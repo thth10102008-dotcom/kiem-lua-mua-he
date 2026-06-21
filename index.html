@@ -84,14 +84,16 @@
         // ==========================================
         // 1. DÁN CẤU HÌNH FIREBASE CỦA BẠN VÀO ĐÂY
         // ==========================================
-        const firebaseConfig = {
-            apiKey: "DÁN_API_KEY_CỦA_BẠN",
-            authDomain: "kiem-lua-mua-he.firebaseapp.com",
-            projectId: "kiem-lua-mua-he",
-            storageBucket: "kiem-lua-mua-he.appspot.com",
-            messagingSenderId: "DÁN_SENDER_ID",
-            appId: "DÁN_APP_ID"
-        };
+       // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyDO6aflnNvi-yxR0SMTvrT_xEulQpyXM4w",
+  authDomain: "kiem-lua-mua-he.firebaseapp.com",
+  projectId: "kiem-lua-mua-he",
+  storageBucket: "kiem-lua-mua-he.firebasestorage.app",
+  messagingSenderId: "331960214215",
+  appId: "1:331960214215:web:53b6c51bc04284091914e2",
+  measurementId: "G-1HPS49HKWR"
+};
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         const auth = firebase.auth();
