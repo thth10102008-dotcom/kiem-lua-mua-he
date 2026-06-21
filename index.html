@@ -3,144 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gặt Lúa Mùa Hè 2026 - Bản Đầy Đủ</title>
+    <title>App Kiếm Lúa 2026</title>
     
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
-    
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+
     <style>
-        /* Giao diện chung */
-        body { 
-            font-family: Arial, sans-serif; 
-            text-align: center; 
-            background-color: #f0f2f5; 
-            margin: 0;
-        }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; text-align: center; }
         
-        /* CSS cho chữ chạy */
-        .header-chay { 
-            background-color: #ffcc00; 
-            color: #d9534f;
-            padding: 15px 0; 
-            font-size: 22px; 
-            font-weight: bold; 
-            overflow: hidden; 
-            white-space: nowrap; 
-        }
-        .chu-chay { 
-            display: inline-block; 
-            padding-left: 100%;
-            animation: move 12s linear infinite; 
-        }
-        @keyframes move { 
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(-100%, 0); } 
-        }
+        /* Chữ chạy */
+        .marquee { background: #ffcc00; padding: 10px; font-weight: bold; color: #d9534f; overflow: hidden; white-space: nowrap; }
         
-        /* Khung nội dung chính */
-        .container { 
-            margin-top: 50px; 
-            background: white; 
-            padding: 40px; 
-            border-radius: 15px; 
-            display: inline-block; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
-        }
+        /* Bố cục chính */
+        .container { max-width: 400px; margin: 30px auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         
-        h2 { color: #333; }
-        #balance-display { color: #28a745; font-size: 45px; font-weight: bold; margin: 20px 0; }
+        /* Màn hình Đăng nhập */
+        #login-screen { display: block; }
+        .logo { width: 100px; height: 100px; border-radius: 50%; margin-bottom: 20px; }
+        .btn-login { background: #4285F4; color: white; padding: 15px; border: none; border-radius: 8px; width: 100%; font-size: 18px; cursor: pointer; font-weight: bold; }
         
-        /* Nút bấm Gặt Lúa */
-        button { 
-            padding: 15px 30px; 
-            font-size: 20px; 
-            font-weight: bold;
-            cursor: pointer; 
-            background-color: #ff9900; 
-            color: white; 
-            border: none; 
-            border-radius: 8px; 
-            transition: 0.3s;
-        }
-        button:hover { background-color: #e68a00; }
-        button:disabled { background-color: #cccccc; cursor: not-allowed; }
+        /* Màn hình App (Ban đầu ẩn đi) */
+        #app-screen { display: none; }
+        
+        /* Trang cá nhân */
+        .profile { background: #e9ecef; padding: 15px; border-radius: 10px; margin-bottom: 20px; display: flex; align-items: center; text-align: left; }
+        .profile img { width: 50px; height: 50px; border-radius: 50%; margin-right: 15px; }
+        .profile-info h3 { margin: 0; font-size: 16px; color: #333; }
+        .profile-info p { margin: 5px 0 0; font-size: 12px; color: #666; }
+        
+        /* Khu vực số dư */
+        .balance-box { margin-bottom: 20px; }
+        .balance-value { font-size: 40px; font-weight: bold; color: #28a745; margin: 10px 0; }
+        
+        /* Khu vực Nút bấm */
+        .btn { padding: 15px; width: 100%; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; margin-bottom: 10px; transition: 0.3s; }
+        .btn-task { background: #ff9800; color: white; }
+        .btn-withdraw { background: #dc3545; color: white; }
+        .btn:disabled { background: #ccc !important; cursor: not-allowed; }
+        
+        .btn-logout { background: transparent; color: #666; border: 1px solid #ccc; margin-top: 20px; }
     </style>
 </head>
 <body>
 
-    <div class="header-chay">
-        <div class="chu-chay">🌾 CHÀO MỪNG ĐẾN VỚI MÙA GẶT LÚA 2026 - GẶT NHANH TAY, NHẬN NGAY LÚA ĐẦY KHO! 🌾</div>
-    </div>
+    <div class="marquee"><span>🌾 APP KIẾM LÚA MÙA HÈ - LÀM NHIỆM VỤ RÚT TIỀN THẬT 🌾</span></div>
 
     <div class="container">
-        <h2>Số dư tài khoản của bạn</h2>
-        <div id="balance-display">Đang tải...</div>
-        <button id="gat-btn">🌾 GẶT LÚA (Nhận 200đ)</button>
+        
+        <div id="login-screen">
+            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135692.png" alt="Logo" class="logo">
+            <h2>Chào mừng bạn</h2>
+            <p>Vui lòng đăng nhập để bắt đầu kiếm tiền</p>
+            <button id="btn-login" class="btn-login">Đăng nhập bằng Google</button>
+        </div>
+
+        <div id="app-screen">
+            
+            <div class="profile">
+                <img id="user-avatar" src="" alt="Avatar">
+                <div class="profile-info">
+                    <h3 id="user-name">Đang tải...</h3>
+                    <p>Mã cá nhân: <b id="user-id">...</b></p>
+                </div>
+            </div>
+
+            <div class="balance-box">
+                <div style="color: #666;">Số dư của bạn</div>
+                <div id="balance-display" class="balance-value">0đ</div>
+            </div>
+
+            <button id="btn-task" class="btn btn-task">🌾 LÀM NHIỆM VỤ (+200đ)</button>
+            <button id="btn-withdraw" class="btn btn-withdraw">💳 RÚT TIỀN</button>
+            <button id="btn-logout" class="btn btn-logout">Đăng xuất</button>
+            
+        </div>
     </div>
 
     <script>
         // ==========================================
-        // BƯỚC 1: DÁN CẤU HÌNH FIREBASE CỦA BẠN VÀO ĐÂY
+        // 1. DÁN CẤU HÌNH FIREBASE CỦA BẠN VÀO ĐÂY
         // ==========================================
         const firebaseConfig = {
-            apiKey: "ĐIỀN_API_KEY_CỦA_BẠN_VÀO_ĐÂY",
+            apiKey: "DÁN_API_KEY_CỦA_BẠN",
             authDomain: "kiem-lua-mua-he.firebaseapp.com",
             projectId: "kiem-lua-mua-he",
             storageBucket: "kiem-lua-mua-he.appspot.com",
-            messagingSenderId: "ĐIỀN_SENDER_ID",
-            appId: "ĐIỀN_APP_ID"
+            messagingSenderId: "DÁN_SENDER_ID",
+            appId: "DÁN_APP_ID"
         };
-
-        // Khởi tạo Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-        
-        // ==========================================
-        // BƯỚC 2: ID NGƯỜI DÙNG (Document ID trong bảng users)
-        // Dựa theo ảnh bạn chụp, mã ID đang là hPKv7iVziDGgzLMT1GeG
-        // ==========================================
-        const userId = "hPKv7iVziDGgzLMT1GeG"; 
+        const auth = firebase.auth();
+        const provider = new firebase.auth.GoogleAuthProvider();
+
+        // Biến lưu trữ số dư hiện tại để kiểm tra khi rút tiền
+        let currentBalance = 0;
 
         // ==========================================
-        // BƯỚC 3: TỰ ĐỘNG CẬP NHẬT SỐ DƯ LIÊN TỤC
+        // 2. XỬ LÝ ẨN/HIỆN MÀN HÌNH KHI ĐĂNG NHẬP
         // ==========================================
-        db.collection("users").doc(userId).onSnapshot((doc) => {
-            if (doc.exists) {
-                const data = doc.data();
-                document.getElementById("balance-display").innerText = data.balance + "đ";
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // ĐÃ ĐĂNG NHẬP: Hiện App, Ẩn Login
+                document.getElementById("login-screen").style.display = "none";
+                document.getElementById("app-screen").style.display = "block";
+                
+                // Điền thông tin cá nhân (Tự động tạo mã code dựa trên UID)
+                document.getElementById("user-name").innerText = user.displayName;
+                document.getElementById("user-avatar").src = user.photoURL;
+                document.getElementById("user-id").innerText = user.uid.substring(0, 8).toUpperCase(); // Lấy 8 chữ số đầu làm mã
+
+                // Lắng nghe số dư từ Firestore
+                db.collection("users").doc(user.uid).onSnapshot(doc => {
+                    if (doc.exists) {
+                        currentBalance = doc.data().balance;
+                        document.getElementById("balance-display").innerText = currentBalance + "đ";
+                    } else {
+                        // Nếu user mới tinh chưa có quỹ, tạo quỹ 0đ
+                        db.collection("users").doc(user.uid).set({ balance: 0, name: user.displayName });
+                    }
+                });
             } else {
-                document.getElementById("balance-display").innerText = "0đ";
+                // CHƯA ĐĂNG NHẬP: Hiện Login, Ẩn App
+                document.getElementById("login-screen").style.display = "block";
+                document.getElementById("app-screen").style.display = "none";
             }
         });
 
         // ==========================================
-        // BƯỚC 4: XỬ LÝ NÚT GẶT TIỀN & CHỐNG SPAM
+        // 3. CÁC NÚT BẤM (Đăng nhập, Đăng xuất, Nhiệm vụ, Rút tiền)
         // ==========================================
-        const gatBtn = document.getElementById("gat-btn");
         
-        gatBtn.addEventListener("click", () => {
-            // Khóa nút 3 giây để chống bấm liên tục
-            gatBtn.disabled = true; 
-            gatBtn.innerText = "Đang gặt...";
+        // Đăng nhập
+        document.getElementById("btn-login").addEventListener("click", () => {
+            auth.signInWithPopup(provider).catch(err => alert("Lỗi đăng nhập: " + err.message));
+        });
 
-            // Lệnh cộng 200đ vào Firebase
-            db.collection("users").doc(userId).update({
+        // Đăng xuất
+        document.getElementById("btn-logout").addEventListener("click", () => auth.signOut());
+
+        // Làm nhiệm vụ (Gặt lúa)
+        const btnTask = document.getElementById("btn-task");
+        btnTask.addEventListener("click", () => {
+            if(!auth.currentUser) return;
+            btnTask.disabled = true;
+            btnTask.innerText = "Đang xử lý...";
+            
+            db.collection("users").doc(auth.currentUser.uid).update({
                 balance: firebase.firestore.FieldValue.increment(200)
-            })
-            .then(() => {
-                alert("🎉 Gặt thành công 200đ!");
-            })
-            .catch((error) => {
-                console.error("Lỗi: ", error);
-                alert("Có lỗi xảy ra, hãy kiểm tra lại kết nối!");
-            })
-            .finally(() => {
-                // Mở khóa nút trở lại sau 3 giây
+            }).then(() => {
                 setTimeout(() => {
-                    gatBtn.disabled = false;
-                    gatBtn.innerText = "🌾 GẶT LÚA (Nhận 200đ)";
-                }, 3000); 
+                    btnTask.disabled = false;
+                    btnTask.innerText = "🌾 LÀM NHIỆM VỤ (+200đ)";
+                }, 2000); // Khóa nút 2 giây
             });
+        });
+
+        // Rút tiền
+        document.getElementById("btn-withdraw").addEventListener("click", () => {
+            if(!auth.currentUser) return;
+            
+            // Yêu cầu tối thiểu 10.000đ mới cho rút
+            if (currentBalance >= 10000) {
+                alert("Hệ thống đã ghi nhận yêu cầu rút " + currentBalance + "đ của bạn. Vui lòng chờ xử lý!");
+                // Trừ tiền sau khi báo rút thành công
+                db.collection("users").doc(auth.currentUser.uid).update({ balance: 0 });
+            } else {
+                alert("Bạn cần tối thiểu 10.000đ để thực hiện lệnh rút tiền nhé! Hiện tại bạn mới có " + currentBalance + "đ.");
+            }
         });
     </script>
 </body>
