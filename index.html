@@ -2,188 +2,87 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kiếm Lúa Mùa Hè</title>
-    <!-- Thư viện icon -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        /* Cài đặt nền mượt mà */
-        body { 
-            background: linear-gradient(135deg, #1e824c, #e67e22); 
-            min-height: 100vh; 
-            margin: 0; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            color: white; 
-            padding: 15px;
-            padding-bottom: 80px; /* Chừa chỗ cho thanh menu dưới đáy */
-        }
-
-        /* Khung thông báo chạy chữ */
-        .notification-bar {
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 20px;
-            padding: 8px 15px;
-            margin-bottom: 20px;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-        }
-        .notification-bar i { color: #f1c40f; margin-right: 10px; }
-        
-        /* Hiệu ứng kính mờ (Thẻ nội dung) */
-        .card { 
-            background: rgba(255, 255, 255, 0.15); 
-            backdrop-filter: blur(12px); 
-            -webkit-backdrop-filter: blur(12px);
-            padding: 20px; 
-            border-radius: 20px; 
-            margin-bottom: 15px; 
-            border: 1px solid rgba(255, 255, 255, 0.2); 
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
-        }
-
-        /* Nút bấm chuẩn */
-        .btn { 
-            background: #f39c12; 
-            border: none; 
-            padding: 10px 20px; 
-            border-radius: 12px; 
-            color: white; 
-            cursor: pointer; 
-            font-weight: bold; 
-            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.4);
-            transition: 0.3s;
-        }
-        .btn:hover { background: #e67e22; transform: scale(1.05); }
-        .btn-full { width: 100%; padding: 15px; font-size: 16px; margin-top: 10px; }
-        .btn-zalo { background: #0068ff; box-shadow: 0 4px 15px rgba(0, 104, 255, 0.4); }
-
-        /* Chuyển trang */
-        .page { display: none; animation: fadeIn 0.4s ease-in-out; }
+        body { background: linear-gradient(135deg, #1e824c, #e67e22); min-height: 100vh; margin: 0; font-family: 'Segoe UI', sans-serif; color: white; padding: 15px; padding-bottom: 80px; }
+        .card { background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(12px); padding: 20px; border-radius: 20px; margin-bottom: 15px; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn { background: #f39c12; border: none; padding: 10px 20px; border-radius: 12px; color: white; cursor: pointer; font-weight: bold; }
+        .page { display: none; }
         .active-page { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Menu dưới đáy (Bottom Navigation) */
-        .bottom-nav { 
-            position: fixed; 
-            bottom: 0; left: 0; width: 100%; 
-            background: rgba(15, 15, 15, 0.85); 
-            backdrop-filter: blur(15px);
-            display: flex; 
-            justify-content: space-around; 
-            padding: 15px 0; 
-            border-top-left-radius: 25px;
-            border-top-right-radius: 25px;
-            z-index: 1000;
-        }
-        .nav-item { 
-            text-align: center; 
-            color: #bdc3c7; 
-            cursor: pointer; 
-            font-size: 12px; 
-            flex: 1;
-        }
-        .nav-item i { display: block; font-size: 22px; margin-bottom: 5px; }
-        .nav-item.active { color: #f1c40f; font-weight: bold; }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.85); display: flex; justify-content: space-around; padding: 15px 0; border-top-left-radius: 25px; border-top-right-radius: 25px; }
+        .nav-item { text-align: center; color: #bdc3c7; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <!-- KHUNG 1: TRANG CHỦ -->
+    <!-- PHẦN ĐĂNG NHẬP -->
+    <div id="auth-box" class="card" style="text-align:center;">
+        <div id="user-info">Đang tải trạng thái...</div>
+    </div>
+
+    <!-- CÁC TRANG CHỨC NĂNG -->
     <div id="home" class="page active-page">
-        <!-- Ảnh Logo -->
-        <div style="text-align:center; margin-bottom: 15px;">
-            <img src="logo.jpg" style="width:130px; height:130px; border-radius:50%; border:4px solid white; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
-        </div>
-
-        <!-- Thanh thông báo chạy chữ -->
-        <div class="notification-bar">
-            <i class="fas fa-bell"></i>
-            <marquee scrollamount="5">Chào mừng đến với Kiếm Lúa Mùa Hè! Hoàn thành nhiệm vụ mỗi ngày để tích lũy thóc và rút tiền về ví Momo/Ngân hàng nhanh chóng.</marquee>
-        </div>
-
-        <!-- Khu vực chứa các nhiệm vụ -->
-        <h3 style="text-align:center; margin-bottom: 20px;"><i class="fas fa-list-check"></i> Nhiệm vụ hôm nay</h3>
-        <div id="task-list">
-            <!-- Dữ liệu từ Google Sheets sẽ tự động nhảy vào đây -->
-            <div style="text-align: center; color: rgba(255,255,255,0.7);">Đang tải nhiệm vụ...</div>
-        </div>
+        <div style="text-align:center"><img src="logo.jpg" style="width:100px; border-radius:50%"></div>
+        <div id="task-list"></div>
     </div>
 
-    <!-- KHUNG 2: TRANG RÚT TIỀN / HỖ TRỢ -->
-    <div id="contact" class="page">
-        <div class="card" style="text-align: center; margin-top: 20px;">
-            <i class="fas fa-wallet" style="font-size: 50px; color: #f1c40f; margin-bottom: 15px;"></i>
-            <h2>Rút Tiền & Hỗ Trợ</h2>
-            <p>Khi đạt đủ số dư, bạn có thể tạo lệnh rút tiền hoặc liên hệ Admin nếu gặp lỗi.</p>
-            
-            <!-- NÚT ĐIỀN FORM RÚT TIỀN (SỬA LINK Ở ĐÂY) -->
-            <button class="btn btn-full" onclick="window.open('LINK_GOOGLE_FORM_CUA_BAN', '_blank')">
-                <i class="fas fa-money-bill-wave"></i> Tạo lệnh rút tiền ngay
-            </button>
-        </div>
-
-        <div class="card" style="text-align: center;">
-            <p>Admin hỗ trợ 24/7</p>
-            <!-- NÚT LIÊN HỆ ZALO (SỬA SỐ ĐIỆN THOẠI Ở ĐÂY) -->
-            <button class="btn btn-full btn-zalo" onclick="window.open('https://zalo.me/SỐ_ĐIỆN_THOẠI_CỦA_BẠN', '_blank')">
-                <i class="fab fa-zalo"></i> Nhắn tin Zalo Admin
-            </button>
-        </div>
+    <div id="contact" class="page card">
+        <h3>Hỗ trợ & Rút tiền</h3>
+        <button class="btn" onclick="window.open('LINK_GOOGLE_FORM_CUA_BAN', '_blank')">Tạo lệnh rút tiền</button>
     </div>
 
-    <!-- THANH MENU ĐIỀU HƯỚNG DƯỚI ĐÁY -->
     <div class="bottom-nav">
-        <div class="nav-item active" id="nav-home" onclick="switchTab('home')">
-            <i class="fas fa-home"></i>
-            Trang chủ
-        </div>
-        <div class="nav-item" id="nav-contact" onclick="switchTab('contact')">
-            <i class="fas fa-user-circle"></i>
-            Cá nhân
-        </div>
+        <div class="nav-item" onclick="switchTab('home')"><i class="fas fa-home"></i><br>Trang chủ</div>
+        <div class="nav-item" onclick="switchTab('contact')"><i class="fas fa-user-circle"></i><br>Cá nhân</div>
     </div>
 
-    <!-- ĐOẠN MÃ XỬ LÝ -->
-    <script>
-        // Hàm chuyển đổi giữa các trang
-        function switchTab(tabId) {
-            // Ẩn tất cả các trang
-            document.querySelectorAll('.page').forEach(page => page.classList.remove('active-page'));
-            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-            
-            // Hiển thị trang được chọn
-            document.getElementById(tabId).classList.add('active-page');
-            document.getElementById('nav-' + tabId).classList.add('active');
-            
-            // Trượt lên đầu trang
-            window.scrollTo(0,0);
-        }
+    <!-- SCRIPT CHÍNH -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
 
-        // Link API Google Sheets của bạn
-        const API_URL = 'https://script.google.com/macros/s/AKfycbzr72fyJveUw1Z4s3yWw244VIqMP_jWpZoXfTcYuHdDp8mSvtF_Yl5VVPrxoSGXu1al/exec';
-        
-        // Gọi dữ liệu từ Sheets
-        fetch(API_URL)
+        const firebaseConfig = {
+            apiKey: "AIzaSyDO6aflnNvi-yxR0SMTvrT_xEulQpyXM4w",
+            authDomain: "kiem-lua-mua-he.firebaseapp.com",
+            projectId: "kiem-lua-mua-he",
+            storageBucket: "kiem-lua-mua-he.firebasestorage.app",
+            messagingSenderId: "331960214215",
+            appId: "1:331960214215:web:53b6c51bc04284091914e2"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        window.login = () => signInWithPopup(auth, provider);
+        window.logout = () => signOut(auth);
+        window.switchTab = (id) => {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+            document.getElementById(id).classList.add('active-page');
+        };
+
+        onAuthStateChanged(auth, (user) => {
+            const ui = document.getElementById('user-info');
+            if (user) {
+                ui.innerHTML = `Xin chào <b>${user.displayName}</b> <br> <button onclick="logout()">Đăng xuất</button>`;
+            } else {
+                ui.innerHTML = `<button onclick="login()">Đăng nhập bằng Google</button>`;
+            }
+        });
+
+        // Nạp nhiệm vụ
+        fetch('https://script.google.com/macros/s/AKfycbzr72fyJveUw1Z4s3yWw244VIqMP_jWpZoXfTcYuHdDp8mSvtF_Yl5VVPrxoSGXu1al/exec')
             .then(res => res.json())
             .then(data => {
                 const list = document.getElementById('task-list');
-                list.innerHTML = ''; // Xóa dòng "Đang tải nhiệm vụ..."
-                
-                // Vẽ từng thẻ nhiệm vụ ra màn hình
                 data.forEach(item => {
-                    list.innerHTML += `
-                    <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
-                        <div>
-                            <strong style="font-size: 16px;">${item.ten}</strong><br>
-                            <small style="color: #f1c40f; font-weight: bold;"><i class="fas fa-coins"></i> Gặt ${item.soTien}đ</small>
-                        </div>
-                        <button class="btn" onclick="window.open('${item.link}', '_blank')">Gặt ngay</button>
+                    list.innerHTML += `<div class="card" style="display:flex; justify-content:space-between">
+                        <div><b>${item.ten}</b><br>${item.soTien}đ</div>
+                        <button class="btn" onclick="window.open('${item.link}', '_blank')">Gặt</button>
                     </div>`;
                 });
-            })
-            .catch(error => {
-                document.getElementById('task-list').innerHTML = '<div style="text-align:center">Chưa có nhiệm vụ nào hoặc lỗi kết nối.</div>';
             });
     </script>
 </body>
