@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* TONE MÀU CHUYÊN NGHIỆP */
         :root { 
             --primary: #1E3A8A; 
             --primary-light: #EFF6FF; 
@@ -37,7 +36,6 @@
         .btn-primary:hover { background-color: #1E40AF; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(30,58,138,0.2); }
         .btn-success { background-color: var(--success); color: var(--white); }
         .btn-danger { background-color: var(--danger); color: white; }
-        .btn-warning { background-color: var(--accent); color: white; }
 
         .tele-btn { position: fixed; bottom: 30px; right: 30px; background: #0088cc; color: white; width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(0,136,204,0.4); z-index: 1000; transition: 0.3s; }
         .tele-btn:hover { transform: scale(1.1); }
@@ -68,13 +66,12 @@
         .dropdown-content a { color: var(--text-dark); padding: 14px 16px; text-decoration: none; display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; transition: 0.2s;}
         .dropdown-content a:hover { background-color: #F8FAFC; color: var(--primary); }
         .dropdown-content.show { display: block; animation: dropIn 0.2s ease; }
-        @keyframes dropIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
         .content-section { display: none; animation: fadeIn 0.3s; } 
         .content-section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* BẢNG CHỨNG THANH TOÁN LIVE (MỚI) */
+        /* PAYMENT PROOF FEED */
         .live-payout-box { background: white; border: 1px solid #E2E8F0; border-radius: 12px; padding: 16px 20px; display: flex; align-items: center; gap: 16px; margin-bottom: 24px; box-shadow: var(--shadow-sm); overflow: hidden;}
         .live-payout-icon { background: #DCFCE7; color: #16A34A; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;}
         .live-payout-content { flex: 1; overflow: hidden; position: relative; height: 24px; }
@@ -83,27 +80,26 @@
         .payout-item.exit { top: -24px; opacity: 0; }
         .payout-time { color: var(--text-muted); font-size: 12px; font-weight: 400; margin-left: 8px;}
 
-        /* Dashboard Cards Mới */
         .dashboard-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 32px; }
         .stat-card { background-color: var(--white); padding: 24px; border-radius: var(--border-radius); box-shadow: var(--shadow-sm); border-left: 4px solid var(--primary); }
         .stat-card:nth-child(2) { border-left-color: var(--success); }
-        .stat-card:nth-child(3) { border-left-color: var(--accent); } /* Card Hoa Hồng */
+        .stat-card:nth-child(3) { border-left-color: var(--accent); } 
         .stat-card-label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 8px; font-weight: 600; text-transform: uppercase; }
         .stat-card-value { font-size: 28px; font-weight: 800; color: var(--text-dark); }
 
-        /* Bảng Điều Khoản & Cam Kết (MỚI) */
+        /* Điều khoản & Cam kết */
         .rules-box { background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 12px; padding: 20px; margin-bottom: 24px; }
         .rules-box h4 { color: #1E3A8A; margin-bottom: 12px; font-size: 16px; display: flex; align-items: center; gap: 8px; }
         .rules-box ul { list-style: none; padding-left: 0; }
         .rules-box ul li { font-size: 14px; color: #1E40AF; margin-bottom: 8px; display: flex; align-items: flex-start; gap: 8px; font-weight: 500; }
 
-        /* Nút Điểm Danh (MỚI) */
+        /* Bảng Điểm Danh Hàng Ngày */
         .checkin-banner { background: linear-gradient(135deg, #10B981, #059669); border-radius: 16px; padding: 24px; display: flex; align-items: center; justify-content: space-between; color: white; margin-bottom: 24px; box-shadow: 0 4px 15px rgba(16,185,129,0.3); }
         .checkin-info h4 { font-size: 18px; margin-bottom: 6px; font-weight: 800;}
         .checkin-info p { font-size: 14px; opacity: 0.9;}
         .btn-checkin { background: white; color: #059669; padding: 12px 24px; border-radius: 30px; font-weight: 800; cursor: pointer; border: none; font-size: 14px; transition: 0.2s;}
         .btn-checkin:hover { transform: scale(1.05); }
-        .btn-checkin:disabled { background: #A7F3D0; color: #065F46; cursor: not-allowed; transform: none;}
+        .btn-checkin:disabled { background: #A7F3D0; color: #065F46; cursor: not-allowed; transform: none; opacity: 0.8;}
 
         .chart-container { background: var(--white); padding: 24px; border-radius: var(--border-radius); box-shadow: var(--shadow-sm); margin-bottom: 32px; border: 1px solid #E2E8F0; }
         .chart-header { display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 700; color: var(--text-dark); margin-bottom: 20px; }
@@ -152,23 +148,20 @@
 </head>
 <body>
 
-    <!-- NÚT HỖ TRỢ TELEGRAM -->
     <a href="https://t.me/hanhle1231" target="_blank" class="tele-btn" title="Hỗ trợ Telegram">
         <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.19-.08-.05-.19-.02-.27 0-.11.03-1.93 1.23-5.46 3.62-.51.35-.98.52-1.4.51-.46-.01-1.35-.26-2.01-.48-.81-.27-1.46-.42-1.4-.88.03-.24.36-.48.98-.74 3.85-1.68 6.42-2.79 7.71-3.32 3.67-1.53 4.43-1.8 4.93-1.81.11 0 .36.03.49.13.11.08.14.19.16.27-.01.04-.01.12-.02.17z"/></svg>
     </a>
 
-    <!-- GIAO DIỆN CHÍNH -->
     <div id="main-app" style="display: none; width: 100%;">
         
         <aside class="sidebar">
             <div class="sidebar-logo">
                 <img src="logo.jpg" alt="Logo">
-                <h1>KIẾM LÚA MÙA HÈ</h1>
+                <h1>KIẾM LÚA MUA HÈ</h1>
             </div>
             <ul class="sidebar-menu">
                 <li class="active"><a href="#" data-section="dashboard">📊 Trang chủ</a></li>
                 <li><a href="#" data-section="earn">🌾 Kiếm Lúa</a></li>
-                <!-- MENU MỚI: CHIA SẺ -->
                 <li><a href="#" data-section="referral">🤝 Chia Sẻ (Ref)</a></li>
                 <li><a href="#" data-section="withdraw">🏦 Rút Thưởng</a></li>
                 <li><a href="#" data-section="profile">👤 Hồ Sơ Của Tôi</a></li>
@@ -191,7 +184,6 @@
                 </div>
                 <div class="header-right">
                     <div class="balance-badge">🌾 <span id="header-points">0</span></div>
-                    
                     <div class="avatar-dropdown">
                         <img src="101036-1215264.jpg" class="user-avatar-mini" onclick="toggleAvatarMenu()" onerror="this.src='logo.jpg'">
                         <div id="avatarMenu" class="dropdown-content">
@@ -202,15 +194,11 @@
                 </div>
             </header>
 
-            <!-- BẢNG BẰNG CHỨNG THANH TOÁN LIVE -->
             <div class="live-payout-box">
                 <div class="live-payout-icon">💸</div>
-                <div class="live-payout-content" id="payout-feed">
-                    <!-- Các thông báo sẽ được JS tạo tự động ở đây -->
-                </div>
+                <div class="live-payout-content" id="payout-feed"></div>
             </div>
 
-            <!-- TRANG CHỦ -->
             <section id="dashboard" class="content-section active">
                 <div class="dashboard-cards">
                     <div class="stat-card">
@@ -221,7 +209,6 @@
                         <span class="stat-card-label">Nhiệm vụ hoàn thành</span>
                         <span class="stat-card-value" id="db-completed-count" style="color: var(--success);">0</span>
                     </div>
-                    <!-- KHUNG MỚI: TIỀN TỪ LỢI NHUẬN CHIA SẺ -->
                     <div class="stat-card">
                         <span class="stat-card-label">Lúa từ Hoa Hồng (Ref)</span>
                         <span class="stat-card-value" id="db-ref-income" style="color: var(--accent);">0</span>
@@ -234,16 +221,13 @@
                 </div>
             </section>
 
-            <!-- KIẾM LÚA -->
             <section id="earn" class="content-section">
-                
-                <!-- TÍNH NĂNG ĐIỂM DANH HÀNG NGÀY -->
                 <div class="checkin-banner">
                     <div class="checkin-info">
                         <h4>🎁 Điểm Danh Nhận Quà</h4>
                         <p>Mỗi ngày đăng nhập và bấm điểm danh để nhận ngay Lúa miễn phí!</p>
                     </div>
-                    <button class="btn-checkin" id="btn-daily-checkin" onclick="simulateCheckin()">Điểm danh ngay (+50 Lúa)</button>
+                    <button class="btn-checkin" id="btn-daily-checkin" onclick="executeRealCheckin()">Điểm danh ngay (+50 Lúa)</button>
                 </div>
 
                 <div class="special-grid">
@@ -267,7 +251,6 @@
                 <div class="task-list" id="task-container"><p style="color: var(--text-muted); font-size:14px;">Đang tải dữ liệu...</p></div>
             </section>
 
-            <!-- TRANG CHIA SẺ NHẬN LỢI NHUẬN (MỚI) -->
             <section id="referral" class="content-section">
                 <h3 style="margin-bottom: 20px;">🤝 Chia sẻ bạn bè - Nhận lợi nhuận 10%</h3>
                 <div class="form-box" style="margin-bottom: 24px;">
@@ -276,34 +259,18 @@
                         <input type="text" id="ref-link-input" readonly style="margin:0; background:#EFF6FF; border-color:#BFDBFE; color:#1E3A8A; font-weight:600;">
                         <button class="btn btn-primary" onclick="copyRefLink()" style="flex-shrink:0;">Copy Link</button>
                     </div>
-                    <p style="font-size:13px; color:var(--text-muted); margin-top:12px;">* Gửi link này cho bạn bè. Khi họ làm nhiệm vụ, bạn sẽ tự động nhận được thêm 10% số Lúa họ kiếm được (Không trừ vào tiền của họ).</p>
-                </div>
-                <div class="dashboard-cards">
-                    <div class="stat-card" style="border-left-color: var(--success)">
-                        <span class="stat-card-label">Bạn bè đã mời</span>
-                        <span class="stat-card-value">0</span>
-                    </div>
-                    <div class="stat-card" style="border-left-color: var(--accent)">
-                        <span class="stat-card-label">Lúa nhận từ bạn bè</span>
-                        <span class="stat-card-value">0</span>
-                    </div>
                 </div>
             </section>
 
-            <!-- RÚT THƯỞNG -->
             <section id="withdraw" class="content-section">
-                <h3 style="margin-bottom: 20px;">Tạo Yêu Cầu Rút Thưởng</h3>
-                
-                <!-- BẢNG ĐIỀU KHOẢN VÀ CAM KẾT (MỚI) -->
+                <h3>Tạo Yêu Cầu Rút Thưởng</h3><br>
                 <div class="rules-box">
                     <h4>⚖️ Điều Khoản & Cam Kết Rút Tiền</h4>
                     <ul>
                         <li><span>✅</span> Số Lúa rút tối thiểu cho mỗi lần là: <b>10,000 Lúa</b>.</li>
-                        <li><span>⏱️</span> Thời gian hệ thống duyệt và chuyển tiền: <b>Tự động hoặc tối đa 24h làm việc</b>.</li>
-                        <li><span>🛡️</span> Cam kết uy tín 100%. Mọi hành vi dùng tool, buff bẩn, cheat link sẽ bị hệ thống tự động khóa tài khoản vĩnh viễn và hủy thanh toán.</li>
+                        <li><span>⏱️</span> Thời gian duyệt và chuyển tiền: <b>Tối đa 24h làm việc</b>.</li>
                     </ul>
                 </div>
-
                 <div class="form-box" style="max-width: 600px;">
                     <label>Hình thức nhận lúa:</label>
                     <select id="wd-method" onchange="updateWdInputs()">
@@ -311,25 +278,24 @@
                         <option value="MoMo">Ví Điện Tử MoMo</option>
                         <option value="Ngân Hàng">Chuyển khoản Ngân Hàng</option>
                     </select>
-                    <label id="lbl-details">Nhà mạng cần rút (Viettel, Vina, Mobi...):</label>
+                    <label id="lbl-details">Nhà mạng cần rút:</label>
                     <input type="text" id="wd-details" placeholder="Ví dụ: Thẻ Viettel mệnh giá 50k">
                     <label>Số Lúa muốn rút:</label>
                     <input type="number" id="wd-amount" placeholder="Nhập số lúa...">
-                    <button class="btn btn-primary" id="btn-withdraw" style="width: 100%; margin-top: 8px;" onclick="submitWithdraw()">Gửi yêu cầu đổi thưởng</button>
+                    <button class="btn btn-primary" id="btn-withdraw" style="width: 100%;" onclick="submitWithdraw()">Gửi yêu cầu đổi thưởng</button>
                 </div>
             </section>
 
-            <!-- HỒ SƠ -->
             <section id="profile" class="content-section">
-                <h3 style="margin-bottom: 20px;">Quản lý hồ sơ</h3>
+                <h3>Quản lý hồ sơ</h3><br>
                 <div class="profile-grid">
                     <div class="form-box" style="text-align: center;">
                         <img src="101036-1215264.jpg" style="width: 100px; height: 100px; border-radius: 50%; border: 4px solid var(--primary-light); margin-bottom: 16px; object-fit: cover;" onerror="this.src='logo.jpg'">
-                        <h4 id="prof-username" style="color: var(--primary); font-size: 18px; margin-bottom: 20px;">Username</h4>
+                        <h4 id="prof-username">Username</h4><br>
                         <button class="btn btn-danger" style="width: 100%;" onclick="logoutApp()">Đăng xuất tài khoản</button>
                     </div>
                     <div class="form-box">
-                        <h4 style="margin-bottom: 16px; border-bottom: 1px solid #E2E8F0; padding-bottom: 8px;">Bảo mật tài khoản</h4>
+                        <h4>Bảo mật tài khoản</h4><br>
                         <label>Mật khẩu hiện tại:</label>
                         <input type="password" id="old-pass" placeholder="Nhập mật khẩu cũ">
                         <label>Mật khẩu mới:</label>
@@ -341,47 +307,39 @@
         </main>
     </div>
 
-    <!-- MÀN HÌNH ĐĂNG NHẬP -->
     <div class="auth-layout-container" id="auth-view">
         <div class="auth-card" id="auth-login-card">
-            <div style="text-align: center; margin-bottom: 24px;"><img src="logo.jpg" style="width:100px; border-radius:50%; border:3px solid var(--primary-light);"></div>
-            <h2 style="text-align: center; margin-bottom: 20px; color: var(--primary); font-weight:800;">Đăng Nhập</h2>
+            <div style="text-align: center; margin-bottom: 24px;"><img src="logo.jpg" style="width:100px; border-radius:50%"></div>
+            <h2 style="text-align: center; margin-bottom: 20px; color: var(--primary);">Đăng Nhập</h2>
             <div class="auth-msg" id="login-msg"></div>
-            <label>Tài khoản / Email:</label>
             <input type="text" id="log-user" placeholder="Nhập tài khoản...">
-            <label>Mật khẩu:</label>
             <input type="password" id="log-pass" placeholder="Nhập mật khẩu...">
             <div class="remember-box">
                 <input type="checkbox" id="login-remember" checked>
-                <label for="login-remember" style="font-weight: 500; cursor:pointer;">Lưu đăng nhập cho lần sau</label>
+                <label for="login-remember">Lưu đăng nhập cho lần sau</label>
             </div>
-            <button class="btn btn-primary" style="width: 100%; font-size: 15px; padding: 14px;" id="btn-login" onclick="login()">Đăng nhập ngay</button>
-            <p style="text-align: center; margin-top: 24px; font-size: 14px;">Chưa có tài khoản? <a href="#" onclick="toggleAuth(true)" style="color:var(--primary); font-weight:700;">Đăng ký</a></p>
+            <button class="btn btn-primary" style="width: 100%;" id="btn-login" onclick="login()">Đăng nhập ngay</button>
+            <p style="text-align: center; margin-top: 24px;">Chưa có tài khoản? <a href="#" onclick="toggleAuth(true)" style="color:var(--primary); font-weight:700;">Đăng ký</a></p>
         </div>
         
         <div class="auth-card" id="auth-register-card" style="display: none;">
-            <div style="text-align: center; margin-bottom: 24px;"><img src="logo.jpg" style="width:100px; border-radius:50%; border:3px solid var(--primary-light);"></div>
-            <h2 style="text-align: center; margin-bottom: 20px; color: var(--primary); font-weight:800;">Tạo Tài Khoản</h2>
+            <div style="text-align: center; margin-bottom: 24px;"><img src="logo.jpg" style="width:100px; border-radius:50%"></div>
+            <h2 style="text-align: center; margin-bottom: 20px; color: var(--primary);">Tạo Tài Khoản</h2>
             <div class="auth-msg" id="register-msg"></div>
-            <label>Tên đăng nhập viết liền:</label>
-            <input type="text" id="reg-user" placeholder="Ví dụ: nguyenvana">
-            <label>Địa chỉ Email (Rất quan trọng):</label>
-            <input type="email" id="reg-email" placeholder="Ví dụ: email@gmail.com">
-            <label>Mật khẩu bảo mật:</label>
+            <input type="text" id="reg-user" placeholder="Tên tài khoản...">
+            <input type="email" id="reg-email" placeholder="Địa chỉ Email...">
             <input type="password" id="reg-pass" placeholder="Tạo mật khẩu...">
-            <button class="btn btn-primary" style="width: 100%; font-size: 15px; padding: 14px;" id="btn-register" onclick="register()">Đăng ký tài khoản</button>
-            <p style="text-align: center; margin-top: 24px; font-size: 14px;">Đã có tài khoản? <a href="#" onclick="toggleAuth(false)" style="color:var(--primary); font-weight:700;">Đăng nhập</a></p>
+            <button class="btn btn-primary" style="width: 100%;" id="btn-register" onclick="register()">Đăng ký tài khoản</button>
+            <p style="text-align: center; margin-top: 24px;">Đã có tài khoản? <a href="#" onclick="toggleAuth(false)" style="color:var(--primary); font-weight:700;">Đăng nhập</a></p>
         </div>
     </div>
 
-    <!-- SCRIPT -->
     <script>
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx1hP042D5mQFWTxqaVXDVDvCFX5clpUJ4Ej1tf4d26H5XvPptMRwEqPOE86u3NqwbK/exec';
         let currentUser = "";
         let incomeChartInstance = null;
         let countdownInterval = null;
 
-        // DANH SÁCH RÚT TIỀN ẢO LÀM MẪU CHO MỤC PAYMENT PROOF (Bạn có thể thêm bớt tùy ý)
         const fakePayouts = [
             "Người dùng <b>An***</b> vừa rút thành công Thẻ cào 20k Viettel",
             "Người dùng <b>Binh***</b> vừa đổi thành công 50k về Ví MoMo",
@@ -396,33 +354,45 @@
                 currentUser = savedUser;
                 enterApplication();
             }
-            startLivePayoutFeed(); // Khởi động bảng chạy Payment Proof
+            startLivePayoutFeed();
         });
 
-        // HIỆU ỨNG CHẠY LIVE PAYMENT PROOF
+        // ĐIỀU KHIỂN HÀM ĐIỂM DANH DATA THẬT
+        function executeRealCheckin() {
+            const btn = document.getElementById('btn-daily-checkin');
+            btn.innerText = "Đang xử lý...";
+            btn.disabled = true;
+
+            fetch(`${SCRIPT_URL}?action=dailyCheckin&username=${encodeURIComponent(currentUser)}`)
+            .then(res => res.json()).then(data => {
+                alert(data.message);
+                if (data.status === 'success') {
+                    btn.innerText = "Đã điểm danh hôm nay ✅";
+                    loadDashboard(); // Load lại số dư thật từ Sheet về
+                } else {
+                    btn.innerText = "Đã điểm danh hôm nay ✅";
+                }
+            }).catch(() => {
+                alert("Lỗi kết nối máy chủ điểm danh!");
+                btn.innerText = "Điểm danh ngay (+50 Lúa)";
+                btn.disabled = false;
+            });
+        }
+
         function startLivePayoutFeed() {
             const feedContainer = document.getElementById('payout-feed');
             let currentIndex = 0;
-
             function showNextPayout() {
-                // Tạo element mới
+                if(!feedContainer) return;
                 const div = document.createElement('div');
                 div.className = 'payout-item';
-                
-                // Random thời gian từ 1 đến 15 phút trước
                 const randomMins = Math.floor(Math.random() * 15) + 1;
                 div.innerHTML = `${fakePayouts[currentIndex]} <span class="payout-time">(${randomMins} phút trước)</span>`;
-                
                 feedContainer.appendChild(div);
-
-                // Hiệu ứng trượt lên
                 setTimeout(() => div.classList.add('active'), 50);
-
-                // Sau 3 giây thì trượt lên biến mất và gọi cái tiếp theo
                 setTimeout(() => {
                     div.classList.replace('active', 'exit');
-                    setTimeout(() => div.remove(), 500); // Xóa khỏi DOM
-                    
+                    setTimeout(() => div.remove(), 500);
                     currentIndex = (currentIndex + 1) % fakePayouts.length;
                     showNextPayout();
                 }, 3000);
@@ -440,39 +410,25 @@
                 const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
                 const s = Math.floor((diff % (1000 * 60)) / 1000);
-                document.getElementById('cd-h').innerText = String(h).padStart(2, '0');
-                document.getElementById('cd-m').innerText = String(m).padStart(2, '0');
-                document.getElementById('cd-s').innerText = String(s).padStart(2, '0');
+                if(document.getElementById('cd-h')) {
+                    document.getElementById('cd-h').innerText = String(h).padStart(2, '0');
+                    document.getElementById('cd-m').innerText = String(m).padStart(2, '0');
+                    document.getElementById('cd-s').innerText = String(s).padStart(2, '0');
+                }
             }
             updateTime();
             countdownInterval = setInterval(updateTime, 1000);
         }
 
-        // TẠO LINK GIỚI THIỆU & COPY
         function generateRefLink() {
             const baseUrl = window.location.origin + window.location.pathname;
-            document.getElementById('ref-link-input').value = `${baseUrl}?ref=${currentUser}`;
+            if(document.getElementById('ref-link-input')) document.getElementById('ref-link-input').value = `${baseUrl}?ref=${currentUser}`;
         }
         function copyRefLink() {
             const copyText = document.getElementById('ref-link-input');
             copyText.select();
             document.execCommand("copy");
-            alert("Đã copy link giới thiệu! Hãy gửi cho bạn bè nhé.");
-        }
-
-        // MÔ PHỎNG NÚT ĐIỂM DANH
-        function simulateCheckin() {
-            const btn = document.getElementById('btn-daily-checkin');
-            btn.innerText = "Đang xử lý...";
-            setTimeout(() => {
-                alert("Điểm danh thành công! Bạn nhận được +50 Lúa.");
-                btn.innerText = "Đã điểm danh hôm nay ✅";
-                btn.disabled = true;
-                // Cập nhật số dư ảo tạm thời trên giao diện
-                const currentPoints = parseInt(document.getElementById('header-points').innerText.replace(/,/g, ''));
-                document.getElementById('header-points').innerText = (currentPoints + 50).toLocaleString();
-                document.getElementById('db-points').innerText = (currentPoints + 50).toLocaleString();
-            }, 1000);
+            alert("Đã copy link giới thiệu!");
         }
 
         function toggleAvatarMenu() { document.getElementById("avatarMenu").classList.toggle("show"); }
@@ -498,9 +454,10 @@
             document.getElementById('main-app').style.display = 'flex';
             document.getElementById('welcome-username').innerText = currentUser;
             document.getElementById('prof-username').innerText = currentUser;
+            document.getElementById('marquee-content').innerText = `🔥 CHÚC MỪNG ${currentUser.toUpperCase()} ĐÃ THAM GIA KIẾM LÚA MÙA HÈ! 🎉`;
             
             startCountdown();
-            generateRefLink(); // Tạo link Ref khi vào web
+            generateRefLink();
             loadDashboard();
         }
 
@@ -535,7 +492,6 @@
             }
         });
 
-        // CÁC HÀM API CHÍNH
         function register() {
             const u = document.getElementById('reg-user').value.trim();
             const e = document.getElementById('reg-email').value.trim();
@@ -549,8 +505,7 @@
                 if(data.status === 'success') {
                     toggleAuth(false);
                     const logMsg = document.getElementById('login-msg');
-                    logMsg.style.color = 'var(--success)';
-                    logMsg.innerText = data.message;
+                    logMsg.style.color = 'var(--success)'; logMsg.innerText = data.message;
                 } else { msg.style.color = 'var(--danger)'; msg.innerText = data.message; }
             });
         }
@@ -579,21 +534,28 @@
                 document.getElementById('db-points').innerText = Number(data.points).toLocaleString();
                 document.getElementById('db-completed-count').innerText = data.completedCount;
                 
+                // Khóa hoặc mở nút điểm danh dựa vào dữ liệu thật từ Google Sheet gửi về
+                const checkinBtn = document.getElementById('btn-daily-checkin');
+                if (data.hasCheckedInToday) {
+                    checkinBtn.innerText = "Đã điểm danh hôm nay ✅";
+                    checkinBtn.disabled = true;
+                } else {
+                    checkinBtn.innerText = "Điểm danh ngay (+50 Lúa)";
+                    checkinBtn.disabled = false;
+                }
+
                 let last7Days = [];
                 let incomeData = [0, 0, 0, 0, 0, 0, 0];
                 for(let i=6; i>=0; i--) {
-                    let d = new Date();
-                    d.setDate(d.getDate() - i);
+                    let d = new Date(); d.setDate(d.getDate() - i);
                     last7Days.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`);
                 }
-
                 data.taskHistory.forEach(h => {
                     let taskDateObj = new Date(h.time);
                     let taskDateString = `${taskDateObj.getFullYear()}-${String(taskDateObj.getMonth()+1).padStart(2,'0')}-${String(taskDateObj.getDate()).padStart(2,'0')}`;
                     let idx = last7Days.indexOf(taskDateString);
                     if(idx !== -1) { incomeData[idx] += parseInt(h.reward); }
                 });
-
                 renderChart(last7Days, incomeData); 
             });
         }
@@ -613,7 +575,6 @@
                         borderWidth: 2,
                         pointBackgroundColor: '#FFFFFF',
                         pointBorderColor: '#3B82F6',
-                        pointBorderWidth: 2,
                         pointRadius: 4,
                         fill: true,
                         tension: 0.3 
@@ -623,7 +584,7 @@
                     responsive: true, maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
                     scales: {
-                        y: { beginAtZero: true, grid: { borderDash: [4, 4], color: '#E2E8F0' }, ticks: { stepSize: 1000 } },
+                        y: { beginAtZero: true, grid: { borderDash: [4, 4], color: '#E2E8F0' } },
                         x: { grid: { display: false } }
                     }
                 }
