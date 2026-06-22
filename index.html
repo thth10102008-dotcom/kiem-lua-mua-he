@@ -71,7 +71,7 @@
         .content-section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* PAYMENT PROOF FEED */
+        /* LIVE PAYOUT LOGS */
         .live-payout-box { background: white; border: 1px solid #E2E8F0; border-radius: 12px; padding: 16px 20px; display: flex; align-items: center; gap: 16px; margin-bottom: 24px; box-shadow: var(--shadow-sm); overflow: hidden;}
         .live-payout-icon { background: #DCFCE7; color: #16A34A; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;}
         .live-payout-content { flex: 1; overflow: hidden; position: relative; height: 24px; }
@@ -87,13 +87,13 @@
         .stat-card-label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 8px; font-weight: 600; text-transform: uppercase; }
         .stat-card-value { font-size: 28px; font-weight: 800; color: var(--text-dark); }
 
-        /* Điều khoản & Cam kết */
+        /* Rules Box */
         .rules-box { background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 12px; padding: 20px; margin-bottom: 24px; }
         .rules-box h4 { color: #1E3A8A; margin-bottom: 12px; font-size: 16px; display: flex; align-items: center; gap: 8px; }
         .rules-box ul { list-style: none; padding-left: 0; }
         .rules-box ul li { font-size: 14px; color: #1E40AF; margin-bottom: 8px; display: flex; align-items: flex-start; gap: 8px; font-weight: 500; }
 
-        /* Bảng Điểm Danh Hàng Ngày */
+        /* Daily Checkin Banner */
         .checkin-banner { background: linear-gradient(135deg, #10B981, #059669); border-radius: 16px; padding: 24px; display: flex; align-items: center; justify-content: space-between; color: white; margin-bottom: 24px; box-shadow: 0 4px 15px rgba(16,185,129,0.3); }
         .checkin-info h4 { font-size: 18px; margin-bottom: 6px; font-weight: 800;}
         .checkin-info p { font-size: 14px; opacity: 0.9;}
@@ -193,6 +193,12 @@
                     </div>
                 </div>
             </header>
+
+            <div class="marquee-container">
+                <div class="marquee-text" id="marquee-content">
+                    🔥 CHÀO MỪNG BẠN ĐẾN VỚI KIẾM LÚA MÙA HÈ! 🎉
+                </div>
+            </div>
 
             <div class="live-payout-box">
                 <div class="live-payout-icon">💸</div>
@@ -335,6 +341,7 @@
     </div>
 
     <script>
+        // LINK SCRIPT WEB APP ĐÃ ĐƯỢC GẮN CHÍNH XÁC:
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx1hP042D5mQFWTxqaVXDVDvCFX5clpUJ4Ej1tf4d26H5XvPptMRwEqPOE86u3NqwbK/exec';
         let currentUser = "";
         let incomeChartInstance = null;
@@ -357,7 +364,6 @@
             startLivePayoutFeed();
         });
 
-        // ĐIỀU KHIỂN HÀM ĐIỂM DANH DATA THẬT
         function executeRealCheckin() {
             const btn = document.getElementById('btn-daily-checkin');
             btn.innerText = "Đang xử lý...";
@@ -368,7 +374,7 @@
                 alert(data.message);
                 if (data.status === 'success') {
                     btn.innerText = "Đã điểm danh hôm nay ✅";
-                    loadDashboard(); // Load lại số dư thật từ Sheet về
+                    loadDashboard(); 
                 } else {
                     btn.innerText = "Đã điểm danh hôm nay ✅";
                 }
@@ -534,7 +540,6 @@
                 document.getElementById('db-points').innerText = Number(data.points).toLocaleString();
                 document.getElementById('db-completed-count').innerText = data.completedCount;
                 
-                // Khóa hoặc mở nút điểm danh dựa vào dữ liệu thật từ Google Sheet gửi về
                 const checkinBtn = document.getElementById('btn-daily-checkin');
                 if (data.hasCheckedInToday) {
                     checkinBtn.innerText = "Đã điểm danh hôm nay ✅";
