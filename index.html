@@ -3,868 +3,313 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KIẾM TIỀN MÙA HÈ - Hoàn thành nhiệm vụ, Nhận xu</title>
+    <title>KIẾM LÚA MÙA HÈ - Hoàn thành nhiệm vụ</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* --- Reset & Global Styles --- */
-        :root {
-            --primary-pink: #E84D8A;
-            --primary-purple: #7A5AF8;
-            --primary-purple-light: #F0EFFF; /* Màu nền nhẹ của tím */
-            --bg-body: #F5F7FA;
-            --white: #FFFFFF;
-            --text-dark: #333333;
-            --text-muted: #666666;
-            --font-main: 'Poppins', sans-serif;
-            --shadow: 0 4px 12px rgba(0,0,0,0.08);
-            --border-radius: 12px;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: var(--font-main);
-            background-color: var(--bg-body);
-            color: var(--text-dark);
-            display: flex;
-            min-height: 100vh;
-        }
-
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        ul {
-            list-style: none;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 12px 15px;
-            margin-top: 8px;
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-family: var(--font-main);
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--primary-purple);
-        }
-
-        /* --- Buttons --- */
-        .btn {
-            display: inline-block;
-            padding: 12px 30px;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            border: none;
-            font-family: var(--font-main);
-            font-weight: 600;
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-
-        .btn-primary {
-            background-color: var(--primary-pink);
-            color: var(--white);
-        }
-
-        .btn-primary:hover {
-            background-color: #D6437A;
-        }
-
-        .btn-secondary {
-            background-color: var(--primary-purple);
-            color: var(--white);
-        }
-
-        .btn-secondary:hover {
-            background-color: #6549E0;
-        }
-
-        .btn-start {
-            background-color: var(--primary-pink);
-            color: var(--white);
-            padding: 8px 20px;
-            border-radius: 30px;
-            font-size: 14px;
-        }
-
-        /* --- Sidebar (Menu) --- */
-        aside.sidebar {
-            width: 280px;
-            background-color: var(--white);
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-            box-shadow: var(--shadow);
-            position: fixed;
-            height: 100vh;
-            z-index: 10;
-        }
-
-        .sidebar-logo {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .sidebar-logo img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover; /* Đảm bảo logo tròn đẹp */
-        }
-
-        .sidebar-logo h1 {
-            color: var(--text-dark);
-            font-size: 1.2rem;
-            margin-top: 10px;
-            font-weight: 700;
-        }
-
-        .sidebar-menu {
-            flex-grow: 1;
-        }
-
-        .sidebar-menu li {
-            margin-bottom: 10px;
-        }
-
-        .sidebar-menu a {
-            display: flex;
-            align-items: center;
-            padding: 15px;
-            border-radius: 8px;
-            transition: background 0.3s ease, color 0.3s ease;
-            font-weight: 500;
-            color: var(--text-dark);
-        }
-
-        /* Thêm icon giả lập bằng CSS pseudo-elements (để code gọn) */
-        .sidebar-menu a::before {
-            content: '';
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            margin-right: 15px;
-            background-color: var(--text-muted);
-            mask-size: cover;
-            -webkit-mask-size: cover;
-        }
-
-        /* Ví dụ icon cho Dashboard */
-        .sidebar-menu a[data-section="dashboard"]::before {
-            background-color: var(--text-dark);
-            /* icon placeholder: line chart */
-            content: "📈";
-        }
-        /* Ví dụ icon cho Kiếm Xu */
-        .sidebar-menu a[data-section="earn"]::before {
-            content: "💰";
-        }
-        /* Ví dụ icon cho Điểm Thưởng */
-        .sidebar-menu a[data-section="points"]::before {
-            content: "🎁";
-        }
-        /* Ví dụ icon cho Rút Thưởng */
-        .sidebar-menu a[data-section="withdraw"]::before {
-            content: "🏦";
-        }
-        /* Ví dụ icon cho Lịch Sử */
-        .sidebar-menu a[data-section="history"]::before {
-            content: "📝";
-        }
-        /* Ví dụ icon cho Hồ Sơ */
-        .sidebar-menu a[data-section="profile"]::before {
-            content: "👤";
-        }
-        /* Ví dụ icon cho Hướng Dẫn */
-        .sidebar-menu a[data-section="guide"]::before {
-            content: "❓";
-        }
-        /* Ví dụ icon cho Đăng Xuất */
-        .sidebar-menu a[data-section="logout"]::before {
-            content: "🚪";
-        }
-
-        .sidebar-menu a:hover {
-            background-color: var(--primary-purple-light);
-            color: var(--primary-purple);
-        }
-
-        .sidebar-menu a:hover::before {
-            background-color: var(--primary-purple);
-        }
-
-        .sidebar-menu .active a {
-            background-color: var(--primary-purple);
-            color: var(--white);
-        }
-
-        .sidebar-menu .active a::before {
-            background-color: var(--white);
-        }
-
-        .sidebar-footer {
-            text-align: center;
-            border-top: 1px solid #eee;
-            padding-top: 20px;
-            margin-top: 20px;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            line-height: 1.4;
-        }
-
-        /* --- Main Content --- */
-        main.content {
-            margin-left: 280px; /* Bằng chiều rộng sidebar */
-            padding: 40px;
-            flex: 1;
-        }
-
-        header.top-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
-        }
-
-        header.top-header h2 {
-            font-weight: 700;
-        }
-
-        .header-controls {
-            display: flex;
-            align-items: center;
-        }
-
-        .notification {
-            position: relative;
-            margin-right: 20px;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        .notification::after {
-            content: '';
-            display: block;
-            position: absolute;
-            top: 2px;
-            right: 2px;
-            width: 8px;
-            height: 8px;
-            background-color: red;
-            border-radius: 50%;
-        }
-
-        .user-avatar-mini {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--primary-purple);
-        }
-
-        /* --- General Content Sections --- */
-        .content-section {
-            display: none; /* Ban đầu ẩn */
-        }
-
-        .content-section.active {
-            display: block; /* Hiện phần được chọn */
-        }
-
-        /* --- Dashboard Specifics --- */
-        .dashboard-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            margin-bottom: 40px;
-        }
-
-        .stat-card {
-            background-color: var(--white);
-            padding: 25px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            transition: transform 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .stat-card-label {
-            display: block;
-            font-size: 1rem;
-            color: var(--text-muted);
-            margin-bottom: 10px;
-            font-weight: 500;
-        }
-
-        .stat-card-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--primary-purple);
-        }
-
-        /* Thêm gradient màu tím nhạt cho card đầu tiên */
-        .stat-card.total-points {
-            background: linear-gradient(135deg, var(--white) 0%, #FAF9FF 100%);
-            border-left: 5px solid var(--primary-purple);
-        }
-
-        /* Tùy chỉnh màu tím/hồng cho Dashboard cards */
-        .stat-card:nth-child(2) .stat-card-value { color: #5BDBA7; } /* Màu xanh lá cho nhiệm vụ */
-        .stat-card:nth-child(3) .stat-card-value { color: var(--primary-pink); }
-        .stat-card:nth-child(4) .stat-card-value { color: #FF9F43; } /* Màu cam cho tháng */
-
-        .dashboard-extras {
-            background-color: var(--white);
-            padding: 25px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-        }
-
-        .dashboard-extras h3 {
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-
-        .dashboard-extras p {
-            color: var(--text-muted);
-            margin-bottom: 10px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
-        }
+        :root { --primary-pink: #E84D8A; --primary-purple: #7A5AF8; --primary-purple-light: #F0EFFF; --bg-body: #F5F7FA; --white: #FFFFFF; --text-dark: #333333; --text-muted: #666666; --font-main: 'Poppins', sans-serif; --shadow: 0 4px 12px rgba(0,0,0,0.08); --border-radius: 12px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-main); background-color: var(--bg-body); color: var(--text-dark); display: flex; min-height: 100vh; }
+        a { text-decoration: none; color: inherit; } ul { list-style: none; }
+        input, select { width: 100%; padding: 12px 15px; margin-top: 8px; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 8px; font-family: var(--font-main); }
+        input:focus, select:focus { outline: none; border-color: var(--primary-purple); }
+        .btn { display: inline-block; padding: 12px 30px; border-radius: var(--border-radius); cursor: pointer; border: none; font-family: var(--font-main); font-weight: 600; transition: all 0.3s ease; text-align: center; }
+        .btn-primary { background-color: var(--primary-pink); color: var(--white); } .btn-primary:hover { background-color: #D6437A; }
+        .btn-secondary { background-color: var(--primary-purple); color: var(--white); } .btn-secondary:hover { background-color: #6549E0; }
+        .btn-danger { background-color: #ff4757; color: white; }
+        .btn-start { background-color: var(--primary-pink); color: var(--white); padding: 8px 20px; border-radius: 30px; font-size: 14px; min-width: 110px; }
+        .btn-start:disabled { background-color: #ccc; cursor: not-allowed; }
+        .btn-claim { background-color: #5BDBA7; color: var(--white); padding: 8px 20px; border-radius: 30px; font-size: 14px; min-width: 110px; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
         
-        /* --- Earn Section Specifics --- */
-        .task-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        .task-card {
-            background-color: var(--white);
-            padding: 20px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .task-info-left {
-            flex-grow: 1;
-        }
-
-        .task-name {
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
-
-        .task-meta {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-top: 5px;
-        }
-
-        .task-meta span {
-            color: var(--primary-pink);
-            font-weight: 600;
-            margin-right: 10px;
-        }
-
-        /* --- Table Styling (History, Points) --- */
-        .data-table-container {
-            background-color: var(--white);
-            padding: 25px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-        }
-
-        table.data-table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-        }
-
-        table.data-table th, table.data-table td {
-            padding: 15px;
-            border-bottom: 1px solid #eee;
-        }
-
-        table.data-table th {
-            color: var(--text-muted);
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        table.data-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        /* Statuses */
-        .status {
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-        .status-completed { background-color: #E6FFFA; color: #38A169; }
-        .status-pending { background-color: #FFF9E6; color: #D69E2E; }
-        .status-rejected { background-color: #FFF5F5; color: #E53E3E; }
-
-        /* --- Withdraw Section Specifics --- */
-        .withdraw-content {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 30px;
-        }
-
-        .withdraw-form-card {
-            background-color: var(--white);
-            padding: 30px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-        }
-
-        .withdraw-form-card h3 { margin-bottom: 20px; }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--text-dark);
-            font-weight: 500;
-        }
-
-        .withdraw-conditions-card {
-            background-color: var(--white);
-            padding: 25px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            border-top: 5px solid var(--primary-pink);
-        }
-
-        .withdraw-conditions-card h3 { margin-bottom: 15px; }
-        .withdraw-conditions-card p {
-            color: var(--text-muted);
-            margin-bottom: 15px;
-        }
-
-        /* --- Profile Section Specifics --- */
-        .profile-container {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 30px;
-        }
-
-        .profile-left-card {
-            background-color: var(--white);
-            padding: 30px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            text-align: center;
-        }
-
-        .profile-left-card .user-avatar-big {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 5px solid var(--primary-purple);
-            margin-bottom: 20px;
-        }
-
-        .profile-left-card h2 {
-            font-weight: 700;
-            color: var(--primary-purple);
-        }
-        .profile-left-card p {
-            color: var(--text-muted);
-            margin-bottom: 10px;
-        }
-
-        .profile-details-card {
-            background-color: var(--white);
-            padding: 30px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-        }
-
-        .profile-details-card h3 { margin-bottom: 20px; }
-
-        /* --- Register/Login Layout --- */
-        .auth-layout-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: var(--bg-body);
-            z-index: 100;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            /* Ban đầu ẩn, chỉ hiện nếu cần */
-            /* display: none; */
-        }
-        /* Mặc định cho auth-view là ẩn */
-        #auth-view {
-            display: none;
-        }
-
-        .auth-card {
-            background-color: var(--white);
-            padding: 40px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            width: 100%;
-            max-width: 500px;
-        }
-
-        .auth-card .logo-container {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .auth-card .logo-container img {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .auth-card h2 {
-            text-align: center;
-            margin-bottom: 30px;
-            font-weight: 700;
-            color: var(--primary-purple);
-        }
-
-        .auth-links {
-            margin-top: 20px;
-            text-align: center;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-
-        .auth-links a {
-            color: var(--primary-purple);
-            font-weight: 600;
-        }
-
-        /* --- Media Queries --- */
-        @media (max-width: 992px) {
-            aside.sidebar {
-                width: 200px;
-            }
-            main.content {
-                margin-left: 200px;
-                padding: 20px;
-            }
-            .sidebar-logo h1 { font-size: 1rem; }
-            .stat-card-value { font-size: 1.6rem; }
-        }
-
-        @media (max-width: 768px) {
-            aside.sidebar {
-                transform: translateX(-100%);
-                transition: transform 0.3s ease;
-                height: auto; /* Cho phép scroll */
-            }
-            aside.sidebar.mobile-open {
-                transform: translateX(0%);
-            }
-            main.content {
-                margin-left: 0;
-                width: 100%;
-            }
-            .dashboard-cards, .task-list, .withdraw-content, .profile-container {
-                grid-template-columns: 1fr;
-            }
-        }
+        aside.sidebar { width: 280px; background-color: var(--white); display: flex; flex-direction: column; padding: 20px; box-shadow: var(--shadow); position: fixed; height: 100vh; z-index: 10; }
+        .sidebar-logo { text-align: center; margin-bottom: 30px; } .sidebar-logo img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; }
+        .sidebar-logo h1 { color: var(--text-dark); font-size: 1.2rem; margin-top: 10px; font-weight: 700; }
+        .sidebar-menu { flex-grow: 1; } .sidebar-menu li { margin-bottom: 10px; }
+        .sidebar-menu a { display: flex; align-items: center; padding: 15px; border-radius: 8px; transition: background 0.3s ease; font-weight: 500; color: var(--text-dark); }
+        .sidebar-menu a:hover, .sidebar-menu .active a { background-color: var(--primary-purple-light); color: var(--primary-purple); }
+        
+        main.content { margin-left: 280px; padding: 40px; flex: 1; }
+        .content-section { display: none; } .content-section.active { display: block; }
+        
+        .dashboard-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 40px; }
+        .stat-card { background-color: var(--white); padding: 25px; border-radius: var(--border-radius); box-shadow: var(--shadow); }
+        .stat-card-label { display: block; font-size: 1rem; color: var(--text-muted); margin-bottom: 10px; }
+        .stat-card-value { font-size: 2rem; font-weight: 700; color: var(--primary-purple); }
+        
+        .task-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .task-card { background-color: var(--white); padding: 20px; border-radius: var(--border-radius); box-shadow: var(--shadow); display: flex; justify-content: space-between; align-items: center;}
+        
+        .grid-2 { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
+        .card-box { background-color: var(--white); padding: 30px; border-radius: var(--border-radius); box-shadow: var(--shadow); }
+        
+        .auth-layout-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: var(--bg-body); z-index: 100; display: flex; justify-content: center; align-items: center; }
+        .auth-card { background-color: var(--white); padding: 40px; border-radius: var(--border-radius); box-shadow: var(--shadow); width: 100%; max-width: 450px; }
+        .logo-container { text-align: center; margin-bottom: 20px; } .logo-container img { width: 120px; border-radius: 50%; }
     </style>
 </head>
 <body>
 
-    <aside class="sidebar">
-        <div class="sidebar-logo">
-            <img src="https://i.ibb.co/tP6n5Qp/image-0.png" alt="Kiếm Tiền Mùa Hè Logo">
-            <h1>KIẾM TIỀN MÙA HÈ</h1>
-        </div>
-        <ul class="sidebar-menu">
-            <li class="active"><a href="#" data-section="dashboard">Trang chủ (Dashboard)</a></li>
-            <li><a href="#" data-section="earn">Kiếm Xu</a></li>
-            <li><a href="#" data-section="points">Điểm Thưởng</a></li>
-            <li><a href="#" data-section="withdraw">Rút Thưởng</a></li>
-            <li><a href="#" data-section="history">Lịch Sử Giao Dịch</a></li>
-            <li><a href="#" data-section="profile">Hồ Sơ Cá Nhân</a></li>
-            <li><a href="#" data-section="guide">Hướng Dẫn</a></li>
-            <li class="logout-btn"><a href="#" data-section="logout">Đăng Xuất</a></li>
-        </ul>
-        <div class="sidebar-footer">
-            "Hoàn thành nhiệm vụ - Nhận xu mỗi ngày - Kiếm tiền mùa hè dễ dàng"
-        </div>
-    </aside>
-
-    <main class="content">
-        <header class="top-header">
-            <h2>Chào mừng, <span id="welcome-username">Bản lĩnh ☀️</span></h2>
-            <div class="header-controls">
-                <span class="notification">🔔</span>
-                <img src="https://via.placeholder.com/150" alt="User Mini Avatar" class="user-avatar-mini">
+    <div id="main-app" style="display: none; width: 100%;">
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <img src="logo.jpg" alt="Logo">
+                <h1>KIẾM LÚA MÙA HÈ</h1>
             </div>
-        </header>
+            <ul class="sidebar-menu">
+                <li class="active"><a href="#" data-section="dashboard">📊 Trang chủ</a></li>
+                <li><a href="#" data-section="earn">💰 Kiếm Lúa (Nhiệm vụ)</a></li>
+                <li><a href="#" data-section="withdraw">🏦 Rút Thưởng</a></li>
+                <li><a href="#" data-section="profile">👤 Hồ Sơ Cá Nhân</a></li>
+            </ul>
+        </aside>
 
-        <section id="dashboard" class="content-section active">
-            <div class="dashboard-cards">
-                <div class="stat-card total-points">
-                    <span class="stat-card-label">Tổng số Xu Mùa Hè</span>
-                    <span class="stat-card-value">12,580</span>
-                </div>
-                <div class="stat-card completed-tasks">
-                    <span class="stat-card-label">Tổng số nhiệm vụ đã hoàn thành</span>
-                    <span class="stat-card-value">25</span>
-                </div>
-                <div class="stat-card income-today">
-                    <span class="stat-card-label">Thu nhập hôm nay</span>
-                    <span class="stat-card-value">1,200 Xu</span>
-                </div>
-                <div class="stat-card income-month">
-                    <span class="stat-card-label">Thu nhập tháng này</span>
-                    <span class="stat-card-value">3,450 Xu</span>
-                </div>
-            </div>
-            <div class="dashboard-extras">
-                <h3>📢 Thông báo hệ thống</h3>
-                <p>Nhiệm vụ mới: Vượt link "Thế Giới Công Nghệ" vừa được thêm.</p>
-                <p>Cập nhật: Ví điện tử MoMo đã được bảo trì xong, có thể rút tiền bình thường.</p>
-            </div>
-        </section>
-
-        <section id="earn" class="content-section">
-            <h3 class="mb-4" style="margin-bottom: 20px;">Danh sách nhiệm vụ</h3>
-            <div class="task-list">
-                <div class="task-card">
-                    <div class="task-info-left">
-                        <p class="task-name">Vượt Link "Thế Giới Công Nghệ"</p>
-                        <p class="task-meta">Thưởng: <span>20 Xu</span> | Thời gian: 15 giây</p>
+        <main class="content">
+            <section id="dashboard" class="content-section active">
+                <h2>Chào mừng, <span id="welcome-username" style="color: var(--primary-purple);">Người dùng</span>! 🌾</h2>
+                <br>
+                <div class="dashboard-cards">
+                    <div class="stat-card">
+                        <span class="stat-card-label">Tổng Lúa (Xu) tích lũy</span>
+                        <span class="stat-card-value" id="db-points">0</span>
                     </div>
-                    <button class="btn btn-start">Bắt đầu</button>
-                </div>
-                <div class="task-card">
-                    <div class="task-info-left">
-                        <p class="task-name">Xem Website "Khỏe và Đẹp"</p>
-                        <p class="task-meta">Thưởng: <span>10 Xu</span> | Thời gian: 10 giây</p>
+                    <div class="stat-card">
+                        <span class="stat-card-label">Nhiệm vụ đã hoàn thành</span>
+                        <span class="stat-card-value" id="db-completed-count" style="color: #5BDBA7;">0</span>
                     </div>
-                    <button class="btn btn-start">Bắt đầu</button>
                 </div>
-                <div class="task-card">
-                    <div class="task-info-left">
-                        <p class="task-name">Xem Quảng Cáo "Học Viện Kỹ Năng"</p>
-                        <p class="task-meta">Thưởng: <span>5 Xu</span> | Thời gian: 5 giây</p>
-                    </div>
-                    <button class="btn btn-start">Bắt đầu</button>
+            </section>
+
+            <section id="earn" class="content-section">
+                <h3>Danh sách nhiệm vụ hôm nay</h3><br>
+                <div class="task-list" id="task-container">
+                    <p>Đang tải dữ liệu...</p>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <section id="points" class="content-section">
-            <h3>Tổng quan Điểm Thưởng</h3>
-            <div class="data-table-container">
-                <table class="data-table">
-                    <thead>
-                        <tr><th>Hiển thị</th><th>Giá trị</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>Tổng Xu hiện có</td><td><strong>12,580</strong> Xu</td></tr>
-                        <tr><td>Xu nhận hôm nay</td><td><strong>1,200</strong> Xu</td></tr>
-                        <tr><td>Xu nhận tháng này</td><td><strong>3,450</strong> Xu</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <section id="withdraw" class="content-section">
-            <h3>Yêu cầu Rút Thưởng</h3>
-            <div class="withdraw-content">
-                <div class="withdraw-form-card">
-                    <h3>Hình thức thanh toán</h3>
-                    <div class="form-group mb-4">
-                        <label>Chọn hình thức:</label>
-                        <select>
-                            <option>Chuyển khoản ngân hàng</option>
-                            <option>Ví điện tử MoMo</option>
+            <section id="withdraw" class="content-section">
+                <h3>Yêu cầu Rút Thưởng</h3><br>
+                <div class="grid-2">
+                    <div class="card-box">
+                        <label>Chọn hình thức Rút:</label>
+                        <select id="wd-method" onchange="changeWithdrawMethod()">
+                            <option value="Thẻ Cào">Thẻ cào điện thoại (Viettel, Vina, Mobi)</option>
+                            <option value="Ví MoMo">Ví MoMo</option>
+                            <option value="Ngân Hàng">Chuyển khoản Ngân Hàng</option>
                         </select>
+                        
+                        <label id="lbl-details">Nhà mạng muốn rút (VD: Viettel):</label>
+                        <input type="text" id="wd-details" placeholder="Nhập chi tiết...">
+                        
+                        <label>Số Lúa (Xu) muốn đổi (Tối thiểu 10.000):</label>
+                        <input type="number" id="wd-amount" placeholder="Ví dụ: 10000">
+                        
+                        <button class="btn btn-secondary" id="btn-withdraw" onclick="submitWithdraw()">Gửi yêu cầu Rút Tiền</button>
                     </div>
-                    <div class="form-group mb-4">
-                        <label>Số tài khoản:</label>
-                        <input type="text" placeholder="Nhập số tài khoản/Ví">
+                    <div class="card-box" style="border-top: 5px solid var(--primary-pink);">
+                        <h4>💡 Hướng dẫn</h4><br>
+                        <p>- <strong>Thẻ cào:</strong> Ghi rõ tên nhà mạng. Admin sẽ gửi mã thẻ vào Email của bạn.</p>
+                        <p>- <strong>MoMo/Ngân hàng:</strong> Ghi rõ STK và Tên chủ tài khoản.</p>
+                        <p>- Thời gian duyệt: 12h - 24h.</p>
                     </div>
-                    <div class="form-group mb-4">
-                        <label>Tên ngân hàng:</label>
-                        <input type="text" placeholder="Nhập tên ngân hàng (v.d. Techcombank)">
-                    </div>
-                    <div class="form-group mb-4">
-                        <label>Chủ tài khoản:</label>
-                        <input type="text" placeholder="Nhập tên chủ tài khoản">
-                    </div>
-                    <div class="form-group mb-4">
-                        <label>Số xu cần rút:</label>
-                        <input type="number" placeholder="Tối thiểu 10,000 Xu">
-                    </div>
-                    <button class="btn btn-secondary">Gửi yêu cầu rút tiền</button>
                 </div>
-                <div class="withdraw-conditions-card">
-                    <h3>💡 Điều kiện</h3>
-                    <p>Để thực hiện rút tiền, tài khoản của bạn cần có ít nhất:</p>
-                    <h2>10.000 Xu</h2>
-                    <p>Thời gian xử lý: 2-3 ngày làm việc.</p>
-                </div>
-            </div>
-        </section>
+            </section>
 
-        <section id="history" class="content-section">
-            <h3>Lịch sử hoạt động và rút tiền</h3>
-            <div class="data-table-container">
-                <table class="data-table">
-                    <thead>
-                        <tr><th>Ngày</th><th>Nội dung</th><th>Số Xu</th><th>Trạng thái</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>2024-05-20</td><td>Hoàn thành NV: Vượt link Thế Giới CN</td><td>+20</td><td><span class="status status-completed">Thành công</span></td></tr>
-                        <tr><td>2024-05-20</td><td>Hoàn thành NV: Xem website Khoẻ đẹp</td><td>+10</td><td><span class="status status-completed">Thành công</span></td></tr>
-                        <tr><td>2024-05-18</td><td>Rút tiền: Ngân hàng ACB (...4567)</td><td>-15,000</td><td><span class="status status-pending">Đang xử lý</span></td></tr>
-                        <tr><td>2024-05-15</td><td>Hoàn thành NV: Vượt link...</td><td>+20</td><td><span class="status status-completed">Thành công</span></td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <section id="profile" class="content-section">
-            <h3>Hồ sơ tài khoản</h3>
-            <div class="profile-container">
-                <div class="profile-left-card">
-                    <img src="https://via.placeholder.com/150" alt="User big Avatar" class="user-avatar-big">
-                    <h2>Bản lĩnh ☀️</h2>
-                    <p>Member từ: 2024-01-10</p>
-                    <button class="btn btn-primary" style="margin-top: 10px;">Đổi mật khẩu</button>
-                </div>
-                <div class="profile-details-card">
-                    <h3>Thông tin cơ bản</h3>
-                    <div class="form-group mb-4">
-                        <label>Tên người dùng:</label>
-                        <input type="text" value="Bản lĩnh ☀️" disabled style="background-color: #f0f0f0; border-color: #ddd;">
+            <section id="profile" class="content-section">
+                <h3>Trang cá nhân</h3><br>
+                <div class="grid-2">
+                    <div class="card-box" style="text-align: center;">
+                        <img src="logo.jpg" style="width: 150px; border-radius: 50%; border: 3px solid var(--primary-purple);">
+                        <h2 id="prof-username" style="margin: 10px 0;">Username</h2>
+                        <button class="btn btn-danger" onclick="logoutApp()" style="margin-top: 15px;">Đăng xuất tài khoản</button>
                     </div>
-                    <div class="form-group mb-4">
-                        <label>Email liên hệ:</label>
-                        <input type="email" value="contact.user@email.com">
+                    <div class="card-box">
+                        <h3>Đổi mật khẩu</h3><br>
+                        <input type="password" id="old-pass" placeholder="Mật khẩu cũ">
+                        <input type="password" id="new-pass" placeholder="Mật khẩu mới">
+                        <button class="btn btn-primary" onclick="changePassword()">Cập nhật mật khẩu</button>
                     </div>
-                    <button class="btn btn-secondary">Cập nhật thông tin</button>
                 </div>
-            </div>
-        </section>
-    </main>
+            </section>
+        </main>
+    </div>
 
     <div class="auth-layout-container" id="auth-view">
-        <div class="auth-card" id="auth-register-card">
-            <div class="logo-container">
-                <img src="https://i.ibb.co/tP6n5Qp/image-0.png" alt="Kiếm Tiền Mùa Hè Logo">
-            </div>
-            <h2>Đăng ký tài khoản</h2>
-            <form onsubmit="return false">
-                <input type="text" placeholder="Tên đăng nhập" required>
-                <input type="email" placeholder="Email" required>
-                <input type="password" placeholder="Mật khẩu" required>
-                <input type="password" placeholder="Nhập lại mật khẩu" required>
-                <input type="text" placeholder="Mã xác nhận" required>
-                <button class="btn btn-primary btn-block" style="width: 100%;">Đăng ký</button>
-            </form>
-            <div class="auth-links">
-                Đã có tài khoản? <a href="#" id="switch-to-login">Đăng nhập ngay</a>
-            </div>
+        <div class="auth-card" id="auth-login-card">
+            <div class="logo-container"><img src="logo.jpg" alt="Logo"></div>
+            <h2 style="text-align: center; color: var(--primary-purple);">Đăng Nhập</h2>
+            <input type="text" id="log-user" placeholder="Tên đăng nhập">
+            <input type="password" id="log-pass" placeholder="Mật khẩu">
+            <button class="btn btn-primary" style="width: 100%;" onclick="login()">Đăng nhập</button>
+            <p style="text-align: center; margin-top: 20px;">Chưa có tài khoản? <a href="#" onclick="toggleAuth()" style="color: var(--primary-purple);">Đăng ký</a></p>
         </div>
-
-        <div class="auth-card" id="auth-login-card" style="display: none;">
-            <div class="logo-container">
-                <img src="https://i.ibb.co/tP6n5Qp/image-0.png" alt="Kiếm Tiền Mùa Hè Logo">
-            </div>
-            <h2>Đăng nhập</h2>
-            <form onsubmit="return false">
-                <input type="text" placeholder="Tên đăng nhập hoặc Email" required>
-                <input type="password" placeholder="Mật khẩu" required>
-                <button class="btn btn-primary btn-block" style="width: 100%; margin-bottom: 10px;">Đăng nhập</button>
-                <a href="#" class="btn btn-link" style="color: var(--text-muted); font-size: 0.9rem; margin-top: 10px;">Quên mật khẩu?</a>
-            </form>
-            <div class="auth-links">
-                Chưa có tài khoản? <a href="#" id="switch-to-register">Đăng ký mới</a>
-            </div>
+        
+        <div class="auth-card" id="auth-register-card" style="display: none;">
+            <div class="logo-container"><img src="logo.jpg" alt="Logo"></div>
+            <h2 style="text-align: center; color: var(--primary-purple);">Đăng Ký</h2>
+            <input type="text" id="reg-user" placeholder="Tên đăng nhập">
+            <input type="email" id="reg-email" placeholder="Email (Để nhận thẻ cào)">
+            <input type="password" id="reg-pass" placeholder="Mật khẩu">
+            <button class="btn btn-primary" style="width: 100%;" onclick="register()">Đăng ký</button>
+            <p style="text-align: center; margin-top: 20px;">Đã có tài khoản? <a href="#" onclick="toggleAuth()" style="color: var(--primary-purple);">Đăng nhập</a></p>
         </div>
     </div>
 
-
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // --- 1. Sidebar Section Switching ---
-            const menuItems = document.querySelectorAll('.sidebar-menu li:not(.logout-btn) a');
-            const sections = document.querySelectorAll('.content-section');
-            const logoutButton = document.querySelector('.logout-btn a');
-            const authView = document.getElementById('auth-view');
+        // LẮP CHÍNH XÁC LINK BẠN VỪA GỬI VÀO ĐÂY:
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx1hP042D5mQFWTxqaVXDVDvCFX5clpUJ4Ej1tf4d26H5XvPptMRwEqPOE86u3NqwbK/exec';
+        let currentUser = "";
 
-            menuItems.forEach(item => {
-                item.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    // 1.1 Remove active class from all menu items
-                    document.querySelectorAll('.sidebar-menu li').forEach(li => li.classList.remove('active'));
-                    // 1.2 Add active class to current menu item's parent li
-                    this.parentElement.classList.add('active');
+        // Chuyển tab Auth
+        function toggleAuth() {
+            const l = document.getElementById('auth-login-card');
+            const r = document.getElementById('auth-register-card');
+            l.style.display = l.style.display === 'none' ? 'block' : 'none';
+            r.style.display = r.style.display === 'none' ? 'block' : 'none';
+        }
 
-                    // 2.1 Hide all content sections
-                    sections.forEach(section => section.classList.remove('active'));
-                    // 2.2 Show the target content section
-                    const targetSectionId = this.getAttribute('data-section');
-                    document.getElementById(targetSectionId).classList.add('active');
+        // Đăng xuất
+        function logoutApp() {
+            currentUser = "";
+            document.getElementById('main-app').style.display = 'none';
+            document.getElementById('auth-view').style.display = 'flex';
+        }
+
+        // Chuyển Menu
+        document.querySelectorAll('.sidebar-menu a').forEach(a => {
+            a.onclick = (e) => {
+                e.preventDefault();
+                document.querySelectorAll('.sidebar-menu li').forEach(li => li.classList.remove('active'));
+                a.parentElement.classList.add('active');
+                document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
+                
+                const secId = a.getAttribute('data-section');
+                document.getElementById(secId).classList.add('active');
+                if(secId === 'dashboard') loadDashboard();
+                if(secId === 'earn') loadTasks();
+            }
+        });
+
+        // 1. ĐĂNG KÝ
+        function register() {
+            const u = document.getElementById('reg-user').value;
+            const e = document.getElementById('reg-email').value;
+            const p = document.getElementById('reg-pass').value;
+            fetch(`${SCRIPT_URL}?action=register&username=${u}&email=${e}&password=${p}`)
+            .then(r => r.json()).then(data => {
+                alert(data.message);
+                if(data.status === 'success') toggleAuth();
+            });
+        }
+
+        // 2. ĐĂNG NHẬP
+        function login() {
+            const u = document.getElementById('log-user').value;
+            const p = document.getElementById('log-pass').value;
+            fetch(`${SCRIPT_URL}?action=login&username=${u}&password=${p}`)
+            .then(r => r.json()).then(data => {
+                if(data.status === 'success') {
+                    currentUser = data.username;
+                    document.getElementById('welcome-username').innerText = currentUser;
+                    document.getElementById('prof-username').innerText = currentUser;
+                    document.getElementById('auth-view').style.display = 'none';
+                    document.getElementById('main-app').style.display = 'flex';
+                    loadDashboard();
+                } else alert(data.message);
+            });
+        }
+
+        // 3. LOAD DASHBOARD
+        function loadDashboard() {
+            fetch(`${SCRIPT_URL}?action=getUserData&username=${currentUser}`)
+            .then(r => r.json()).then(data => {
+                document.getElementById('db-points').innerText = data.points;
+                document.getElementById('db-completed-count').innerText = data.completedCount;
+            });
+        }
+
+        // 4. LOAD NHIỆM VỤ (HIỂN THỊ CHÍNH XÁC ĐẾM NGƯỢC)
+        function loadTasks() {
+            const box = document.getElementById('task-container');
+            box.innerHTML = 'Đang tải...';
+            fetch(`${SCRIPT_URL}?action=getTasks&username=${currentUser}`)
+            .then(r => r.json()).then(tasks => {
+                box.innerHTML = '';
+                if(tasks.length === 0) { box.innerHTML = '<p>Bạn đã làm hết nhiệm vụ hôm nay. Chờ ngày mai nhé!</p>'; return; }
+                
+                tasks.forEach(t => {
+                    box.innerHTML += `
+                        <div class="task-card" id="task-${t.id}">
+                            <div>
+                                <h4 style="margin-bottom:5px;">${t.name}</h4>
+                                <small style="color:var(--text-muted)">Thưởng: <b style="color:var(--primary-pink)">${t.reward} Xu</b> | Chờ: ${t.time}s</small>
+                            </div>
+                            <button class="btn btn-start" id="btn-${t.id}" onclick="startTask('${t.id}', '${t.link}', ${t.time})">Làm ngay</button>
+                        </div>
+                    `;
                 });
             });
+        }
 
-            // Handle Logout
-            logoutButton.addEventListener('click', function(e) {
-                e.preventDefault();
-                alert('Bạn đã đăng xuất.');
-                authView.style.display = 'flex'; // Hiện Register/Login view
-                document.getElementById('auth-login-card').style.display = 'block'; // Mặc định hiện login
-                document.getElementById('auth-register-card').style.display = 'none';
+        function startTask(id, link, time) {
+            const btn = document.getElementById(`btn-${id}`);
+            window.open(link, '_blank'); // Mở link
+            let timeLeft = time;
+            btn.disabled = true;
+            
+            const timer = setInterval(() => {
+                timeLeft--;
+                btn.innerText = `Chờ ${timeLeft}s`;
+                if(timeLeft <= 0) {
+                    clearInterval(timer);
+                    btn.disabled = false;
+                    btn.className = "btn btn-claim";
+                    btn.innerText = "Nhận Xu";
+                    btn.onclick = () => claimReward(id, btn);
+                }
+            }, 1000);
+        }
+
+        function claimReward(id, btn) {
+            btn.innerText = 'Đang cộng...';
+            fetch(`${SCRIPT_URL}?action=completeTask&username=${currentUser}&taskId=${id}`)
+            .then(r => r.json()).then(data => {
+                alert(data.message);
+                document.getElementById(`task-${id}`).style.display = 'none'; // Ẩn nhiệm vụ đi
+                loadDashboard(); // Cập nhật lại số dư trên web ngay lập tức
             });
+        }
 
-            // --- 2. Authentication View Switches ---
-            const switchToLoginBtn = document.getElementById('switch-to-login');
-            const switchToRegisterBtn = document.getElementById('switch-to-register');
-            const registerCard = document.getElementById('auth-register-card');
-            const loginCard = document.getElementById('auth-login-card');
+        // 5. GIAO DIỆN RÚT TIỀN ĐỘNG
+        function changeWithdrawMethod() {
+            const v = document.getElementById('wd-method').value;
+            const lbl = document.getElementById('lbl-details');
+            const inp = document.getElementById('wd-details');
+            if(v === 'Thẻ Cào') { lbl.innerText = 'Nhà mạng (Viettel/Vina/Mobi):'; inp.placeholder = 'Nhập tên nhà mạng...'; }
+            else { lbl.innerText = 'Số tài khoản / Số điện thoại (Kèm tên):'; inp.placeholder = 'VD: 0987654321 - Nguyen Van A'; }
+        }
 
-            switchToLoginBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                registerCard.style.display = 'none';
-                loginCard.style.display = 'block';
+        function submitWithdraw() {
+            const method = document.getElementById('wd-method').value;
+            const details = document.getElementById('wd-details').value;
+            const amount = document.getElementById('wd-amount').value;
+            if(amount < 10000) return alert('Số xu rút tối thiểu là 10.000!');
+            
+            document.getElementById('btn-withdraw').innerText = 'Đang xử lý...';
+            fetch(`${SCRIPT_URL}?action=withdraw&username=${currentUser}&method=${method}&details=${details}&amount=${amount}`)
+            .then(r => r.json()).then(data => {
+                alert(data.message);
+                document.getElementById('btn-withdraw').innerText = 'Gửi yêu cầu Rút Tiền';
+                loadDashboard(); // Update lại xu bị trừ
             });
+        }
 
-            switchToRegisterBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                loginCard.style.display = 'none';
-                registerCard.style.display = 'block';
-            });
-
-            // *Lưu ý:* Để ẩn view Auth và hiện main content, bạn có thể gọi `authView.style.display = 'none'` trong hàm xử lý logic login/register thật.
-        });
+        // 6. ĐỔI MẬT KHẨU
+        function changePassword() {
+            const o = document.getElementById('old-pass').value;
+            const n = document.getElementById('new-pass').value;
+            fetch(`${SCRIPT_URL}?action=changePassword&username=${currentUser}&oldPass=${o}&newPass=${n}`)
+            .then(r => r.json()).then(data => alert(data.message));
+        }
     </script>
 </body>
 </html>
