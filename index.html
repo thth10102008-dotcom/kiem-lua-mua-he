@@ -47,7 +47,7 @@
 
         aside.sidebar { width: 260px; background-color: var(--white); display: flex; flex-direction: column; padding: 24px 16px; box-shadow: var(--shadow-sm); position: fixed; height: 100vh; z-index: 10; border-right: 1px solid #E2E8F0; }
         .sidebar-logo { text-align: center; margin-bottom: 32px; } 
-        .sidebar-logo img { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary-light); padding: 3px; }
+        .sidebar-logo img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary-light); padding: 3px; }
         .sidebar-logo h1 { color: var(--primary); font-size: 1.1rem; margin-top: 12px; font-weight: 800; letter-spacing: 0.5px; }
         .sidebar-menu { flex-grow: 1; list-style: none; } 
         .sidebar-menu li { margin-bottom: 6px; }
@@ -60,7 +60,7 @@
         .balance-badge { background-color: #FEF3C7; color: #B45309; padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 6px; }
         
         .avatar-dropdown { position: relative; display: inline-block; }
-        .user-avatar-mini { width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--primary); cursor: pointer; object-fit: cover; transition: 0.2s; background: #eee;}
+        .user-avatar-mini { width: 42px; height: 42px; border-radius: 50%; border: 2px solid var(--primary); cursor: pointer; object-fit: cover; transition: 0.2s; background: #eee;}
         .user-avatar-mini:hover { transform: scale(1.05); }
         .dropdown-content { display: none; position: absolute; right: 0; top: 50px; background-color: white; min-width: 180px; box-shadow: 0px 8px 24px rgba(0,0,0,0.12); border-radius: 12px; z-index: 100; overflow: hidden; border: 1px solid #E2E8F0; }
         .dropdown-content a { color: var(--text-dark); padding: 14px 16px; text-decoration: none; display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; transition: 0.2s;}
@@ -125,13 +125,36 @@
         .task-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
         .task-card { background-color: var(--white); padding: 20px; border-radius: var(--border-radius); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: 16px; justify-content: space-between; border: 1px solid #E2E8F0; }
         .task-header { display: flex; gap: 16px; align-items: center; }
-        .task-img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; background-color: #F1F5F9; border: 1px solid #E2E8F0; }
-        .task-info h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; color: var(--primary); }
-        .task-info p { font-size: 13px; color: var(--text-dark); font-weight: 600;}
-        .task-info p span { color: var(--accent); font-weight: 800; }
+        
+        /* ĐÃ PHÓNG TO ẢNH NHIỆM VỤ THEO YÊU CẦU */
+        .task-img { width: 95px; height: 95px; border-radius: 12px; object-fit: cover; background-color: #F1F5F9; border: 1px solid #E2E8F0; box-shadow: 0 2px 8px rgba(0,0,0,0.06);}
+        
+        .task-info h4 { font-size: 16px; font-weight: 800; margin-bottom: 6px; color: var(--primary); }
+        .task-info p { font-size: 14px; color: var(--text-dark); font-weight: 600;}
+        .task-info p span { color: var(--accent); font-weight: 800; font-size: 15px;}
         .task-body-inputs { background: #F8FAFC; padding: 16px; border-radius: 8px; display: none; border: 1px dashed #CBD5E1; }
         
         .form-box { background: white; padding: 32px; border-radius: var(--border-radius); box-shadow: var(--shadow-sm); border: 1px solid #E2E8F0; }
+
+        /* BẢNG THÔNG BÁO POPUP Ở GIỮA MÀN HÌNH - TỰ ĐỘNG ĐÓNG SAU 3 GIÂY */
+        .custom-popup-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.4); z-index: 99999;
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: 0.3s ease;
+            backdrop-filter: blur(2px);
+        }
+        .custom-popup-overlay.show { opacity: 1; pointer-events: all; }
+        .custom-popup-box {
+            background: white; padding: 35px 25px; border-radius: 24px;
+            text-align: center; box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+            transform: scale(0.7) translateY(20px); transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-width: 90%; width: 340px; border: 1px solid #E2E8F0;
+        }
+        .custom-popup-overlay.show .custom-popup-box { transform: scale(1) translateY(0); }
+        .popup-icon { font-size: 72px; margin-bottom: 18px; line-height: 1; } /* Ảnh icon thông báo to ra */
+        .popup-title { font-size: 22px; font-weight: 800; color: var(--text-dark); margin-bottom: 10px; }
+        .popup-message { font-size: 15px; color: var(--text-muted); font-weight: 500; line-height: 1.5; }
 
         .auth-layout-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-body); z-index: 100; display: flex; justify-content: center; align-items: center; }
         .auth-card { background-color: var(--white); padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); width: 100%; max-width: 400px; border: 1px solid #E2E8F0; }
@@ -157,11 +180,18 @@
 </head>
 <body>
 
+    <div id="custom-popup-overlay" class="custom-popup-overlay">
+        <div class="custom-popup-box">
+            <div class="popup-icon" id="popup-icon">✅</div>
+            <h3 class="popup-title" id="popup-title">Thành công!</h3>
+            <p class="popup-message" id="popup-message">Thao tác của bạn đã được ghi nhận.</p>
+        </div>
+    </div>
+
     <a href="https://t.me/hanhle1231" target="_blank" class="tele-btn" title="Hỗ trợ Telegram">
         <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.19-.08-.05-.19-.02-.27 0-.11.03-1.93 1.23-5.46 3.62-.51.35-.98.52-1.4.51-.46-.01-1.35-.26-2.01-.48-.81-.27-1.46-.42-1.4-.88.03-.24.36-.48.98-.74 3.85-1.68 6.42-2.79 7.71-3.32 3.67-1.53 4.43-1.8 4.93-1.81.11 0 .36.03.49.13.11.08.14.19.16.27-.01.04-.01.12-.02.17z"/></svg>
     </a>
 
-    <!-- MAIN APP -->
     <div id="main-app" style="display: none; width: 100%;">
         
         <aside class="sidebar">
@@ -174,7 +204,6 @@
                 <li><a href="#" data-section="earn">🌾 Kiếm Lúa</a></li>
                 <li><a href="#" data-section="referral">🤝 Chia Sẻ (Ref)</a></li>
                 <li><a href="#" data-section="withdraw">🏦 Rút Thưởng</a></li>
-                <!-- ĐÃ KHÔI PHỤC LẠI NÚT LỊCH SỬ Ở MENU -->
                 <li><a href="#" data-section="history-section">📝 Lịch Sử</a></li>
                 <li><a href="#" data-section="profile">👤 Hồ Sơ Của Tôi</a></li>
             </ul>
@@ -200,7 +229,6 @@
                         <img src="101036-1215264.jpg" class="user-avatar-mini" onclick="toggleAvatarMenu()" onerror="this.src='logo.jpg'">
                         <div id="avatarMenu" class="dropdown-content">
                             <a href="#" onclick="openSection('profile'); toggleAvatarMenu();">⚙️ Cài đặt hồ sơ</a>
-                            <!-- Nút chuyển nhanh vào Lịch sử rút tiền từ Avatar -->
                             <a href="#" onclick="switchHistoryTab('withdraw'); openSection('history-section'); toggleAvatarMenu();">💸 Lịch sử rút tiền</a>
                             <div style="height: 1px; background: #E2E8F0; margin: 4px 0;"></div>
                             <a href="#" onclick="logoutApp(); toggleAvatarMenu();" style="color: var(--danger);">🚪 Đăng xuất</a>
@@ -215,13 +243,11 @@
                 </div>
             </div>
 
-            <!-- LIVE PAYOUTS -->
             <div class="live-payout-box">
                 <div class="live-payout-icon">💸</div>
                 <div class="live-payout-content" id="payout-feed"></div>
             </div>
 
-            <!-- DASHBOARD -->
             <section id="dashboard" class="content-section active">
                 <div class="dashboard-cards">
                     <div class="stat-card">
@@ -244,7 +270,6 @@
                 </div>
             </section>
 
-            <!-- KIẾM LÚA -->
             <section id="earn" class="content-section">
                 <div class="checkin-banner">
                     <div class="checkin-info">
@@ -275,7 +300,6 @@
                 <div class="task-list" id="task-container"><p style="color: var(--text-muted); font-size:14px;">Đang tải dữ liệu...</p></div>
             </section>
 
-            <!-- TRANG CHIA SẺ -->
             <section id="referral" class="content-section">
                 <h3 style="margin-bottom: 20px;">🤝 Chia sẻ bạn bè - Nhận lợi nhuận 10%</h3>
                 <div class="form-box" style="margin-bottom: 24px;">
@@ -287,7 +311,6 @@
                 </div>
             </section>
 
-            <!-- RÚT THƯỞNG -->
             <section id="withdraw" class="content-section">
                 <h3>Tạo Yêu Cầu Rút Thưởng</h3><br>
                 <div class="rules-box">
@@ -313,7 +336,6 @@
                 </div>
             </section>
 
-            <!-- ĐÃ KHÔI PHỤC: LỊCH SỬ -->
             <section id="history-section" class="content-section">
                 <div class="tabs-nav">
                     <div class="tab-btn active" id="tab-task" onclick="switchHistoryTab('task')">Hoạt động (Nhiệm vụ)</div>
@@ -335,7 +357,6 @@
                 </div>
             </section>
 
-            <!-- HỒ SƠ -->
             <section id="profile" class="content-section">
                 <h3>Quản lý hồ sơ</h3><br>
                 <div class="profile-grid">
@@ -357,7 +378,6 @@
         </main>
     </div>
 
-    <!-- MÀN HÌNH AUTH -->
     <div class="auth-layout-container" id="auth-view">
         <div class="auth-card" id="auth-login-card">
             <div style="text-align: center; margin-bottom: 24px;"><img src="logo.jpg" style="width:100px; border-radius:50%"></div>
@@ -385,8 +405,8 @@
         </div>
     </div>
 
-    <!-- SCRIPT ĐIỀU KHIỂN CHÍNH -->
     <script>
+        // ĐƯỜNG LINK WEB APP SCRIPT CỦA BẠN ĐÃ ĐƯỢC CHÈN CHUẨN XÁC:
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx1hP042D5mQFWTxqaVXDVDvCFX5clpUJ4Ej1tf4d26H5XvPptMRwEqPOE86u3NqwbK/exec';
         let currentUser = "";
         let incomeChartInstance = null;
@@ -401,6 +421,18 @@
             "Người dùng <b>Lien***</b> vừa đổi thành công 20k về Ví MoMo"
         ];
 
+        function showPopup(title, message, isSuccess = true) {
+            const popup = document.getElementById('custom-popup-overlay');
+            document.getElementById('popup-icon').innerText = isSuccess ? '✅' : '⚠️';
+            document.getElementById('popup-title').innerText = title;
+            document.getElementById('popup-message').innerText = message;
+            
+            popup.classList.add('show');
+            setTimeout(() => {
+                popup.classList.remove('show');
+            }, 3000); // 3000ms = 3 giây đóng tự động công khai trung tâm
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             const savedUser = localStorage.getItem('remembered_user');
             if(savedUser) {
@@ -410,7 +442,6 @@
             startLivePayoutFeed();
         });
 
-        // Hàm chuyển tab Lịch sử
         function switchHistoryTab(tabName) {
             document.getElementById('tab-task').classList.toggle('active', tabName === 'task');
             document.getElementById('tab-withdraw').classList.toggle('active', tabName === 'withdraw');
@@ -425,7 +456,7 @@
 
             fetch(`${SCRIPT_URL}?action=dailyCheckin&username=${encodeURIComponent(currentUser)}`)
             .then(res => res.json()).then(data => {
-                alert(data.message);
+                showPopup(data.status === 'success' ? 'Thành công!' : 'Thông báo', data.message, data.status === 'success');
                 if (data.status === 'success') {
                     btn.innerText = "Đã điểm danh hôm nay ✅";
                     loadDashboard(); 
@@ -433,7 +464,7 @@
                     btn.innerText = "Đã điểm danh hôm nay ✅";
                 }
             }).catch(() => {
-                alert("Lỗi kết nối máy chủ điểm danh!");
+                showPopup("Lỗi mạng", "Lỗi kết nối máy chủ điểm danh!", false);
                 btn.innerText = "Điểm danh ngay (+50 Lúa)";
                 btn.disabled = false;
             });
@@ -488,7 +519,7 @@
             const copyText = document.getElementById('ref-link-input');
             copyText.select();
             document.execCommand("copy");
-            alert("Đã copy link giới thiệu!");
+            showPopup("Thành công!", "Đã copy link giới thiệu!", true);
         }
 
         function toggleAvatarMenu() { document.getElementById("avatarMenu").classList.toggle("show"); }
@@ -559,13 +590,12 @@
             const msg = document.getElementById('register-msg');
             if(!u || !e || !p) { msg.style.color = 'var(--danger)'; msg.innerText = 'Vui lòng điền đủ thông tin!'; return; }
             document.getElementById('btn-register').innerText = 'Đang tạo tài khoản...';
-            fetch(`${https://script.google.com/macros/s/AKfycbx1hP042D5mQFWTxqaVXDVDvCFX5clpUJ4Ej1tf4d26H5XvPptMRwEqPOE86u3NqwbK/exec}?action=register&username=${encodeURIComponent(u)}&email=${encodeURIComponent(e)}&password=${encodeURIComponent(p)}`)
+            fetch(`${SCRIPT_URL}?action=register&username=${encodeURIComponent(u)}&email=${encodeURIComponent(e)}&password=${encodeURIComponent(p)}`)
             .then(res => res.json()).then(data => {
                 document.getElementById('btn-register').innerText = 'Đăng ký tài khoản';
                 if(data.status === 'success') {
                     toggleAuth(false);
-                    const logMsg = document.getElementById('login-msg');
-                    logMsg.style.color = 'var(--success)'; logMsg.innerText = data.message;
+                    showPopup('Thành công', data.message, true);
                 } else { msg.style.color = 'var(--danger)'; msg.innerText = data.message; }
             });
         }
@@ -614,7 +644,6 @@
                     last7Days.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`);
                 }
                 data.taskHistory.forEach(h => {
-                    // Đẩy từng dòng lịch sử vào bảng
                     tBody.innerHTML += `<tr><td>${h.taskId}</td><td>${new Date(h.time).toLocaleDateString('vi-VN')}</td><td style="color:var(--success);font-weight:700;">+${h.reward}</td></tr>`;
                     
                     let taskDateObj = new Date(h.time);
@@ -704,10 +733,10 @@
 
         function verifyCode(id) {
             const codeInput = document.getElementById(`code-val-${id}`).value.trim();
-            if(!codeInput) return alert('Vui lòng điền mã xác nhận!');
+            if(!codeInput) return showPopup('Chú ý', 'Vui lòng điền mã xác nhận!', false);
             fetch(`${SCRIPT_URL}?action=completeTask&username=${encodeURIComponent(currentUser)}&taskId=${encodeURIComponent(id)}&userCode=${encodeURIComponent(codeInput)}`)
             .then(res => res.json()).then(data => {
-                alert(data.message);
+                showPopup(data.status === 'success' ? 'Thành công!' : 'Lỗi!', data.message, data.status === 'success');
                 if(data.status === 'success') {
                     document.getElementById(`card-${id}`).style.display = 'none';
                     loadDashboard();
@@ -743,12 +772,12 @@
             const method = document.getElementById('wd-method').value;
             const details = document.getElementById('wd-details').value.trim();
             const amount = document.getElementById('wd-amount').value;
-            if(!details || !amount) return alert('Vui lòng điền thông tin!');
-            if(parseInt(amount) < 10000) return alert('Số lượng Lúa rút tối thiểu là 10.000 lúa!');
+            if(!details || !amount) return showPopup("Thiếu thông tin", 'Vui lòng điền đầy đủ thông tin!', false);
+            if(parseInt(amount) < 10000) return showPopup("Từ chối", 'Số lượng Lúa rút tối thiểu là 10.000 lúa!', false);
             document.getElementById('btn-withdraw').innerText = 'Đang xử lý...';
             fetch(`${SCRIPT_URL}?action=withdraw&username=${encodeURIComponent(currentUser)}&method=${encodeURIComponent(method)}&details=${encodeURIComponent(details)}&amount=${amount}`)
             .then(res => res.json()).then(data => {
-                alert(data.message);
+                showPopup(data.status === 'success' ? 'Đã gửi yêu cầu' : 'Lỗi!', data.message, data.status === 'success');
                 document.getElementById('btn-withdraw').innerText = 'Gửi yêu cầu đổi thưởng';
                 if(data.status === 'success') {
                     document.getElementById('wd-details').value = ""; document.getElementById('wd-amount').value = "";
@@ -760,10 +789,10 @@
         function submitChangePassword() {
             const oldP = document.getElementById('old-pass').value;
             const newP = document.getElementById('new-pass').value;
-            if(!oldP || !newP) return alert('Vui lòng điền đủ mật khẩu!');
+            if(!oldP || !newP) return showPopup("Chú ý", 'Vui lòng điền đủ mật khẩu!', false);
             fetch(`${SCRIPT_URL}?action=changePassword&username=${encodeURIComponent(currentUser)}&oldPass=${encodeURIComponent(oldP)}&newPass=${encodeURIComponent(newP)}`)
             .then(res => res.json()).then(data => {
-                alert(data.message);
+                showPopup(data.status === 'success' ? 'Thành công' : 'Lỗi', data.message, data.status === 'success');
                 if(data.status === 'success') { document.getElementById('old-pass').value = ""; document.getElementById('new-pass').value = ""; }
             });
         }
