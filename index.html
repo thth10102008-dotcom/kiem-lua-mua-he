@@ -148,16 +148,18 @@
 </head>
 <body>
 
+    <!-- NÚT TELEGRAM -->
     <a href="https://t.me/hanhle1231" target="_blank" class="tele-btn" title="Hỗ trợ Telegram">
         <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.19-.08-.05-.19-.02-.27 0-.11.03-1.93 1.23-5.46 3.62-.51.35-.98.52-1.4.51-.46-.01-1.35-.26-2.01-.48-.81-.27-1.46-.42-1.4-.88.03-.24.36-.48.98-.74 3.85-1.68 6.42-2.79 7.71-3.32 3.67-1.53 4.43-1.8 4.93-1.81.11 0 .36.03.49.13.11.08.14.19.16.27-.01.04-.01.12-.02.17z"/></svg>
     </a>
 
+    <!-- MAIN APP -->
     <div id="main-app" style="display: none; width: 100%;">
         
         <aside class="sidebar">
             <div class="sidebar-logo">
                 <img src="logo.jpg" alt="Logo">
-                <h1>KIẾM LÚA MUA HÈ</h1>
+                <h1>KIẾM LÚA MÙA HÈ</h1>
             </div>
             <ul class="sidebar-menu">
                 <li class="active"><a href="#" data-section="dashboard">📊 Trang chủ</a></li>
@@ -200,11 +202,13 @@
                 </div>
             </div>
 
+            <!-- LIVE PAYOUTS -->
             <div class="live-payout-box">
                 <div class="live-payout-icon">💸</div>
                 <div class="live-payout-content" id="payout-feed"></div>
             </div>
 
+            <!-- DASHBOARD -->
             <section id="dashboard" class="content-section active">
                 <div class="dashboard-cards">
                     <div class="stat-card">
@@ -227,6 +231,7 @@
                 </div>
             </section>
 
+            <!-- KIẾM LÚA -->
             <section id="earn" class="content-section">
                 <div class="checkin-banner">
                     <div class="checkin-info">
@@ -257,6 +262,7 @@
                 <div class="task-list" id="task-container"><p style="color: var(--text-muted); font-size:14px;">Đang tải dữ liệu...</p></div>
             </section>
 
+            <!-- TRANG CHIA SẺ -->
             <section id="referral" class="content-section">
                 <h3 style="margin-bottom: 20px;">🤝 Chia sẻ bạn bè - Nhận lợi nhuận 10%</h3>
                 <div class="form-box" style="margin-bottom: 24px;">
@@ -268,6 +274,7 @@
                 </div>
             </section>
 
+            <!-- RÚT THƯỞNG -->
             <section id="withdraw" class="content-section">
                 <h3>Tạo Yêu Cầu Rút Thưởng</h3><br>
                 <div class="rules-box">
@@ -283,6 +290,8 @@
                         <option value="Thẻ Cào">Đổi Thẻ Cào Điện Thoại</option>
                         <option value="MoMo">Ví Điện Tử MoMo</option>
                         <option value="Ngân Hàng">Chuyển khoản Ngân Hàng</option>
+                        <!-- TÙY CHỌN THÊM GARENA -->
+                        <option value="Garena">Đổi Thẻ Garena</option>
                     </select>
                     <label id="lbl-details">Nhà mạng cần rút:</label>
                     <input type="text" id="wd-details" placeholder="Ví dụ: Thẻ Viettel mệnh giá 50k">
@@ -292,6 +301,7 @@
                 </div>
             </section>
 
+            <!-- HỒ SƠ -->
             <section id="profile" class="content-section">
                 <h3>Quản lý hồ sơ</h3><br>
                 <div class="profile-grid">
@@ -313,6 +323,7 @@
         </main>
     </div>
 
+    <!-- MÀN HÌNH AUTH -->
     <div class="auth-layout-container" id="auth-view">
         <div class="auth-card" id="auth-login-card">
             <div style="text-align: center; margin-bottom: 24px;"><img src="logo.jpg" style="width:100px; border-radius:50%"></div>
@@ -340,8 +351,8 @@
         </div>
     </div>
 
+    <!-- SCRIPT ĐIỀU KHIỂN CHÍNH -->
     <script>
-        // LINK SCRIPT WEB APP ĐÃ ĐƯỢC GẮN CHÍNH XÁC:
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx1hP042D5mQFWTxqaVXDVDvCFX5clpUJ4Ej1tf4d26H5XvPptMRwEqPOE86u3NqwbK/exec';
         let currentUser = "";
         let incomeChartInstance = null;
@@ -352,6 +363,7 @@
             "Người dùng <b>Binh***</b> vừa đổi thành công 50k về Ví MoMo",
             "Người dùng <b>Tuan99***</b> vừa rút thành công 100k Vietcombank",
             "Người dùng <b>Hoang***</b> vừa rút thành công Thẻ cào 50k Vina",
+            "Người dùng <b>Kien***</b> vừa rút thành công Thẻ Garena 20k",
             "Người dùng <b>Lien***</b> vừa đổi thành công 20k về Ví MoMo"
         ];
 
@@ -649,13 +661,27 @@
             });
         }
 
+        // --- CẬP NHẬT FORM HIỂN THỊ KHI CHỌN RÚT THẺ GARENA ---
         function updateWdInputs() {
             const method = document.getElementById('wd-method').value;
             const lbl = document.getElementById('lbl-details');
             const inp = document.getElementById('wd-details');
-            if(method === 'Thẻ Cào') { lbl.innerText = "Nhà mạng (Viettel, Vina, Mobi...):"; inp.placeholder = "Nhập nhà mạng cần đổi thẻ..."; }
-            else if(method === 'MoMo') { lbl.innerText = "Số điện thoại ví MoMo + Tên bạn:"; inp.placeholder = "Ví dụ: 0912... - NGUYEN VAN A"; }
-            else { lbl.innerText = "Số TK + Ngân hàng + Tên chủ thẻ:"; inp.placeholder = "Ví dụ: 1903... - Techcombank - NGUYEN VAN A"; }
+            if(method === 'Thẻ Cào') { 
+                lbl.innerText = "Nhà mạng (Viettel, Vina, Mobi...):"; 
+                inp.placeholder = "Ví dụ: Viettel, VinaPhone..."; 
+            }
+            else if(method === 'MoMo') { 
+                lbl.innerText = "Số điện thoại ví MoMo + Tên bạn:"; 
+                inp.placeholder = "Ví dụ: 0912... - NGUYEN VAN A"; 
+            }
+            else if(method === 'Garena') { 
+                lbl.innerText = "Mệnh giá thẻ Garena (20k, 50k, 100k...):"; 
+                inp.placeholder = "Ví dụ: Thẻ Garena 50k"; 
+            }
+            else { 
+                lbl.innerText = "Số TK + Ngân hàng + Tên chủ thẻ:"; 
+                inp.placeholder = "Ví dụ: 1903... - Techcombank - NGUYEN VAN A"; 
+            }
         }
 
         function submitWithdraw() {
