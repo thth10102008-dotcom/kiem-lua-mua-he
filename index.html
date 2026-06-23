@@ -559,7 +559,7 @@
             const msg = document.getElementById('register-msg');
             if(!u || !e || !p) { msg.style.color = 'var(--danger)'; msg.innerText = 'Vui lòng điền đủ thông tin!'; return; }
             document.getElementById('btn-register').innerText = 'Đang tạo tài khoản...';
-            fetch(`${SCRIPT_URL}?action=register&username=${encodeURIComponent(u)}&email=${encodeURIComponent(e)}&password=${encodeURIComponent(p)}`)
+            fetch(`${https://script.google.com/macros/s/AKfycbx1hP042D5mQFWTxqaVXDVDvCFX5clpUJ4Ej1tf4d26H5XvPptMRwEqPOE86u3NqwbK/exec}?action=register&username=${encodeURIComponent(u)}&email=${encodeURIComponent(e)}&password=${encodeURIComponent(p)}`)
             .then(res => res.json()).then(data => {
                 document.getElementById('btn-register').innerText = 'Đăng ký tài khoản';
                 if(data.status === 'success') {
