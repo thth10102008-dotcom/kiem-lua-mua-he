@@ -720,31 +720,19 @@
                 });
             });
         }
-
-        function openTaskLink(id, link) {
-            window.open(link, '_blank');
-            document.getElementById(`input-box-${id}`).style.display = 'block';
-            const actBtn = document.getElementById(`btn-action-${id}`);
-            actBtn.innerText = "Đang chờ nhập mã...";
-            actBtn.disabled = true;
-            actBtn.style.backgroundColor = "#E2E8F0";
-            actBtn.style.color = "#64748B";
-        }
-
-        function verifyCode(id) {
-            const codeInput = document.getElementById(`code-val-${id}`).value.trim();
-            if(!codeInput) return showPopup('Chú ý', 'Vui lòng điền mã xác nhận!', false);
-            fetch(`${SCRIPT_URL}?action=completeTask&username=${encodeURIComponent(currentUser)}&taskId=${encodeURIComponent(id)}&userCode=${encodeURIComponent(codeInput)}`)
-            .then(res => res.json()).then(data => {
-                showPopup(data.status === 'success' ? 'Thành công!' : 'Lỗi!', data.message, data.status === 'success');
-                if(data.status === 'success') {
-                    document.getElementById(`card-${id}`).style.display = 'none';
-                    loadDashboard();
-                    const currentCount = parseInt(document.getElementById('remaining-tasks-count').innerText);
-                    if(currentCount > 0) document.getElementById('remaining-tasks-count').innerText = currentCount - 1;
-                }
-            });
-        }
+function openTaskLink(id, link) {
+    // Mở link rút gọn của Link4M
+    window.open(link, '_blank');
+    
+    // Đổi tên nút thành "Đang làm..." để người dùng không bấm nhiều lần
+    const actBtn = document.getElementById(`btn-action-${id}`);
+    if(actBtn) {
+        actBtn.innerText = "Đang làm... (Làm xong F5 tải lại)";
+        actBtn.style.backgroundColor = "#E2E8F0";
+        actBtn.style.color = "#64748B";
+        actBtn.disabled = true;
+    }
+}
 
         function updateWdInputs() {
             const method = document.getElementById('wd-method').value;
