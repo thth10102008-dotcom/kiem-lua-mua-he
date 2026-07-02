@@ -721,10 +721,13 @@
             });
         }
 function openTaskLink(id, link) {
-    // Mở link rút gọn của Link4M
+    // 1. HỆ THỐNG BÍ MẬT PHÁT VÉ CHO KHÁCH (Lưu vào máy khách)
+    localStorage.setItem('ve_nhiem_vu', id);
+    
+    // 2. Mở link rút gọn sang tab mới
     window.open(link, '_blank');
     
-    // Đổi tên nút thành "Đang làm..." để người dùng không bấm nhiều lần
+    // 3. Đổi màu nút thành Đang làm
     const actBtn = document.getElementById(`btn-action-${id}`);
     if(actBtn) {
         actBtn.innerText = "Đang làm... (Làm xong F5 tải lại)";
@@ -733,7 +736,6 @@ function openTaskLink(id, link) {
         actBtn.disabled = true;
     }
 }
-
         function updateWdInputs() {
             const method = document.getElementById('wd-method').value;
             const lbl = document.getElementById('lbl-details');
