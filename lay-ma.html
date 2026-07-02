@@ -13,7 +13,7 @@
     </style>
 </head>
 <body>
-    <div class="box">
+    <div class="box" id="main-box">
         <h3 style="color: #1E3A8A; margin-top:0;">HỆ THỐNG XÁC NHẬN</h3>
         <p id="status-text" style="color:#64748B;">Vui lòng đợi hết giờ để hệ thống cộng tiền...</p>
         <div class="timer" id="countdown-timer">30</div>
@@ -21,6 +21,28 @@
     </div>
 
     <script>
+        // =======================================================
+        // 1. CỔNG BẢO VỆ CHỐNG TOOL BỎ QUA QUẢNG CÁO & LƯU LINK GỐC
+        // =======================================================
+        let nguonGoc = document.referrer;
+        
+        // Kiểm tra xem khách có đi từ Link4M tới không
+        // Nếu bạn dùng web rút gọn khác thì đổi chữ "link4m" thành tên web đó
+        if(nguonGoc === "" || !nguonGoc.includes("link4m")) { 
+            // Nếu phát hiện gian lận, xóa hộp giao diện đi và hiện cảnh báo
+            document.body.innerHTML = `
+                <div style="text-align:center; margin-top: 50px; padding: 20px; background: white; border-radius: 16px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); width: 80%; max-width: 400px;">
+                    <h2 style="color: red; font-size: 24px;">🚫 QUAY VÀO Ô MẤT LƯỢT!</h2>
+                    <p style="color: #64748B; font-size: 15px;">Hệ thống phát hiện bạn dùng Tool Bypass hoặc lưu link gốc để ăn gian.</p>
+                    <p style="color: #1E3A8A; font-weight: bold; font-size: 15px;">Vui lòng tắt tool, quay lại trang chủ và thực hiện vượt link đàng hoàng để được cộng Lúa nhé!</p>
+                </div>
+            `;
+            throw new Error("Phát hiện dùng tool, dừng hệ thống!"); // Lệnh này chặn đếm ngược
+        }
+
+        // =======================================================
+        // 2. HỆ THỐNG ĐẾM NGƯỢC VÀ TỰ ĐỘNG CỘNG TIỀN (NẾU KHÁCH CHƠI ĐẸP)
+        // =======================================================
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx1hP042D5mQFWTxqaVXDVDvCFX5clpUJ4Ej1tf4d26H5XvPptMRwEqPOE86u3NqwbK/exec';
         
         const currentUser = localStorage.getItem('remembered_user');
