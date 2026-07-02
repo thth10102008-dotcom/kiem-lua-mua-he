@@ -21,44 +21,40 @@
     </div>
 
     <script>
-        // =======================================================
-        // 1. CỔNG BẢO VỆ CHỐNG TOOL BỎ QUA QUẢNG CÁO & LƯU LINK GỐC
-        // =======================================================
-        let nguonGoc = document.referrer;
-        
-        // Kiểm tra xem khách có đi từ Link4M tới không
-        // Nếu bạn dùng web rút gọn khác thì đổi chữ "link4m" thành tên web đó
-        if(nguonGoc === "" ) { 
-            // Nếu phát hiện gian lận, xóa hộp giao diện đi và hiện cảnh báo
-            document.body.innerHTML = `
-                <div style="text-align:center; margin-top: 50px; padding: 20px; background: white; border-radius: 16px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); width: 80%; max-width: 400px;">
-                    <h2 style="color: red; font-size: 24px;">🚫 QUAY VÀO Ô MẤT LƯỢT!</h2>
-                    <p style="color: #64748B; font-size: 15px;">Hệ thống phát hiện bạn dùng Tool Bypass hoặc lưu link gốc để ăn gian.</p>
-                    <p style="color: #1E3A8A; font-weight: bold; font-size: 15px;">Vui lòng tắt tool, quay lại trang chủ và thực hiện vượt link đàng hoàng để được cộng Lúa nhé!</p>
-                </div>
-            `;
-            throw new Error("Phát hiện dùng tool, dừng hệ thống!"); // Lệnh này chặn đếm ngược
-        }
-
-        // =======================================================
-        // 2. HỆ THỐNG ĐẾM NGƯỢC VÀ TỰ ĐỘNG CỘNG TIỀN (NẾU KHÁCH CHƠI ĐẸP)
-        // =======================================================
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx1hP042D5mQFWTxqaVXDVDvCFX5clpUJ4Ej1tf4d26H5XvPptMRwEqPOE86u3NqwbK/exec';
-        
-        const currentUser = localStorage.getItem('remembered_user');
+        // Lấy ID nhiệm vụ từ đường link
         const urlParams = new URLSearchParams(window.location.search);
         const taskId = urlParams.get('taskId');
+        
+        // Lục trong túi khách xem có cái "vé" mà trang chủ phát không
+        const veNhiemVu = localStorage.getItem('ve_nhiem_vu');
+
+        // ==========================================
+        // 1. CHỐNG GIAN LẬN: SOÁT VÉ
+        // ==========================================
+        // Nếu không có vé, hoặc vé không đúng với nhiệm vụ đang làm -> Đuổi cổ
+        if(!veNhiemVu || veNhiemVu !== taskId) { 
+            document.body.innerHTML = `
+                <div style="text-align:center; margin-top: 50px; padding: 20px; background: white; border-radius: 16px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); width: 80%; max-width: 400px;">
+                    <h2 style="color: red; font-size: 24px;">🚫 LỖI XÁC THỰC!</h2>
+                    <p style="color: #64748B; font-size: 15px;">Bạn chưa nhận nhiệm vụ từ trang chủ, hoặc bạn đã lưu link để gian lận.</p>
+                    <p style="color: #1E3A8A; font-weight: bold; font-size: 15px;">Vui lòng quay lại trang chủ và bấm nút "Thực hiện nhiệm vụ" nhé!</p>
+                </div>
+            `;
+            throw new Error("Phát hiện gian lận không có vé!"); 
+        }
+
+        // ==========================================
+        // 2. HỆ THỐNG ĐẾM NGƯỢC VÀ CỘNG TIỀN
+        // ==========================================
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx1hP042D5mQFWTxqaVXDVDvCFX5clpUJ4Ej1tf4d26H5XvPptMRwEqPOE86u3NqwbK/exec';
+        const currentUser = localStorage.getItem('remembered_user');
 
         const timerDisplay = document.getElementById('countdown-timer');
         const btnReward = document.getElementById('btn-get-reward');
         const statusText = document.getElementById('status-text');
 
         if (!currentUser) {
-            statusText.innerText = "⚠️ LỖI: Bạn chưa đăng nhập ở trang chủ! Hãy mở trang chủ đăng nhập trước.";
-            statusText.style.color = "red";
-            timerDisplay.style.display = 'none';
-        } else if (!taskId) {
-            statusText.innerText = "⚠️ LỖI: Link nhiệm vụ bị hỏng!";
+            statusText.innerText = "⚠️ LỖI: Bạn chưa đăng nhập ở trang chủ!";
             statusText.style.color = "red";
             timerDisplay.style.display = 'none';
         } else {
@@ -82,6 +78,9 @@
                         statusText.style.color = "#10B981"; statusText.style.fontWeight = "bold";
                         btnReward.innerText = "ĐÃ NHẬN! VUI LÒNG ĐÓNG TAB NÀY";
                         btnReward.style.background = "#E2E8F0"; btnReward.style.color = "black";
+                        
+                        // QUAN TRỌNG: Nhận tiền xong thì xé bỏ cái vé đi để không ăn gian được nữa
+                        localStorage.removeItem('ve_nhiem_vu');
                     } else {
                         alert(data.message); 
                         btnReward.innerText = "LỖI, THỬ LẠI"; btnReward.classList.add('active'); btnReward.disabled = false;
