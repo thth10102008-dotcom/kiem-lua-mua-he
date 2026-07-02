@@ -28,7 +28,7 @@
         
         // Kiểm tra xem khách có đi từ Link4M tới không
         // Nếu bạn dùng web rút gọn khác thì đổi chữ "link4m" thành tên web đó
-        if(nguonGoc === "" || !nguonGoc.includes("link4m")) { 
+        if(nguonGoc === "" ) { 
             // Nếu phát hiện gian lận, xóa hộp giao diện đi và hiện cảnh báo
             document.body.innerHTML = `
                 <div style="text-align:center; margin-top: 50px; padding: 20px; background: white; border-radius: 16px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); width: 80%; max-width: 400px;">
