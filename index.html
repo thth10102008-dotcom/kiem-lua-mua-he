@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KIẾM LÚA MỬA HÈ - Nền tảng MMO Uy Tín</title>
+    <title>KIẾM LÚA MÙA HÈ - Nền tảng MMO Uy Tín</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -118,17 +118,28 @@
         .cd-label { font-size: 10px; color: #94A3B8; font-weight: 700; }
         .task-count-box { background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 16px; padding: 24px 20px; display: flex; align-items: center; gap: 20px; }
 
-        .task-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-        .task-card { background-color: var(--white); padding: 20px; border-radius: var(--border-radius); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: 16px; justify-content: space-between; border: 1px solid #E2E8F0; }
-        .task-header { display: flex; gap: 16px; align-items: center; }
-        .task-img { width: 95px; height: 95px; border-radius: 12px; object-fit: cover; background-color: #F1F5F9; border: 1px solid #E2E8F0; box-shadow: 0 2px 8px rgba(0,0,0,0.06);}
-        .task-info h4 { font-size: 16px; font-weight: 800; margin-bottom: 6px; color: var(--primary); }
-        .task-info p { font-size: 14px; color: var(--text-dark); font-weight: 600;}
-        .task-info p span { color: var(--accent); font-weight: 800; font-size: 15px;}
+        /* --- GIAO DIỆN NHÓM NHIỆM VỤ MỚI --- */
+        .task-list { display: flex; flex-direction: column; gap: 24px; }
+        .task-group-card { background: white; border: 1px solid #E2E8F0; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); overflow: hidden; }
+        .task-group-header { display: flex; align-items: center; gap: 16px; padding: 20px; background: #F8FAFC; border-bottom: 1px solid #E2E8F0; }
+        .tg-img { width: 60px; height: 60px; border-radius: 12px; object-fit: cover; border: 1px solid #CBD5E1; background: white; padding: 2px;}
+        .tg-info h4 { font-size: 17px; font-weight: 800; color: #1E3A8A; margin-bottom: 4px; }
+        .tg-info p { font-size: 13px; color: #64748B; font-weight: 600; }
+        .tg-info p span { color: #D97706; font-weight: 800; font-size: 14px;}
         
-        /* CSS CHO Ô NHẬP MÃ XÁC NHẬN */
-        .task-body-inputs { background: #F8FAFC; padding: 16px; border-radius: 8px; display: none; border: 1px dashed #CBD5E1; width: 100%; }
+        .tg-body { padding: 0 20px; }
+        .tg-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px dashed #E2E8F0; gap: 15px; }
+        .tg-row:last-child { border-bottom: none; }
+        .tg-row-name { font-size: 14px; font-weight: 700; color: #334155; display: flex; align-items: center; gap: 8px; }
+        .tg-row-name::before { content: "🔗"; font-size: 16px;}
         
+        .tg-action-btn { background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; transition: 0.2s; white-space: nowrap;}
+        .tg-action-btn:hover { background: #1D4ED8; color: white; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(29, 78, 216, 0.2);}
+        
+        .tg-input-area { display: none; width: 100%; max-width: 280px; flex-direction: column; gap: 6px; background: #F8FAFC; padding: 10px; border-radius: 8px; border: 1px dashed #CBD5E1; }
+        .tg-input-area input { margin: 0; padding: 10px; font-size: 13px; }
+        .tg-input-area button { padding: 10px; font-size: 13px; font-weight: 800; width: 100%; }
+
         .form-box { background: white; padding: 32px; border-radius: var(--border-radius); box-shadow: var(--shadow-sm); border: 1px solid #E2E8F0; }
 
         .custom-popup-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.4); z-index: 99999; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s ease; backdrop-filter: blur(2px); }
@@ -624,31 +635,72 @@
             });
         }
 
+        // ===============================================
+        // HÀM TẢI NHIỆM VỤ TỰ ĐỘNG GOM NHÓM THEO TÊN + TIỀN
+        // ===============================================
         function loadTasks() {
             const box = document.getElementById('task-container');
             box.innerHTML = '<p style="color: var(--text-muted); font-size:14px;">Đang tải danh sách nhiệm vụ...</p>';
+            
             fetch(`${SCRIPT_URL}?action=getTasks&username=${encodeURIComponent(currentUser)}`)
             .then(r => r.json()).then(tasks => {
                 box.innerHTML = '';
                 document.getElementById('remaining-tasks-count').innerText = tasks.length;
-                if(tasks.length === 0) { box.innerHTML = '<p style="font-weight:500;">🎉 Bạn đã hoàn thành hết nhiệm vụ ngày hôm nay.</p>'; return; }
                 
+                if(tasks.length === 0) { 
+                    box.innerHTML = '<p style="font-weight:500; color: #10B981;">🎉 Tuyệt vời! Bạn đã hoàn thành toàn bộ nhiệm vụ ngày hôm nay.</p>'; 
+                    return; 
+                }
+                
+                // Gom nhóm thuật toán bằng JavaScript
+                const grouped = {};
                 tasks.forEach(t => {
-                    box.innerHTML += `
-                        <div class="task-card" id="card-${t.id}">
-                            <div class="task-header">
-                                <img src="${t.img}" class="task-img" onerror="this.src='logo.jpg'">
-                                <div class="task-info"><h4>${t.name}</h4><p>Thưởng: <span>+${t.reward} Lúa</span></p></div>
-                            </div>
-                            <div class="task-body-inputs" id="input-box-${t.id}">
-                                <label style="font-size:12px; font-weight:600; color:#1E3A8A;">Nhập mã xác nhận (Hệ thống cấp sau khi hết 30s):</label>
-                                <input type="text" id="code-val-${t.id}" placeholder="Ví dụ: 123456" style="margin-top:5px; margin-bottom:10px;">
-                                <button class="btn btn-success" style="width:100%;" onclick="verifyCode('${t.id}')">XÁC NHẬN MÃ & NHẬN LÚA</button>
-                            </div>
-                            <button class="btn btn-primary" id="btn-action-${t.id}" onclick="openTaskLink('${t.id}', '${t.link}')">Thực Hiện Nhiệm Vụ</button>
-                        </div>
-                    `;
+                    const key = `${t.name}_${t.reward}`;
+                    if(!grouped[key]) {
+                        grouped[key] = { name: t.name, reward: t.reward, img: t.img, list: [] };
+                    }
+                    grouped[key].list.push(t);
                 });
+
+                // Đổ dữ liệu ra cấu trúc Card Nhóm mới
+                let html = '';
+                for(let key in grouped) {
+                    const g = grouped[key];
+                    
+                    html += `
+                    <div class="task-group-card">
+                        <div class="task-group-header">
+                            <img src="${g.img}" class="tg-img" onerror="this.src='logo.jpg'">
+                            <div class="tg-info">
+                                <h4>${g.name}</h4>
+                                <p>Thưởng: <span>+${g.reward} Lúa/lượt</span> &nbsp;•&nbsp; Còn lại: <b>${g.list.length}</b> nhiệm vụ</p>
+                            </div>
+                        </div>
+                        <div class="tg-body">
+                    `;
+                    
+                    g.list.forEach((t, index) => {
+                        html += `
+                            <div class="tg-row">
+                                <div class="tg-row-name">Thực hiện Link số ${index + 1}</div>
+                                
+                                <button class="tg-action-btn" id="btn-action-${t.id}" onclick="openTaskLink('${t.id}', '${t.link}')">
+                                    Mở Link
+                                </button>
+                                
+                                <div class="tg-input-area" id="input-box-${t.id}">
+                                    <input type="text" id="code-val-${t.id}" placeholder="Nhập mã số xác nhận...">
+                                    <button class="btn btn-success" onclick="verifyCode('${t.id}')">XÁC NHẬN MÃ</button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    html += `
+                        </div>
+                    </div>`;
+                }
+                box.innerHTML = html;
             });
         }
 
@@ -656,14 +708,14 @@
         // BỘ PHÒNG THỦ LỚP 2 & 3 CHỐNG TOOL
         // ===============================================
         function openTaskLink(id, link) {
-            localStorage.setItem('ve_nhiem_vu', id); // Đồng bộ vé
-            localStorage.removeItem('hash_code_' + id); // Dọn mã kẹt
+            localStorage.setItem('ve_nhiem_vu', id); 
+            localStorage.removeItem('hash_code_' + id); 
             window.open(link, '_blank'); 
             
             const actBtn = document.getElementById(`btn-action-${id}`);
             const inputBox = document.getElementById(`input-box-${id}`);
             if(actBtn) actBtn.style.display = 'none';
-            if(inputBox) inputBox.style.display = 'block';
+            if(inputBox) inputBox.style.display = 'flex'; 
         }
 
         function verifyCode(id) {
@@ -673,10 +725,9 @@
             if(!userInput) return showPopup("Lỗi", "Vui lòng nhập mã xác nhận!", false);
             if(!storedHash) return showPopup("Lỗi", "Không tìm thấy dữ liệu! Hãy vượt link lại.", false);
 
-            // Kiểm tra giải mã Base64 chéo
             const expectedHash = btoa(id + "_MAMAT_" + userInput);
             if(storedHash !== expectedHash) {
-                return showPopup("Sai mã", "Mã xác nhận không khớp! Vui lòng thử lại.", false);
+                return showPopup("Sai mã", "Mã xác nhận không đúng! Vui lòng thử lại.", false);
             }
 
             const btn = document.querySelector(`#input-box-${id} button`);
@@ -686,12 +737,12 @@
             .then(res => res.json()).then(data => {
                 if(data.status === 'success') {
                     showPopup('Thành công', "Cộng lúa thành công!", true);
-                    document.getElementById(`input-box-${id}`).innerHTML = `<p style="color: #10B981; font-weight: 800; text-align: center; font-size:15px;">🎉 Nhiệm vụ đã hoàn tất!</p>`;
+                    document.getElementById(`input-box-${id}`).innerHTML = `<p style="color: #10B981; font-weight: 800; text-align: center; font-size:14px;">🎉 Đã hoàn tất!</p>`;
                     localStorage.removeItem('hash_code_' + id); 
                     loadDashboard(); 
                 } else {
                     showPopup('Lỗi', data.message, false);
-                    btn.innerText = "XÁC NHẬN MÃ & NHẬN LÚA"; btn.disabled = false;
+                    btn.innerText = "XÁC NHẬN MÃ"; btn.disabled = false;
                 }
             });
         }
@@ -703,6 +754,8 @@
             else if(method === 'MoMo') { lbl.innerText = "Số điện thoại MoMo + Tên chủ thẻ:"; inp.placeholder = "Ví dụ: 0912... - NGUYEN VAN A"; }
             else { lbl.innerText = "Số tài khoản + Ngân hàng + Tên:"; inp.placeholder = "Ví dụ: Techcombank - 190... - NGUYEN VAN A"; }
         }
+
+        document.getElementById('wd-method').onchange = updateWdInputs;
 
         function submitWithdraw() {
             const method = document.getElementById('wd-method').value;
