@@ -3,90 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xác Nhận Nhiệm Vụ</title>
+    <title>Xác Thực Lấy Mã</title>
     <style>
         body { font-family: sans-serif; background: #F4F7FE; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .box { background: white; padding: 30px; border-radius: 16px; text-align: center; width: 300px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .timer { font-size: 50px; font-weight: bold; color: red; margin: 20px 0; }
-        .btn { padding: 15px; background: #CBD5E1; color: white; border: none; border-radius: 8px; font-weight: bold; width: 100%; cursor: not-allowed; transition: 0.3s;}
-        .btn.active { background: #10B981; cursor: pointer; box-shadow: 0 4px 15px rgba(16,185,129,0.3); }
+        .box { background: white; padding: 30px; border-radius: 16px; text-align: center; width: 320px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border: 1px solid #E2E8F0; }
+        .timer { font-size: 55px; font-weight: bold; color: #EF4444; margin: 20px 0; }
+        
+        /* Giao diện Captcha */
+        .captcha-box { display: none; margin-top: 15px; }
+        canvas { border: 1px solid #CBD5E1; border-radius: 8px; margin-bottom: 10px; background: #F8FAFC; }
+        .cap-input { width: 90%; padding: 12px; border: 1.5px solid #CBD5E1; border-radius: 8px; font-size: 16px; text-align: center; text-transform: uppercase; margin-bottom: 15px; font-weight: bold;}
+        .btn-cap { background: #1E3A8A; color: white; padding: 12px; width: 100%; border: none; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; }
+        
+        /* Giao diện Báo Mã */
+        .result-box { display: none; margin-top: 20px; }
+        .code-display { font-size: 36px; font-weight: 900; color: #10B981; background: #ECFDF5; padding: 15px; border-radius: 8px; border: 2px dashed #34D399; letter-spacing: 5px;}
+        .guide { color: #1E3A8A; font-weight: 600; font-size: 14px; margin-top: 15px; line-height: 1.5; }
     </style>
 </head>
 <body>
-    <div class="box" id="main-box">
-        <h3 style="color: #1E3A8A; margin-top:0;">HỆ THỐNG XÁC NHẬN</h3>
-        <p id="status-text" style="color:#64748B;">Vui lòng đợi hết giờ để hệ thống cộng tiền...</p>
+    <div class="box">
+        <h3 style="color: #1E3A8A; margin-top:0;">HỆ THỐNG LẤY MÃ</h3>
+        <p id="status-text" style="color:#64748B;">Vui lòng không đóng trang này...</p>
+
+        <!-- ĐỒNG HỒ ĐẾM NGƯỢC -->
         <div class="timer" id="countdown-timer">30</div>
-        <button class="btn" id="btn-get-reward" disabled>ĐANG XÁC THỰC...</button>
+
+        <!-- BƯỚC CAPTCHA CHỐNG TOOL -->
+        <div class="captcha-box" id="captcha-section">
+            <p style="color: #F59E0B; font-weight: bold; font-size: 14px;">Vui lòng xác minh bạn là con người:</p>
+            <canvas id="captchaCanvas" width="160" height="60"></canvas><br>
+            <input type="text" id="captchaInput" class="cap-input" placeholder="Nhập chữ trong ảnh">
+            <button class="btn-cap" onclick="verifyCaptcha()">XÁC NHẬN</button>
+        </div>
+
+        <!-- BƯỚC HIỆN MÃ THÀNH CÔNG -->
+        <div class="result-box" id="result-section">
+            <p style="color: #64748B; font-size: 14px; margin-bottom:10px;">Mã của bạn đây. Hãy COPY nó nhé!</p>
+            <div class="code-display" id="final-code"></div>
+            <p class="guide">Quay lại trang chủ, dán mã này vào ô trống để nhận Lúa ngay!</p>
+        </div>
     </div>
 
     <script>
-        // Lấy ID nhiệm vụ từ đường link
         const urlParams = new URLSearchParams(window.location.search);
         const taskId = urlParams.get('taskId');
         
-        // Lục trong túi khách xem có cái "vé" mà trang chủ phát không
-        const veNhiemVu = localStorage.getItem('ve_nhiem_vu');
+        let captchaText = "";
+        let secondsLeft = 30; // Chờ 30 giây
 
-        // ==========================================
-        // 1. CHỐNG GIAN LẬN: SOÁT VÉ
-        // ==========================================
-        // Nếu không có vé, hoặc vé không đúng với nhiệm vụ đang làm -> Đuổi cổ
-        if(!veNhiemVu || veNhiemVu !== taskId) { 
-            document.body.innerHTML = `
-                <div style="text-align:center; margin-top: 50px; padding: 20px; background: white; border-radius: 16px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); width: 80%; max-width: 400px;">
-                    <h2 style="color: red; font-size: 24px;">🚫 LỖI XÁC THỰC!</h2>
-                    <p style="color: #64748B; font-size: 15px;">Bạn chưa nhận nhiệm vụ từ trang chủ, hoặc bạn đã lưu link để gian lận.</p>
-                    <p style="color: #1E3A8A; font-weight: bold; font-size: 15px;">Vui lòng quay lại trang chủ và bấm nút "Thực hiện nhiệm vụ" nhé!</p>
-                </div>
-            `;
-            throw new Error("Phát hiện gian lận không có vé!"); 
-        }
-
-        // ==========================================
-        // 2. HỆ THỐNG ĐẾM NGƯỢC VÀ CỘNG TIỀN
-        // ==========================================
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx1hP042D5mQFWTxqaVXDVDvCFX5clpUJ4Ej1tf4d26H5XvPptMRwEqPOE86u3NqwbK/exec';
-        const currentUser = localStorage.getItem('remembered_user');
-
-        const timerDisplay = document.getElementById('countdown-timer');
-        const btnReward = document.getElementById('btn-get-reward');
-        const statusText = document.getElementById('status-text');
-
-        if (!currentUser) {
-            statusText.innerText = "⚠️ LỖI: Bạn chưa đăng nhập ở trang chủ!";
-            statusText.style.color = "red";
-            timerDisplay.style.display = 'none';
+        // 1. CHẠY ĐẾM NGƯỢC
+        if(!taskId) {
+            document.body.innerHTML = "<h2 style='color:red; text-align:center;'>❌ LỖI LINK NHIỆM VỤ</h2>";
         } else {
-            let secondsLeft = 30; // Chờ 30 giây
             const interval = setInterval(() => {
-                secondsLeft--; timerDisplay.innerText = secondsLeft;
+                secondsLeft--;
+                document.getElementById('countdown-timer').innerText = secondsLeft;
+                
                 if (secondsLeft <= 0) {
-                    clearInterval(interval); timerDisplay.style.display = 'none';
-                    btnReward.innerText = "NHẤN VÀO ĐÂY ĐỂ NHẬN LÚA";
-                    btnReward.classList.add('active'); btnReward.disabled = false;
+                    clearInterval(interval);
+                    document.getElementById('countdown-timer').style.display = 'none';
+                    document.getElementById('status-text').style.display = 'none';
+                    
+                    // Hiện phần Captcha và vẽ hình
+                    document.getElementById('captcha-section').style.display = 'block';
+                    drawCaptcha();
                 }
             }, 1000);
+        }
 
-            btnReward.onclick = function() {
-                btnReward.innerText = "ĐANG XỬ LÝ..."; btnReward.classList.remove('active'); btnReward.disabled = true;
-                
-                fetch(`${SCRIPT_URL}?action=autoComplete&username=${encodeURIComponent(currentUser)}&taskId=${encodeURIComponent(taskId)}`)
-                .then(res => res.json()).then(data => {
-                    if(data.status === 'success') {
-                        statusText.innerText = "🎉 " + data.message;
-                        statusText.style.color = "#10B981"; statusText.style.fontWeight = "bold";
-                        btnReward.innerText = "ĐÃ NHẬN! VUI LÒNG ĐÓNG TAB NÀY";
-                        btnReward.style.background = "#E2E8F0"; btnReward.style.color = "black";
-                        
-                        // QUAN TRỌNG: Nhận tiền xong thì xé bỏ cái vé đi để không ăn gian được nữa
-                        localStorage.removeItem('ve_nhiem_vu');
-                    } else {
-                        alert(data.message); 
-                        btnReward.innerText = "LỖI, THỬ LẠI"; btnReward.classList.add('active'); btnReward.disabled = false;
-                    }
-                });
+        // 2. VẼ ẢNH CAPTCHA CHỐNG TOOL BOT
+        function drawCaptcha() {
+            const canvas = document.getElementById('captchaCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Nền
+            ctx.fillStyle = "#F8FAFC";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Kẻ vạch nhiễu
+            for(let i=0; i<6; i++) {
+                ctx.strokeStyle = ['#94A3B8', '#CBD5E1', '#F1F5F9'][Math.floor(Math.random()*3)];
+                ctx.lineWidth = Math.random() * 2 + 1;
+                ctx.beginPath();
+                ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
+                ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
+                ctx.stroke();
             }
+
+            // Tạo mã ngẫu nhiên 5 chữ/số
+            const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; 
+            captchaText = "";
+            for(let i=0; i<5; i++) captchaText += chars[Math.floor(Math.random() * chars.length)];
+
+            // In chữ lên ảnh với độ nghiêng ngẫu nhiên
+            ctx.font = "bold 28px sans-serif";
+            ctx.fillStyle = "#1E3A8A";
+            for(let i=0; i<captchaText.length; i++) {
+                ctx.save();
+                ctx.translate(20 + i * 25, 40);
+                ctx.rotate((Math.random() - 0.5) * 0.4);
+                ctx.fillText(captchaText[i], 0, 0);
+                ctx.restore();
+            }
+        }
+
+        // 3. KIỂM TRA CAPTCHA & TIẾN HÀNH MÃ HÓA
+        function verifyCaptcha() {
+            const inputVal = document.getElementById('captchaInput').value.trim().toUpperCase();
+            
+            if(inputVal !== captchaText) {
+                alert("❌ Bạn nhập sai Captcha. Vui lòng thử lại!");
+                document.getElementById('captchaInput').value = "";
+                drawCaptcha(); 
+                return;
+            }
+
+            // Tạo mã tiền thưởng 6 số ngẫu nhiên
+            const rewardCode = Math.floor(100000 + Math.random() * 900000).toString();
+            
+            // LỚP BẢO MẬT 3: Mã hóa trước khi lưu để tool không đọc được
+            const encryptedCode = btoa(taskId + "_MAMAT_" + rewardCode);
+            localStorage.setItem('hash_code_' + taskId, encryptedCode);
+
+            // Chuyển giao diện hiện mã cho khách Copy
+            document.getElementById('captcha-section').style.display = 'none';
+            document.getElementById('result-section').style.display = 'block';
+            document.getElementById('final-code').innerText = rewardCode;
         }
     </script>
 </body>
