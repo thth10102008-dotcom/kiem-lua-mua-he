@@ -19,7 +19,6 @@
             --text-dark: #0F172A; 
             --text-muted: #64748B; 
             --shadow-sm: 0 2px 10px rgba(0,0,0,0.04);
-            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1); 
             --border-radius: 14px; 
         }
         
@@ -31,14 +30,12 @@
         input:focus, select:focus { outline: none; border-color: var(--primary); background: var(--white); box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1); }
         label { font-size: 13px; font-weight: 600; color: var(--text-dark); }
 
-        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 24px; border-radius: 8px; cursor: pointer; border: none; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 14px; transition: all 0.2s ease; text-align: center; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 24px; border-radius: 8px; cursor: pointer; border: none; font-weight: 600; font-size: 14px; transition: all 0.2s ease; text-align: center; }
         .btn-primary { background-color: var(--primary); color: var(--white); }
-        .btn-primary:hover { background-color: #1E40AF; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(30,58,138,0.2); }
         .btn-success { background-color: var(--success); color: var(--white); }
         .btn-danger { background-color: var(--danger); color: white; }
 
         .tele-btn { position: fixed; bottom: 30px; right: 30px; background: #0088cc; color: white; width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(0,136,204,0.4); z-index: 1000; transition: 0.3s; }
-        .tele-btn:hover { transform: scale(1.1); }
         .tele-btn svg { width: 28px; height: 28px; fill: currentColor; }
 
         .marquee-container { background: #FEF3C7; padding: 12px 20px; border-radius: 8px; margin-bottom: 24px; overflow: hidden; white-space: nowrap; border-left: 4px solid var(--accent); display: flex; align-items: center; box-shadow: var(--shadow-sm); }
@@ -61,11 +58,10 @@
         
         .avatar-dropdown { position: relative; display: inline-block; }
         .user-avatar-mini { width: 42px; height: 42px; border-radius: 50%; border: 2px solid var(--primary); cursor: pointer; object-fit: cover; transition: 0.2s; background: #eee;}
-        .user-avatar-mini:hover { transform: scale(1.05); }
         .dropdown-content { display: none; position: absolute; right: 0; top: 50px; background-color: white; min-width: 180px; box-shadow: 0px 8px 24px rgba(0,0,0,0.12); border-radius: 12px; z-index: 100; overflow: hidden; border: 1px solid #E2E8F0; }
         .dropdown-content a { color: var(--text-dark); padding: 14px 16px; text-decoration: none; display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; transition: 0.2s;}
         .dropdown-content a:hover { background-color: #F8FAFC; color: var(--primary); }
-        .dropdown-content.show { display: block; animation: dropIn 0.2s ease; }
+        .dropdown-content.show { display: block; }
 
         .content-section { display: none; animation: fadeIn 0.3s; } 
         .content-section.active { display: block; }
@@ -101,73 +97,84 @@
 
         .checkin-banner { background: linear-gradient(135deg, #10B981, #059669); border-radius: 16px; padding: 24px; display: flex; align-items: center; justify-content: space-between; color: white; margin-bottom: 24px; box-shadow: 0 4px 15px rgba(16,185,129,0.3); }
         .checkin-info h4 { font-size: 18px; margin-bottom: 6px; font-weight: 800;}
-        .checkin-info p { font-size: 14px; opacity: 0.9;}
         .btn-checkin { background: white; color: #059669; padding: 12px 24px; border-radius: 30px; font-weight: 800; cursor: pointer; border: none; font-size: 14px; transition: 0.2s;}
-        .btn-checkin:hover { transform: scale(1.05); }
-        .btn-checkin:disabled { background: #A7F3D0; color: #065F46; cursor: not-allowed; transform: none; opacity: 0.8;}
 
         .chart-container { background: var(--white); padding: 24px; border-radius: var(--border-radius); box-shadow: var(--shadow-sm); margin-bottom: 32px; border: 1px solid #E2E8F0; }
-        .chart-header { display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 700; color: var(--text-dark); margin-bottom: 20px; }
+        .chart-header { display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 700; margin-bottom: 20px; }
 
         .special-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 32px; }
-        .timer-box { background: #FFF1F2; border: 1px solid #FECDD3; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
-        .timer-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; color: #9F1239; font-weight: 700; font-size: 14px; text-transform: uppercase; width: 100%; justify-content: center;}
-        .countdown-flex { display: flex; gap: 12px; align-items: center; justify-content: center; margin-bottom: 16px; }
+        .timer-box { background: #FFF1F2; border: 1px solid #FECDD3; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center;}
+        .timer-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; color: #9F1239; font-weight: 700; font-size: 14px; }
+        .countdown-flex { display: flex; gap: 12px; align-items: center; justify-content: center; }
         .cd-block { background: white; border-radius: 8px; width: 64px; height: 64px; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(225,29,72,0.1); }
         .cd-num { font-size: 26px; font-weight: 800; color: #E11D48; line-height: 1;}
         .cd-label { font-size: 10px; color: #94A3B8; font-weight: 700; }
         .task-count-box { background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 16px; padding: 24px 20px; display: flex; align-items: center; gap: 20px; }
 
-        /* --- GIAO DIỆN NHÓM NHIỆM VỤ MỚI --- */
-        .task-list { display: flex; flex-direction: column; gap: 24px; }
-        .task-group-card { background: white; border: 1px solid #E2E8F0; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); overflow: hidden; }
-        .task-group-header { display: flex; align-items: center; gap: 16px; padding: 20px; background: #F8FAFC; border-bottom: 1px solid #E2E8F0; }
-        .tg-img { width: 60px; height: 60px; border-radius: 12px; object-fit: cover; border: 1px solid #CBD5E1; background: white; padding: 2px;}
+        /* ============================================================== */
+        /* CSS KHUNG GỘP NHIỆM VỤ - CÓ TÍNH NĂNG THU MỞ (ACCORDION)      */
+        /* ============================================================== */
+        .task-list { display: flex; flex-direction: column; gap: 20px; }
+        .task-group-card { background: white; border: 1px solid #E2E8F0; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); overflow: hidden; transition: 0.3s; }
+        
+        /* Phần Header: Cài đặt con trỏ chuột và Flexbox để gắn Mũi tên */
+        .task-group-header { display: flex; align-items: center; padding: 20px; background: #F8FAFC; border-bottom: 1px solid #E2E8F0; cursor: pointer; position: relative; user-select: none; }
+        .task-group-header:hover { background: #F1F5F9; }
+        
+        .tg-img { width: 60px; height: 60px; border-radius: 12px; object-fit: cover; border: 1px solid #CBD5E1; background: white; padding: 2px; margin-right: 16px;}
         .tg-info h4 { font-size: 17px; font-weight: 800; color: #1E3A8A; margin-bottom: 4px; }
         .tg-info p { font-size: 13px; color: #64748B; font-weight: 600; }
         .tg-info p span { color: #D97706; font-weight: 800; font-size: 14px;}
         
-        .tg-body { padding: 0 20px; }
+        /* Icon mũi tên xổ xuống */
+        .tg-toggle-icon { margin-left: auto; font-size: 14px; color: #64748B; transition: transform 0.3s ease; font-weight: 900;}
+        /* Khi card có class .open, mũi tên sẽ xoay lên */
+        .task-group-card.open .tg-toggle-icon { transform: rotate(180deg); }
+
+        /* Phần Danh sách link bên trong (Mặc định bị Ẩn) */
+        .tg-body { padding: 0 20px; display: none; } 
+        /* Bật hiển thị khi được chèn class .show */
+        .tg-body.show { display: block; animation: slideDown 0.3s ease-in-out;}
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
         .tg-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px dashed #E2E8F0; gap: 15px; }
         .tg-row:last-child { border-bottom: none; }
         .tg-row-name { font-size: 14px; font-weight: 700; color: #334155; display: flex; align-items: center; gap: 8px; }
         .tg-row-name::before { content: "🔗"; font-size: 16px;}
         
         .tg-action-btn { background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; transition: 0.2s; white-space: nowrap;}
-        .tg-action-btn:hover { background: #1D4ED8; color: white; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(29, 78, 216, 0.2);}
+        .tg-action-btn:hover { background: #1D4ED8; color: white;}
         
         .tg-input-area { display: none; width: 100%; max-width: 280px; flex-direction: column; gap: 6px; background: #F8FAFC; padding: 10px; border-radius: 8px; border: 1px dashed #CBD5E1; }
         .tg-input-area input { margin: 0; padding: 10px; font-size: 13px; }
         .tg-input-area button { padding: 10px; font-size: 13px; font-weight: 800; width: 100%; }
+        /* ============================================================== */
 
         .form-box { background: white; padding: 32px; border-radius: var(--border-radius); box-shadow: var(--shadow-sm); border: 1px solid #E2E8F0; }
 
         .custom-popup-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.4); z-index: 99999; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s ease; backdrop-filter: blur(2px); }
         .custom-popup-overlay.show { opacity: 1; pointer-events: all; }
-        .custom-popup-box { background: white; padding: 35px 25px; border-radius: 24px; text-align: center; box-shadow: 0 15px 50px rgba(0,0,0,0.2); transform: scale(0.7) translateY(20px); transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); max-width: 90%; width: 340px; border: 1px solid #E2E8F0; }
-        .custom-popup-overlay.show .custom-popup-box { transform: scale(1) translateY(0); }
-        .popup-icon { font-size: 72px; margin-bottom: 18px; line-height: 1; }
-        .popup-title { font-size: 22px; font-weight: 800; color: var(--text-dark); margin-bottom: 10px; }
-        .popup-message { font-size: 15px; color: var(--text-muted); font-weight: 500; line-height: 1.5; }
+        .custom-popup-box { background: white; padding: 35px 25px; border-radius: 24px; text-align: center; max-width: 90%; width: 340px; border: 1px solid #E2E8F0; }
+        .popup-icon { font-size: 72px; margin-bottom: 18px; }
+        .popup-title { font-size: 22px; font-weight: 800; margin-bottom: 10px; }
+        .popup-message { font-size: 15px; color: var(--text-muted); }
 
         .auth-layout-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-body); z-index: 100; display: flex; justify-content: center; align-items: center; }
-        .auth-card { background-color: var(--white); padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); width: 100%; max-width: 400px; border: 1px solid #E2E8F0; }
+        .auth-card { background-color: var(--white); padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); width: 100%; max-width: 400px; }
         
         .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; width: 100%; background: var(--white); box-shadow: 0 -2px 10px rgba(0,0,0,0.05); z-index: 99; border-top: 1px solid #E2E8F0; padding-bottom: env(safe-area-inset-bottom); }
         .bottom-nav ul { display: flex; width: 100%; list-style: none; margin: 0; padding: 0; }
         .bottom-nav li { flex: 1; }
-        .bottom-nav a { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0; color: var(--text-muted); font-size: 11px; font-weight: 600; }
+        .bottom-nav a { display: flex; flex-direction: column; align-items: center; padding: 10px 0; color: var(--text-muted); font-size: 11px; font-weight: 600; }
         .bottom-nav a.active { color: var(--primary); }
 
         @media (max-width: 768px) {
             aside.sidebar { display: none; }
             main.content { margin-left: 0; width: 100%; padding: 16px 16px 80px 16px; }
             .bottom-nav { display: flex; }
-            header.top-header { padding: 12px 16px; margin-bottom: 16px; }
             .dashboard-cards { grid-template-columns: 1fr; }
             .checkin-banner { flex-direction: column; text-align: center; gap: 16px; }
             .profile-grid { display: flex !important; flex-direction: column; gap: 16px !important; }
-            .tele-btn { bottom: 80px; right: 16px;}
         }
         .profile-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 24px; }
     </style>
@@ -182,7 +189,7 @@
         </div>
     </div>
 
-    <a href="https://t.me/hanhle1231" target="_blank" class="tele-btn" title="Hỗ trợ Telegram">
+    <a href="https://t.me/hanhle1231" target="_blank" class="tele-btn">
         <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.19-.08-.05-.19-.02-.27 0-.11.03-1.93 1.23-5.46 3.62-.51.35-.98.52-1.4.51-.46-.01-1.35-.26-2.01-.48-.81-.27-1.46-.42-1.4-.88.03-.24.36-.48.98-.74 3.85-1.68 6.42-2.79 7.71-3.32 3.67-1.53 4.43-1.8 4.93-1.81.11 0 .36.03.49.13.11.08.14.19.16.27-.01.04-.01.12-.02.17z"/></svg>
     </a>
 
@@ -231,9 +238,7 @@
             </header>
 
             <div class="marquee-container">
-                <div class="marquee-text" id="marquee-content">
-                    🔥 CHÀO MỪNG BẠN ĐẾN VỚI KIẾM LÚA MÙA HÈ! 🎉
-                </div>
+                <div class="marquee-text" id="marquee-content">🔥 CHÀO MỪNG BẠN ĐẾN VỚI KIẾM LÚA MÙA HÈ! 🎉</div>
             </div>
 
             <div class="live-payout-box">
@@ -375,12 +380,12 @@
         <div class="auth-card" id="auth-login-card">
             <div style="text-align: center; margin-bottom: 24px;"><img src="logo.jpg" style="width:100px; border-radius:50%"></div>
             <h2 style="text-align: center; margin-bottom: 20px; color: var(--primary);">Đăng Nhập</h2>
-            <div class="auth-msg" id="login-msg"></div>
+            <div class="auth-msg" id="login-msg" style="color:var(--danger); margin-bottom:10px;"></div>
             <input type="text" id="log-user" placeholder="Nhập tài khoản...">
             <input type="password" id="log-pass" placeholder="Nhập mật khẩu...">
-            <div class="remember-box" style="margin-bottom:15px; display:flex; gap:8px; align-items:center;">
+            <div style="margin-bottom:15px; display:flex; gap:8px; align-items:center;">
                 <input type="checkbox" id="login-remember" checked style="width:auto; margin:0;">
-                <label for="login-remember" style="font-weight:500;">Lưu đăng nhập cho lần sau</label>
+                <label for="login-remember">Lưu đăng nhập</label>
             </div>
             <button class="btn btn-primary" style="width: 100%;" id="btn-login" onclick="login()">Đăng nhập ngay</button>
             <p style="text-align: center; margin-top: 24px;">Chưa có tài khoản? <a href="#" onclick="toggleAuth(true)" style="color:var(--primary); font-weight:700;">Đăng ký</a></p>
@@ -389,7 +394,7 @@
         <div class="auth-card" id="auth-register-card" style="display: none;">
             <div style="text-align: center; margin-bottom: 24px;"><img src="logo.jpg" style="width:100px; border-radius:50%"></div>
             <h2 style="text-align: center; margin-bottom: 20px; color: var(--primary);">Tạo Tài Khoản</h2>
-            <div class="auth-msg" id="register-msg"></div>
+            <div class="auth-msg" id="register-msg" style="color:var(--danger); margin-bottom:10px;"></div>
             <input type="text" id="reg-user" placeholder="Tên tài khoản...">
             <input type="email" id="reg-email" placeholder="Địa chỉ Email...">
             <input type="password" id="reg-pass" placeholder="Tạo mật khẩu...">
@@ -408,9 +413,7 @@
             "Người dùng <b>An***</b> vừa rút thành công Thẻ cào 20k Viettel",
             "Người dùng <b>Binh***</b> vừa đổi thành công 50k về Ví MoMo",
             "Người dùng <b>Tuan99***</b> vừa rút thành công 100k Vietcombank",
-            "Người dùng <b>Hoang***</b> vừa rút thành công Thẻ cào 50k Vina",
-            "Người dùng <b>Kien***</b> vừa rút thành công Thẻ Garena 20k",
-            "Người dùng <b>Lien***</b> vừa đổi thành công 20k về Ví MoMo"
+            "Người dùng <b>Hoang***</b> vừa rút thành công Thẻ cào 50k Vina"
         ];
 
         function showPopup(title, message, isSuccess = true) {
@@ -425,10 +428,7 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             const savedUser = localStorage.getItem('remembered_user');
-            if(savedUser) {
-                currentUser = savedUser;
-                enterApplication();
-            }
+            if(savedUser) { currentUser = savedUser; enterApplication(); }
             startLivePayoutFeed();
         });
 
@@ -442,15 +442,11 @@
         function executeRealCheckin() {
             const btn = document.getElementById('btn-daily-checkin');
             btn.innerText = "Đang xử lý..."; btn.disabled = true;
-
             fetch(`${SCRIPT_URL}?action=dailyCheckin&username=${encodeURIComponent(currentUser)}`)
             .then(res => res.json()).then(data => {
                 showPopup(data.status === 'success' ? 'Thành công!' : 'Thông báo', data.message, data.status === 'success');
                 btn.innerText = "Đã điểm danh hôm nay ✅";
                 if (data.status === 'success') loadDashboard(); 
-            }).catch(() => {
-                showPopup("Lỗi mạng", "Lỗi kết nối máy chủ!", false);
-                btn.innerText = "Điểm danh ngay (+50 Lúa)"; btn.disabled = false;
             });
         }
 
@@ -498,8 +494,7 @@
             if(document.getElementById('ref-link-input')) document.getElementById('ref-link-input').value = `${baseUrl}?ref=${currentUser}`;
         }
         function copyRefLink() {
-            const copyText = document.getElementById('ref-link-input');
-            copyText.select(); document.execCommand("copy");
+            document.getElementById('ref-link-input').select(); document.execCommand("copy");
             showPopup("Thành công!", "Đã copy link giới thiệu!", true);
         }
 
@@ -516,8 +511,6 @@
         function toggleAuth(showReg) {
             document.getElementById('auth-login-card').style.display = showReg ? 'none' : 'block';
             document.getElementById('auth-register-card').style.display = showReg ? 'block' : 'none';
-            document.getElementById('login-msg').innerText = "";
-            document.getElementById('register-msg').innerText = "";
         }
 
         function enterApplication() {
@@ -526,7 +519,6 @@
             document.getElementById('welcome-username').innerText = currentUser;
             document.getElementById('prof-username').innerText = currentUser;
             document.getElementById('marquee-content').innerText = `🔥 CHÚC MỪNG ${currentUser.toUpperCase()} ĐÃ THAM GIA KIẾM LÚA MÙA HÈ! 🎉`;
-            
             startCountdown(); generateRefLink(); loadDashboard();
         }
 
@@ -563,22 +555,20 @@
             const u = document.getElementById('reg-user').value.trim();
             const e = document.getElementById('reg-email').value.trim();
             const p = document.getElementById('reg-pass').value;
-            const msg = document.getElementById('register-msg');
-            if(!u || !e || !p) { msg.style.color = 'var(--danger)'; msg.innerText = 'Vui lòng điền đủ thông tin!'; return; }
-            document.getElementById('btn-register').innerText = 'Đang tạo tài khoản...';
+            if(!u || !e || !p) return document.getElementById('register-msg').innerText = 'Điền đủ thông tin!';
+            document.getElementById('btn-register').innerText = 'Đang xử lý...';
             fetch(`${SCRIPT_URL}?action=register&username=${encodeURIComponent(u)}&email=${encodeURIComponent(e)}&password=${encodeURIComponent(p)}`)
             .then(res => res.json()).then(data => {
                 document.getElementById('btn-register').innerText = 'Đăng ký tài khoản';
                 if(data.status === 'success') { toggleAuth(false); showPopup('Thành công', data.message, true); } 
-                else { msg.style.color = 'var(--danger)'; msg.innerText = data.message; }
+                else { document.getElementById('register-msg').innerText = data.message; }
             });
         }
 
         function login() {
             const u = document.getElementById('log-user').value.trim();
             const p = document.getElementById('log-pass').value;
-            const msg = document.getElementById('login-msg');
-            if(!u || !p) { msg.style.color = 'var(--danger)'; msg.innerText = 'Vui lòng điền thông tin!'; return; }
+            if(!u || !p) return document.getElementById('login-msg').innerText = 'Điền đủ thông tin!';
             document.getElementById('btn-login').innerText = 'Đang xác thực...';
             fetch(`${SCRIPT_URL}?action=login&username=${encodeURIComponent(u)}&password=${encodeURIComponent(p)}`)
             .then(res => res.json()).then(data => {
@@ -587,7 +577,7 @@
                     currentUser = data.username;
                     if(document.getElementById('login-remember').checked) localStorage.setItem('remembered_user', currentUser);
                     enterApplication();
-                } else { msg.style.color = 'var(--danger)'; msg.innerText = data.message; }
+                } else { document.getElementById('login-msg').innerText = data.message; }
             });
         }
 
@@ -599,7 +589,7 @@
                 document.getElementById('db-completed-count').innerText = data.completedCount;
                 
                 const checkinBtn = document.getElementById('btn-daily-checkin');
-                if (data.hasCheckedInToday) { checkinBtn.innerText = "Đã điểm danh hôm nay ✅"; checkinBtn.disabled = true; } 
+                if (data.hasCheckedInToday) { checkinBtn.innerText = "Đã điểm danh ✅"; checkinBtn.disabled = true; } 
                 else { checkinBtn.innerText = "Điểm danh ngay (+50 Lúa)"; checkinBtn.disabled = false; }
 
                 const tBody = document.getElementById('table-task-body');
@@ -612,14 +602,14 @@
                 }
                 data.taskHistory.forEach(h => {
                     tBody.innerHTML += `<tr><td>${h.taskId}</td><td>${new Date(h.time).toLocaleDateString('vi-VN')}</td><td style="color:var(--success);font-weight:700;">+${h.reward}</td></tr>`;
-                    let taskDateObj = new Date(h.time);
-                    let taskDateString = `${taskDateObj.getFullYear()}-${String(taskDateObj.getMonth()+1).padStart(2,'0')}-${String(taskDateObj.getDate()).padStart(2,'0')}`;
-                    let idx = last7Days.indexOf(taskDateString); if(idx !== -1) { incomeData[idx] += parseInt(h.reward); }
+                    let dObj = new Date(h.time);
+                    let ds = `${dObj.getFullYear()}-${String(dObj.getMonth()+1).padStart(2,'0')}-${String(dObj.getDate()).padStart(2,'0')}`;
+                    let idx = last7Days.indexOf(ds); if(idx !== -1) { incomeData[idx] += parseInt(h.reward); }
                 });
                 renderChart(last7Days, incomeData); 
 
                 const wBody = document.getElementById('table-withdraw-body');
-                wBody.innerHTML = data.withdrawHistory.length === 0 ? '<tr><td colspan="5">Chưa tạo yêu cầu nào</td></tr>' : '';
+                wBody.innerHTML = data.withdrawHistory.length === 0 ? '<tr><td colspan="5">Chưa có yêu cầu</td></tr>' : '';
                 data.withdrawHistory.forEach(w => {
                     wBody.innerHTML += `<tr><td>${w.method}</td><td>${w.details}</td><td style="font-weight:700;">${Number(w.amount).toLocaleString()}</td><td style="font-weight:600;color:${w.status.includes('Chờ')?'var(--accent)':'var(--success)'}">${w.status}</td><td>${new Date(w.time).toLocaleDateString('vi-VN')}</td></tr>`;
                 });
@@ -636,7 +626,25 @@
         }
 
         // ===============================================
-        // HÀM TẢI NHIỆM VỤ TỰ ĐỘNG GOM NHÓM THEO TÊN + TIỀN
+        // HÀM TOGGLE ĐỂ ĐÓNG MỞ NHÓM (ACCORDION)
+        // ===============================================
+        function toggleTaskGroup(groupId) {
+            const body = document.getElementById(`body-${groupId}`);
+            const card = document.getElementById(`group-${groupId}`);
+            
+            if (body.classList.contains('show')) {
+                // Nếu đang mở thì đóng lại
+                body.classList.remove('show');
+                card.classList.remove('open');
+            } else {
+                // Nếu đang đóng thì xổ xuống
+                body.classList.add('show');
+                card.classList.add('open');
+            }
+        }
+
+        // ===============================================
+        // TẢI NHIỆM VỤ - TỰ ĐỘNG GOM NHÓM
         // ===============================================
         function loadTasks() {
             const box = document.getElementById('task-container');
@@ -652,7 +660,7 @@
                     return; 
                 }
                 
-                // Gom nhóm thuật toán bằng JavaScript
+                // Gom nhóm thuật toán
                 const grouped = {};
                 tasks.forEach(t => {
                     const key = `${t.name}_${t.reward}`;
@@ -662,21 +670,26 @@
                     grouped[key].list.push(t);
                 });
 
-                // Đổ dữ liệu ra cấu trúc Card Nhóm mới
+                // Đổ dữ liệu
                 let html = '';
+                let groupIdx = 0; // Đếm số thứ tự nhóm để làm ID
+                
                 for(let key in grouped) {
                     const g = grouped[key];
+                    groupIdx++;
                     
                     html += `
-                    <div class="task-group-card">
-                        <div class="task-group-header">
+                    <div class="task-group-card" id="group-${groupIdx}">
+                        <div class="task-group-header" onclick="toggleTaskGroup(${groupIdx})">
                             <img src="${g.img}" class="tg-img" onerror="this.src='logo.jpg'">
                             <div class="tg-info">
                                 <h4>${g.name}</h4>
-                                <p>Thưởng: <span>+${g.reward} Lúa/lượt</span> &nbsp;•&nbsp; Còn lại: <b>${g.list.length}</b> nhiệm vụ</p>
+                                <p>Thưởng: <span>+${g.reward} Lúa/lượt</span> &nbsp;•&nbsp; Còn lại: <b>${g.list.length}</b></p>
                             </div>
+                            <div class="tg-toggle-icon">▼</div>
                         </div>
-                        <div class="tg-body">
+                        
+                        <div class="tg-body" id="body-${groupIdx}">
                     `;
                     
                     g.list.forEach((t, index) => {
@@ -689,7 +702,7 @@
                                 </button>
                                 
                                 <div class="tg-input-area" id="input-box-${t.id}">
-                                    <input type="text" id="code-val-${t.id}" placeholder="Nhập mã số xác nhận...">
+                                    <input type="text" id="code-val-${t.id}" placeholder="Nhập mã 6 số...">
                                     <button class="btn btn-success" onclick="verifyCode('${t.id}')">XÁC NHẬN MÃ</button>
                                 </div>
                             </div>
@@ -754,7 +767,6 @@
             else if(method === 'MoMo') { lbl.innerText = "Số điện thoại MoMo + Tên chủ thẻ:"; inp.placeholder = "Ví dụ: 0912... - NGUYEN VAN A"; }
             else { lbl.innerText = "Số tài khoản + Ngân hàng + Tên:"; inp.placeholder = "Ví dụ: Techcombank - 190... - NGUYEN VAN A"; }
         }
-
         document.getElementById('wd-method').onchange = updateWdInputs;
 
         function submitWithdraw() {
