@@ -117,7 +117,6 @@
         .task-list { display: flex; flex-direction: column; gap: 20px; }
         .task-group-card { background: white; border: 1px solid #E2E8F0; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); overflow: hidden; transition: 0.3s; }
         
-        /* Phần Header: Cài đặt con trỏ chuột và Flexbox để gắn Mũi tên */
         .task-group-header { display: flex; align-items: center; padding: 20px; background: #F8FAFC; border-bottom: 1px solid #E2E8F0; cursor: pointer; position: relative; user-select: none; }
         .task-group-header:hover { background: #F1F5F9; }
         
@@ -126,14 +125,10 @@
         .tg-info p { font-size: 13px; color: #64748B; font-weight: 600; }
         .tg-info p span { color: #D97706; font-weight: 800; font-size: 14px;}
         
-        /* Icon mũi tên xổ xuống */
         .tg-toggle-icon { margin-left: auto; font-size: 14px; color: #64748B; transition: transform 0.3s ease; font-weight: 900;}
-        /* Khi card có class .open, mũi tên sẽ xoay lên */
         .task-group-card.open .tg-toggle-icon { transform: rotate(180deg); }
 
-        /* Phần Danh sách link bên trong (Mặc định bị Ẩn) */
         .tg-body { padding: 0 20px; display: none; } 
-        /* Bật hiển thị khi được chèn class .show */
         .tg-body.show { display: block; animation: slideDown 0.3s ease-in-out;}
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -148,7 +143,16 @@
         .tg-input-area { display: none; width: 100%; max-width: 280px; flex-direction: column; gap: 6px; background: #F8FAFC; padding: 10px; border-radius: 8px; border: 1px dashed #CBD5E1; }
         .tg-input-area input { margin: 0; padding: 10px; font-size: 13px; }
         .tg-input-area button { padding: 10px; font-size: 13px; font-weight: 800; width: 100%; }
+
         /* ============================================================== */
+        /* CSS WELCOME POPUP (Bảng chào mừng có nút Telegram)           */
+        /* ============================================================== */
+        .welcome-popup-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); z-index: 999999; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .welcome-popup-box { background: #FFF8E7; padding: 25px; border-radius: 20px; max-width: 500px; width: 100%; position: relative; border: 4px solid #D97706; box-shadow: 0 0 30px rgba(0,0,0,0.5); text-align: center; }
+        .close-btn { position: absolute; top: 10px; right: 15px; font-size: 30px; cursor: pointer; color: #991B1B; font-weight: bold; }
+        .welcome-img { width: 100%; border-radius: 12px; margin-bottom: 15px; object-fit: cover; }
+        .tele-contact-btn { background: #0088cc; color: white; padding: 12px 25px; border-radius: 30px; display: inline-block; margin-top: 15px; font-weight: 700; text-decoration: none; transition: 0.2s; }
+        .tele-contact-btn:hover { transform: scale(1.05); box-shadow: 0 4px 10px rgba(0,136,204,0.4); }
 
         .form-box { background: white; padding: 32px; border-radius: var(--border-radius); box-shadow: var(--shadow-sm); border: 1px solid #E2E8F0; }
 
@@ -181,6 +185,18 @@
 </head>
 <body>
 
+    <!-- THÔNG BÁO CHÀO MỪNG (ẨN MẶC ĐỊNH) -->
+    <div id="welcome-popup" class="welcome-popup-overlay" style="display: none;">
+        <div class="welcome-popup-box">
+            <span class="close-btn" onclick="closeWelcomePopup()">×</span>
+            <img src="image_5a67db.jpg" class="welcome-img" alt="Chào mừng" onerror="this.style.display='none'">
+            <h2 style="color: #92400E; margin-bottom: 10px; font-size: 22px; font-weight: 800;">CHÀO MỪNG BẠN, CHIẾN BINH!</h2>
+            <p style="color: #475569; font-size: 15px; margin-bottom: 15px; font-weight: 500;">Hãy hoàn thành nhiệm vụ để nhận những phần thưởng giá trị nhé!</p>
+            <a href="https://t.me/hanhle1231" target="_blank" class="tele-contact-btn">💬 Liên hệ hỗ trợ Telegram</a>
+        </div>
+    </div>
+
+    <!-- POPUP THÔNG BÁO NHỎ -->
     <div id="custom-popup-overlay" class="custom-popup-overlay">
         <div class="custom-popup-box">
             <div class="popup-icon" id="popup-icon">✅</div>
@@ -193,6 +209,7 @@
         <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.19-.08-.05-.19-.02-.27 0-.11.03-1.93 1.23-5.46 3.62-.51.35-.98.52-1.4.51-.46-.01-1.35-.26-2.01-.48-.81-.27-1.46-.42-1.4-.88.03-.24.36-.48.98-.74 3.85-1.68 6.42-2.79 7.71-3.32 3.67-1.53 4.43-1.8 4.93-1.81.11 0 .36.03.49.13.11.08.14.19.16.27-.01.04-.01.12-.02.17z"/></svg>
     </a>
 
+    <!-- GIAO DIỆN CHÍNH -->
     <div id="main-app" style="display: none; width: 100%;">
         <aside class="sidebar">
             <div class="sidebar-logo">
@@ -376,6 +393,7 @@
         </main>
     </div>
 
+    <!-- MÀN HÌNH ĐĂNG NHẬP / ĐĂNG KÝ -->
     <div class="auth-layout-container" id="auth-view">
         <div class="auth-card" id="auth-login-card">
             <div style="text-align: center; margin-bottom: 24px;"><img src="logo.jpg" style="width:100px; border-radius:50%"></div>
@@ -415,6 +433,23 @@
             "Người dùng <b>Tuan99***</b> vừa rút thành công 100k Vietcombank",
             "Người dùng <b>Hoang***</b> vừa rút thành công Thẻ cào 50k Vina"
         ];
+
+        // ===============================================
+        // HÀM KIỂM TRA VÀ ĐÓNG MỞ THÔNG BÁO CHÀO MỪNG (2 GIỜ)
+        // ===============================================
+        function checkWelcomePopup() {
+            const lastClosed = localStorage.getItem('welcome_closed_time');
+            const now = new Date().getTime();
+            // Nếu chưa từng đóng hoặc đã qua 2 tiếng (7200000 ms)
+            if (!lastClosed || (now - lastClosed > 7200000)) {
+                document.getElementById('welcome-popup').style.display = 'flex';
+            }
+        }
+
+        function closeWelcomePopup() {
+            document.getElementById('welcome-popup').style.display = 'none';
+            localStorage.setItem('welcome_closed_time', new Date().getTime());
+        }
 
         function showPopup(title, message, isSuccess = true) {
             const popup = document.getElementById('custom-popup-overlay');
@@ -519,7 +554,13 @@
             document.getElementById('welcome-username').innerText = currentUser;
             document.getElementById('prof-username').innerText = currentUser;
             document.getElementById('marquee-content').innerText = `🔥 CHÚC MỪNG ${currentUser.toUpperCase()} ĐÃ THAM GIA KIẾM LÚA MÙA HÈ! 🎉`;
-            startCountdown(); generateRefLink(); loadDashboard();
+            
+            startCountdown(); 
+            generateRefLink(); 
+            loadDashboard();
+            
+            // Hiện thông báo chào mừng sau khi vào app
+            checkWelcomePopup();
         }
 
         function logoutApp() {
@@ -633,11 +674,9 @@
             const card = document.getElementById(`group-${groupId}`);
             
             if (body.classList.contains('show')) {
-                // Nếu đang mở thì đóng lại
                 body.classList.remove('show');
                 card.classList.remove('open');
             } else {
-                // Nếu đang đóng thì xổ xuống
                 body.classList.add('show');
                 card.classList.add('open');
             }
@@ -672,7 +711,7 @@
 
                 // Đổ dữ liệu
                 let html = '';
-                let groupIdx = 0; // Đếm số thứ tự nhóm để làm ID
+                let groupIdx = 0; 
                 
                 for(let key in grouped) {
                     const g = grouped[key];
