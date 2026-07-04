@@ -111,7 +111,7 @@
         .cd-label { font-size: 10px; color: #94A3B8; font-weight: 700; }
         .task-count-box { background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 16px; padding: 24px 20px; display: flex; align-items: center; gap: 20px; }
 
-        /* KHUNG GỘP NHIỆM VỤ (ACCORDION) THU/MỞ TAB */
+        /* KHUNG GỘP NHIỆM VỤ (ACCORDION) */
         .task-list { display: flex; flex-direction: column; gap: 20px; }
         .task-group-card { background: white; border: 1px solid #E2E8F0; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); overflow: hidden; transition: 0.3s; }
         
@@ -142,7 +142,7 @@
         .tg-input-area input { margin: 0; padding: 10px; font-size: 13px; }
         .tg-input-area button { padding: 10px; font-size: 13px; font-weight: 800; width: 100%; }
 
-        /* WELCOME POPUP (BẢNG CHÀO MỪNG GIỮA MÀN HÌNH) */
+        /* WELCOME POPUP */
         .welcome-popup-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); z-index: 999999; display: flex; justify-content: center; align-items: center; padding: 20px; }
         .welcome-popup-box { background: #FFF8E7; padding: 25px; border-radius: 20px; max-width: 500px; width: 100%; position: relative; border: 4px solid #D97706; box-shadow: 0 0 30px rgba(0,0,0,0.5); text-align: center; }
         .close-btn { position: absolute; top: 10px; right: 15px; font-size: 30px; cursor: pointer; color: #991B1B; font-weight: bold; background: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; line-height: 1; box-shadow: 0 2px 5px rgba(0,0,0,0.2);}
@@ -184,7 +184,7 @@
     <div id="welcome-popup" class="welcome-popup-overlay" style="display: none;">
         <div class="welcome-popup-box">
             <span class="close-btn" onclick="closeWelcomePopup()">×</span>
-            <img src="image_5a67db.jpg" class="welcome-img" alt="Chào mừng" onerror="this.style.display='none'">
+            <img src="image_5a67db.jpg" class="welcome-img" alt="Chào mừng chiến binh" onerror="this.style.display='none'">
             <a href="https://t.me/hanhle1231" target="_blank" class="tele-contact-btn">💬 Liên hệ hỗ trợ Telegram</a>
         </div>
     </div>
@@ -424,7 +424,9 @@
             "Người dùng <b>Hoang***</b> vừa rút thành công Thẻ cào 50k Vina"
         ];
 
-        // KIỂM TRA ĐÓNG MỞ POPUP CHÀO MỪNG TRONG 2 TIẾNG
+        // ===============================================
+        // HÀM KIỂM TRA VÀ ĐÓNG MỞ THÔNG BÁO CHÀO MỪNG (2 GIỜ)
+        // ===============================================
         function checkWelcomePopup() {
             const lastClosed = localStorage.getItem('welcome_closed_time');
             const now = new Date().getTime();
@@ -651,7 +653,6 @@
             });
         }
 
-        // HÀM THU/MỞ NHÓM NHIỆM VỤ (ACCORDION)
         function toggleTaskGroup(groupId) {
             const body = document.getElementById(`body-${groupId}`);
             const card = document.getElementById(`group-${groupId}`);
@@ -664,7 +665,6 @@
             }
         }
 
-        // TẢI VÀ GOM NHÓM NHIỆM VỤ TỰ ĐỘNG
         function loadTasks() {
             const box = document.getElementById('task-container');
             box.innerHTML = '<p style="color: var(--text-muted); font-size:14px;">Đang tải danh sách nhiệm vụ...</p>';
@@ -679,7 +679,6 @@
                     return; 
                 }
                 
-                // Thuật toán gom nhóm bằng JS
                 const grouped = {};
                 tasks.forEach(t => {
                     const key = `${t.name}_${t.reward}`;
@@ -735,12 +734,8 @@
             });
         }
 
-        // BỘ PHÒNG THỦ LỚP 2 & 3 CHỐNG TOOL GIAN LẬN & BOOKMARK (VÉ ĐỘC QUYỀN)
         function openTaskLink(id, link) {
-            // Áp dụng Luật Độc Quyền: Chỉ giữ thời gian và ID của 1 nhiệm vụ duy nhất được bấm sau cùng
-            localStorage.setItem('ve_nhiem_vu_active_id', id);
-            localStorage.setItem('ve_nhiem_vu_active_time', Date.now().toString()); 
-            
+            localStorage.setItem('ve_nhiem_vu', id); 
             localStorage.removeItem('hash_code_' + id); 
             window.open(link, '_blank'); 
             
