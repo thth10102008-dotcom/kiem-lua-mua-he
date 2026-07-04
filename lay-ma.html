@@ -43,61 +43,56 @@
     </div>
 
     <script>
-        // 1. ĐỌC MÃ NHIỆM VỤ TỪ URL ĐÍCH
+        // 1. ĐỌC MÃ NHIỆM VỤ TỪ URL (Ví dụ: lay-ma.html?taskId=1012)
         const urlParams = new URLSearchParams(window.location.search);
         const taskId = urlParams.get('taskId');
         
-        // 2. LẤY VÉ ĐỘC QUYỀN TỪ MÁY KHÁCH
-        const activeId = localStorage.getItem('ve_nhiem_vu_active_id');
-        const clickTime = localStorage.getItem('ve_nhiem_vu_active_time');
-        const now = Date.now();
-
         let captchaText = "";
         let secondsLeft = 30; // Chờ 30 giây
 
-        // HÀM BÁO LỖI CHUNG (Treo luôn màn hình)
+        // HÀM BÁO LỖI CHUNG
         function showError(msg, subMsg) {
             document.getElementById('main-content').innerHTML = `
                 <div style="font-size: 40px; margin-bottom: 10px;">🚫</div>
                 <h2 style="color: red; margin-top: 0;">${msg}</h2>
-                <p style="color: #475569; font-size: 15px; margin-bottom: 20px; line-height: 1.5;">${subMsg}</p>
-                <p style="color: #1E3A8A; font-weight: bold; font-size: 15px;">Vui lòng quay lại trang chủ, tải lại trang và làm lại từ đầu!</p>
+                <p style="color: #475569; font-size: 15px; margin-bottom: 20px;">${subMsg}</p>
+                <p style="color: #1E3A8A; font-weight: bold; font-size: 15px;">Vui lòng quay lại trang chủ và bấm "Mở Link" làm lại nhé!</p>
             `;
         }
 
         // ==========================================
-        // MÁY QUÉT CHỐNG BOOKMARK HẠNG NẶNG
+        // THUẬT TOÁN KIỂM TRA CHỐNG LƯU LINK (BOOKMARK)
         // ==========================================
-        if (!taskId) {
-            showError("LỖI LIÊN KẾT!", "Không tìm thấy mã nhiệm vụ trên thanh địa chỉ.");
-        } 
-        else if (!activeId || !clickTime) {
-            showError("LỖI XÁC THỰC!", "Bạn chưa nhận nhiệm vụ từ trang chủ.");
-        } 
-        else if (activeId !== taskId) {
-            // Khách bấm nhiệm vụ A nhưng lại mở Bookmark của nhiệm vụ B
-            showError("CẢNH BÁO GIAN LẬN!", "Hệ thống phát hiện bạn mở nhiều tab hoặc dùng Bookmark sai quy định.<br><br><b>Chỉ được làm TỪNG NHIỆM VỤ MỘT!</b>");
-            localStorage.removeItem('ve_nhiem_vu_active_id'); // Xóa vé trừng phạt
-        } 
-        else if (now - parseInt(clickTime) < 20000) {
-            // Máy đo tốc độ: Nếu bay từ trang chủ sang đây DƯỚI 20 giây -> Bắt quả tang dùng Bookmark!
-            showError("TỐC ĐỘ PHI LÝ!", "Bạn vượt link quá nhanh (Chưa tới 20 giây).<br><br>Hệ thống nghi ngờ bạn <b>sử dụng Bookmark</b> để nhảy cóc. Mã đã bị hủy!");
-            localStorage.removeItem('ve_nhiem_vu_active_id'); // Xóa vé trừng phạt
-        } 
-        else {
-            // TẤT CẢ ĐỀU HỢP LỆ VÀ SẠCH SẼ -> CHO ĐẾM NGƯỢC
-            const interval = setInterval(() => {
-                secondsLeft--;
-                document.getElementById('countdown-timer').innerText = secondsLeft;
-                
-                if (secondsLeft <= 0) {
-                    clearInterval(interval);
-                    document.getElementById('countdown-timer').style.display = 'none';
-                    document.getElementById('status-text').style.display = 'none';
-                    document.getElementById('captcha-section').style.display = 'block';
-                    drawCaptcha();
-                }
-            }, 1000);
+        if(!taskId) {
+            showError("LỖI LIÊN KẾT!", "Không tìm thấy mã nhiệm vụ. Bạn đã mở sai cách.");
+        } else {
+            // Lấy vé riêng biệt của nhiệm vụ này
+            const clickTime = localStorage.getItem('ve_nhiem_vu_' + taskId);
+            const now = Date.now();
+
+            if (!clickTime) {
+                // LỖI 1: Không có vé (Chưa bấm nút ở trang chủ mà mở link trực tiếp)
+                showError("LỖI XÁC THỰC!", "Bạn chưa nhận nhiệm vụ hoặc vé đã bị hủy.");
+            } else if (now - parseInt(clickTime) < 10000) {
+                // LỖI 2: Vượt link quá nhanh (Dưới 10 giây). 
+                // Lý do: Link rút gọn mất 30s-1p. Nếu vào trang này nhanh hơn 10s -> Chắc chắn đang lưu link (Bookmark)
+                showError("PHÁT HIỆN GIAN LẬN!", "Bạn vượt link quá nhanh. Hệ thống nghi ngờ bạn đã dùng link lưu sẵn (Bookmark).");
+                localStorage.removeItem('ve_nhiem_vu_' + taskId); // Xóa luôn vé
+            } else {
+                // TẤT CẢ HỢP LỆ -> CHO CHẠY ĐẾM NGƯỢC
+                const interval = setInterval(() => {
+                    secondsLeft--;
+                    document.getElementById('countdown-timer').innerText = secondsLeft;
+                    
+                    if (secondsLeft <= 0) {
+                        clearInterval(interval);
+                        document.getElementById('countdown-timer').style.display = 'none';
+                        document.getElementById('status-text').style.display = 'none';
+                        document.getElementById('captcha-section').style.display = 'block';
+                        drawCaptcha();
+                    }
+                }, 1000);
+            }
         }
 
         // Vẽ Captcha
@@ -143,12 +138,11 @@
             }
 
             // ==========================================
-            // XÉ VÉ NGAY SAU KHI LẤY MÃ
+            // XÉ VÉ NGAY LẬP TỨC!
+            // Khi gõ đúng Captcha, xóa vé đi để cấm tải lại trang (F5) lấy mã mới.
             // ==========================================
-            localStorage.removeItem('ve_nhiem_vu_active_id');
-            localStorage.removeItem('ve_nhiem_vu_active_time');
+            localStorage.removeItem('ve_nhiem_vu_' + taskId);
 
-            // Tạo mã thưởng
             const rewardCode = Math.floor(100000 + Math.random() * 900000).toString();
             const encryptedCode = btoa(taskId + "_MAMAT_" + rewardCode);
             localStorage.setItem('hash_code_' + taskId, encryptedCode);
