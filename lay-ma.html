@@ -8,11 +8,14 @@
         body { font-family: sans-serif; background: #F4F7FE; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
         .box { background: white; padding: 30px; border-radius: 16px; text-align: center; width: 340px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border: 1px solid #E2E8F0; }
         .timer { font-size: 55px; font-weight: bold; color: #EF4444; margin: 20px 0; }
+        
+        /* Giao diện Captcha */
         .captcha-box { display: none; margin-top: 15px; }
         canvas { border: 1px solid #CBD5E1; border-radius: 8px; margin-bottom: 10px; background: #F8FAFC; }
         .cap-input { width: 90%; padding: 12px; border: 1.5px solid #CBD5E1; border-radius: 8px; font-size: 16px; text-align: center; text-transform: uppercase; margin-bottom: 15px; font-weight: bold;}
-        .btn-cap { background: #1E3A8A; color: white; padding: 12px; width: 100%; border: none; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; transition: 0.2s;}
-        .btn-cap:hover { background: #1D4ED8; }
+        .btn-cap { background: #1E3A8A; color: white; padding: 12px; width: 100%; border: none; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; }
+        
+        /* Giao diện Báo Mã */
         .result-box { display: none; margin-top: 20px; }
         .code-display { font-size: 36px; font-weight: 900; color: #10B981; background: #ECFDF5; padding: 15px; border-radius: 8px; border: 2px dashed #34D399; letter-spacing: 5px;}
         .guide { color: #1E3A8A; font-weight: 600; font-size: 14px; margin-top: 15px; line-height: 1.5; }
@@ -23,18 +26,15 @@
         <h3 style="color: #1E3A8A; margin-top:0;">HỆ THỐNG LẤY MÃ</h3>
         <p id="status-text" style="color:#64748B;">Vui lòng không đóng trang này...</p>
 
-        <!-- ĐỒNG HỒ -->
         <div class="timer" id="countdown-timer">30</div>
 
-        <!-- CAPTCHA -->
         <div class="captcha-box" id="captcha-section">
-            <p style="color: #F59E0B; font-weight: bold; font-size: 14px;">Xác minh con người:</p>
+            <p style="color: #F59E0B; font-weight: bold; font-size: 14px;">Vui lòng xác minh bạn là con người:</p>
             <canvas id="captchaCanvas" width="160" height="60"></canvas><br>
             <input type="text" id="captchaInput" class="cap-input" placeholder="Nhập chữ trong ảnh">
             <button class="btn-cap" onclick="verifyCaptcha()">XÁC NHẬN</button>
         </div>
 
-        <!-- HIỆN MÃ -->
         <div class="result-box" id="result-section">
             <p style="color: #64748B; font-size: 14px; margin-bottom:10px;">Mã của bạn đây. Hãy COPY nó nhé!</p>
             <div class="code-display" id="final-code"></div>
@@ -43,66 +43,48 @@
     </div>
 
     <script>
-        // 1. ĐỌC MÃ NHIỆM VỤ TỪ URL (Ví dụ: lay-ma.html?taskId=1012)
-        const urlParams = new URLSearchParams(window.location.search);
-        const taskId = urlParams.get('taskId');
+        // KIỂM TRA ĐỒNG BỘ VÉ TỪ TRANG CHỦ ĐỂ PHÁT HIỆN TOOL
+        const taskId = localStorage.getItem('ve_nhiem_vu');
         
         let captchaText = "";
-        let secondsLeft = 30; // Chờ 30 giây
+        let secondsLeft = 30; // Đặt số giây đếm ngược tại đây
 
-        // HÀM BÁO LỖI CHUNG
-        function showError(msg, subMsg) {
+        if(!taskId) {
+            // Hiển thị khung thông báo lỗi chặn tool chuẩn xác như ảnh chụp
             document.getElementById('main-content').innerHTML = `
                 <div style="font-size: 40px; margin-bottom: 10px;">🚫</div>
-                <h2 style="color: red; margin-top: 0;">${msg}</h2>
-                <p style="color: #475569; font-size: 15px; margin-bottom: 20px;">${subMsg}</p>
-                <p style="color: #1E3A8A; font-weight: bold; font-size: 15px;">Vui lòng quay lại trang chủ và bấm "Mở Link" làm lại nhé!</p>
+                <h2 style="color: red; margin-top: 0;">LỖI XÁC THỰC!</h2>
+                <p style="color: #475569; font-size: 15px; margin-bottom: 20px;">Bạn chưa nhận nhiệm vụ từ trang chủ, hoặc bạn đã lưu link để gian lận.</p>
+                <p style="color: #1E3A8A; font-weight: bold; font-size: 15px;">Vui lòng quay lại trang chủ và bấm nút "Thực hiện nhiệm vụ" để bắt đầu lại nhé!</p>
             `;
-        }
-
-        // ==========================================
-        // THUẬT TOÁN KIỂM TRA CHỐNG LƯU LINK (BOOKMARK)
-        // ==========================================
-        if(!taskId) {
-            showError("LỖI LIÊN KẾT!", "Không tìm thấy mã nhiệm vụ. Bạn đã mở sai cách.");
         } else {
-            // Lấy vé riêng biệt của nhiệm vụ này
-            const clickTime = localStorage.getItem('ve_nhiem_vu_' + taskId);
-            const now = Date.now();
-
-            if (!clickTime) {
-                // LỖI 1: Không có vé (Chưa bấm nút ở trang chủ mà mở link trực tiếp)
-                showError("LỖI XÁC THỰC!", "Bạn chưa nhận nhiệm vụ hoặc vé đã bị hủy.");
-            } else if (now - parseInt(clickTime) < 10000) {
-                // LỖI 2: Vượt link quá nhanh (Dưới 10 giây). 
-                // Lý do: Link rút gọn mất 30s-1p. Nếu vào trang này nhanh hơn 10s -> Chắc chắn đang lưu link (Bookmark)
-                showError("PHÁT HIỆN GIAN LẬN!", "Bạn vượt link quá nhanh. Hệ thống nghi ngờ bạn đã dùng link lưu sẵn (Bookmark).");
-                localStorage.removeItem('ve_nhiem_vu_' + taskId); // Xóa luôn vé
-            } else {
-                // TẤT CẢ HỢP LỆ -> CHO CHẠY ĐẾM NGƯỢC
-                const interval = setInterval(() => {
-                    secondsLeft--;
-                    document.getElementById('countdown-timer').innerText = secondsLeft;
+            // Chạy thời gian chờ
+            const interval = setInterval(() => {
+                secondsLeft--;
+                document.getElementById('countdown-timer').innerText = secondsLeft;
+                
+                if (secondsLeft <= 0) {
+                    clearInterval(interval);
+                    document.getElementById('countdown-timer').style.display = 'none';
+                    document.getElementById('status-text').style.display = 'none';
                     
-                    if (secondsLeft <= 0) {
-                        clearInterval(interval);
-                        document.getElementById('countdown-timer').style.display = 'none';
-                        document.getElementById('status-text').style.display = 'none';
-                        document.getElementById('captcha-section').style.display = 'block';
-                        drawCaptcha();
-                    }
-                }, 1000);
-            }
+                    // Hiện Captcha chống bot
+                    document.getElementById('captcha-section').style.display = 'block';
+                    drawCaptcha();
+                }
+            }, 1000);
         }
 
-        // Vẽ Captcha
+        // Tạo ảnh captcha vằn nhiễu chống tool quét chữ (OCR)
         function drawCaptcha() {
             const canvas = document.getElementById('captchaCanvas');
             const ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
             ctx.fillStyle = "#F8FAFC";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+            // Tạo các vạch sọc làm rối loạn mắt đọc của bot
             for(let i=0; i<6; i++) {
                 ctx.strokeStyle = ['#94A3B8', '#CBD5E1', '#F1F5F9'][Math.floor(Math.random()*3)];
                 ctx.lineWidth = Math.random() * 2 + 1;
@@ -121,7 +103,7 @@
             for(let i=0; i<captchaText.length; i++) {
                 ctx.save();
                 ctx.translate(20 + i * 25, 40);
-                ctx.rotate((Math.random() - 0.5) * 0.4);
+                ctx.rotate((Math.random() - 0.5) * 0.4); // Xoay chữ ngẫu nhiên
                 ctx.fillText(captchaText[i], 0, 0);
                 ctx.restore();
             }
@@ -137,16 +119,14 @@
                 return;
             }
 
-            // ==========================================
-            // XÉ VÉ NGAY LẬP TỨC!
-            // Khi gõ đúng Captcha, xóa vé đi để cấm tải lại trang (F5) lấy mã mới.
-            // ==========================================
-            localStorage.removeItem('ve_nhiem_vu_' + taskId);
-
+            // Tạo ngẫu nhiên chuỗi mã thưởng bí mật 6 số
             const rewardCode = Math.floor(100000 + Math.random() * 900000).toString();
+            
+            // Mã hóa chuỗi kiểm tra bằng Base64 (btoa) để tool quét bộ nhớ máy không đọc được số thật
             const encryptedCode = btoa(taskId + "_MAMAT_" + rewardCode);
             localStorage.setItem('hash_code_' + taskId, encryptedCode);
 
+            // Ẩn bảng captcha, hiện mã số cho khách sao chép
             document.getElementById('captcha-section').style.display = 'none';
             document.getElementById('result-section').style.display = 'block';
             document.getElementById('final-code').innerText = rewardCode;
