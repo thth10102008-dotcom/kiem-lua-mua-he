@@ -137,6 +137,7 @@
         
         .tg-action-btn { background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; transition: 0.2s; white-space: nowrap;}
         .tg-action-btn:hover { background: #1D4ED8; color: white;}
+        .tg-action-btn.ad-clicked { background: #DCFCE7; color: #15803D; border-color: #86EFAC; }
         
         .tg-input-area { display: none; width: 100%; max-width: 280px; flex-direction: column; gap: 6px; background: #F8FAFC; padding: 10px; border-radius: 8px; border: 1px dashed #CBD5E1; }
         .tg-input-area input { margin: 0; padding: 10px; font-size: 13px; }
@@ -184,7 +185,7 @@
     <div id="welcome-popup" class="welcome-popup-overlay" style="display: none;">
         <div class="welcome-popup-box">
             <span class="close-btn" onclick="closeWelcomePopup()">×</span>
-            <img src="image_5a67db.jpg" class="welcome-img" alt="Chào mừng chiến binh" onerror="this.style.display='none'">
+            <img src="image_5a67db.jpg" class="welcome-img" alt="Chào mừng" onerror="this.style.display='none'">
             <a href="https://t.me/hanhle1231" target="_blank" class="tele-contact-btn">💬 Liên hệ hỗ trợ Telegram</a>
         </div>
     </div>
@@ -417,6 +418,13 @@
         let incomeChartInstance = null;
         let countdownInterval = null;
 
+        // 3 LINK QUẢNG CÁO XOAY VÒNG DO BẠN CUNG CẤP
+        const AD_NETWORKS = [
+            "https://www.effectivecpmnetwork.com/v3g8tvi2?key=40a3c0407a6d5a6a21fb09208dc6758d",
+            "https://www.effectivecpmnetwork.com/sv6tbzd5ub?key=4090a8c585e33443de502ad7ec2678ba",
+            "https://www.effectivecpmnetwork.com/sdmwabqk?key=99df44fe93fe3cdc2146ada41a3cf4b1"
+        ];
+
         const fakePayouts = [
             "Người dùng <b>An***</b> vừa rút thành công Thẻ cào 20k Viettel",
             "Người dùng <b>Binh***</b> vừa đổi thành công 50k về Ví MoMo",
@@ -424,9 +432,12 @@
             "Người dùng <b>Hoang***</b> vừa rút thành công Thẻ cào 50k Vina"
         ];
 
-        // ===============================================
-        // HÀM KIỂM TRA VÀ ĐÓNG MỞ THÔNG BÁO CHÀO MỪNG (2 GIỜ)
-        // ===============================================
+        // HÀM MỞ QUẢNG CÁO NGẪU NHIÊN 1 TRONG 3 LINK
+        function fireRandomAd() {
+            const randomIndex = Math.floor(Math.random() * AD_NETWORKS.length);
+            window.open(AD_NETWORKS[randomIndex], '_blank');
+        }
+
         function checkWelcomePopup() {
             const lastClosed = localStorage.getItem('welcome_closed_time');
             const now = new Date().getTime();
@@ -463,7 +474,10 @@
             document.getElementById('box-withdraw-history').style.display = tabName === 'withdraw' ? 'block' : 'none';
         }
 
+        // ĐIỂM DANH: BẤM LÀ NẨY 1 LINK QUẢNG CÁO NGẪU NHIÊN
         function executeRealCheckin() {
+            fireRandomAd(); // Nẩy tab quảng cáo kiếm tiền
+            
             const btn = document.getElementById('btn-daily-checkin');
             btn.innerText = "Đang xử lý..."; btn.disabled = true;
             fetch(`${SCRIPT_URL}?action=dailyCheckin&username=${encodeURIComponent(currentUser)}`)
@@ -665,6 +679,7 @@
             }
         }
 
+        // TẢI VÀ GOM NHÓM NHIỆM VỤ TỰ ĐỘNG + ĐẢO VỊ TRÍ NGẪU NHIÊN 
         function loadTasks() {
             const box = document.getElementById('task-container');
             box.innerHTML = '<p style="color: var(--text-muted); font-size:14px;">Đang tải danh sách nhiệm vụ...</p>';
@@ -679,6 +694,12 @@
                     return; 
                 }
                 
+                // Thuật toán đảo vị trí các link bên trong
+                for (let i = tasks.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [tasks[i], tasks[j]] = [tasks[j], tasks[i]];
+                }
+                
                 const grouped = {};
                 tasks.forEach(t => {
                     const key = `${t.name}_${t.reward}`;
@@ -688,10 +709,17 @@
                     grouped[key].list.push(t);
                 });
 
+                // Đảo vị trí ngẫu nhiên của các khung nhóm lớn với nhau
+                const groupKeys = Object.keys(grouped);
+                for (let i = groupKeys.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [groupKeys[i], groupKeys[j]] = [groupKeys[j], groupKeys[i]];
+                }
+
                 let html = '';
                 let groupIdx = 0; 
                 
-                for(let key in grouped) {
+                groupKeys.forEach(key => {
                     const g = grouped[key];
                     groupIdx++;
                     
@@ -729,19 +757,39 @@
                     html += `
                         </div>
                     </div>`;
-                }
+                });
                 box.innerHTML = html;
             });
         }
 
+        // BỘ PHÒNG THỦ 2-CLICK COMBO: ÉP MỞ QUẢNG CÁO XOAY VÒNG RỒI MỚI CHO LÀM NHIỆM VỤ
         function openTaskLink(id, link) {
-            localStorage.setItem('ve_nhiem_vu', id); 
-            localStorage.removeItem('hash_code_' + id); 
-            window.open(link, '_blank'); 
+            const btn = document.getElementById(`btn-action-${id}`);
             
-            const actBtn = document.getElementById(`btn-action-${id}`);
+            // Nếu đây là lượt click lần đầu tiên của nút này
+            if (!btn.classList.contains('ad-clicked')) {
+                // 1. Kích hoạt mở 1 link quảng cáo ngẫu nhiên
+                fireRandomAd();
+                
+                // 2. Biến đổi nút bấm thành nút mở link nhiệm vụ thật
+                btn.classList.add('ad-clicked');
+                btn.innerText = "Bấm lần nữa để làm nhiệm vụ 🚀";
+                btn.style.background = "#DCFCE7";
+                btn.style.color = "#15803D";
+                btn.style.borderColor = "#86EFAC";
+                return; // Dừng lại ở đây, bắt buộc khách phải click phát thứ 2
+            }
+
+            // KHI CLICK LẦN 2 (Khách đã xem xong hoặc tắt tab quảng cáo cũ)
+            // Áp dụng luật bảo mật Vé Độc Quyền đóng dấu thời gian chống tool/bookmark
+            localStorage.setItem('ve_nhiem_vu_active_id', id);
+            localStorage.setItem('ve_nhiem_vu_active_time', Date.now().toString()); 
+            
+            localStorage.removeItem('hash_code_' + id); 
+            window.open(link, '_blank'); // Mở link vượt cấp tốc
+            
             const inputBox = document.getElementById(`input-box-${id}`);
-            if(actBtn) actBtn.style.display = 'none';
+            if(btn) btn.style.display = 'none';
             if(inputBox) inputBox.style.display = 'flex'; 
         }
 
@@ -781,7 +829,6 @@
             else if(method === 'MoMo') { lbl.innerText = "Số điện thoại MoMo + Tên chủ thẻ:"; inp.placeholder = "Ví dụ: 0912... - NGUYEN VAN A"; }
             else { lbl.innerText = "Số tài khoản + Ngân hàng + Tên:"; inp.placeholder = "Ví dụ: Techcombank - 190... - NGUYEN VAN A"; }
         }
-        document.getElementById('wd-method').onchange = updateWdInputs;
 
         function submitWithdraw() {
             const method = document.getElementById('wd-method').value;
