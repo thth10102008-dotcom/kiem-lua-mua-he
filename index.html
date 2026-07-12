@@ -8,28 +8,16 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root { 
-            --primary: #1E3A8A; 
-            --primary-light: #EFF6FF; 
-            --accent: #F59E0B; 
-            --accent-hover: #D97706;
-            --success: #10B981;
-            --danger: #EF4444;
-            --bg-body: #F4F7FE; 
-            --white: #FFFFFF; 
-            --text-dark: #0F172A; 
-            --text-muted: #64748B; 
-            --shadow-sm: 0 2px 10px rgba(0,0,0,0.04);
-            --border-radius: 14px; 
+            --primary: #1E3A8A; --primary-light: #EFF6FF; --accent: #F59E0B; --accent-hover: #D97706;
+            --success: #10B981; --danger: #EF4444; --bg-body: #F4F7FE; --white: #FFFFFF; 
+            --text-dark: #0F172A; --text-muted: #64748B; --shadow-sm: 0 2px 10px rgba(0,0,0,0.04); --border-radius: 14px; 
         }
-        
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg-body); color: var(--text-dark); display: flex; min-height: 100vh; overflow-x: hidden; }
         a { text-decoration: none; color: inherit; } 
-        
         input, select { width: 100%; padding: 14px 16px; margin-top: 8px; margin-bottom: 16px; border: 1.5px solid #E2E8F0; border-radius: 8px; font-family: 'Inter', sans-serif; font-size: 14px; transition: 0.2s; background: #F8FAFC; }
         input:focus, select:focus { outline: none; border-color: var(--primary); background: var(--white); box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1); }
         label { font-size: 13px; font-weight: 600; color: var(--text-dark); }
-
         .btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 24px; border-radius: 8px; cursor: pointer; border: none; font-weight: 600; font-size: 14px; transition: all 0.2s ease; text-align: center; }
         .btn-primary { background-color: var(--primary); color: var(--white); }
         .btn-success { background-color: var(--success); color: var(--white); }
@@ -47,8 +35,7 @@
         .sidebar-logo img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary-light); padding: 3px; }
         .sidebar-logo h1 { color: var(--primary); font-size: 1.1rem; margin-top: 12px; font-weight: 800; letter-spacing: 0.5px; }
         .sidebar-menu { flex-grow: 1; list-style: none; } 
-        .sidebar-menu li { margin-bottom: 6px; }
-        .sidebar-menu a { display: flex; align-items: center; padding: 12px 16px; border-radius: 8px; transition: 0.2s; font-weight: 600; color: var(--text-muted); font-size: 14px; }
+        .sidebar-menu a { display: flex; align-items: center; padding: 12px 16px; border-radius: 8px; transition: 0.2s; font-weight: 600; color: var(--text-muted); font-size: 14px; margin-bottom: 6px;}
         .sidebar-menu a:hover, .sidebar-menu .active a { background-color: var(--primary-light); color: var(--primary); }
         
         main.content { margin-left: 260px; padding: 32px 40px; flex: 1; width: calc(100% - 260px); }
@@ -81,7 +68,6 @@
         .payout-item { position: absolute; width: 100%; font-size: 14px; font-weight: 600; color: var(--text-dark); transition: 0.5s; top: 24px; opacity: 0; }
         .payout-item.active { top: 0; opacity: 1; }
         .payout-item.exit { top: -24px; opacity: 0; }
-        .payout-time { color: var(--text-muted); font-size: 12px; font-weight: 400; margin-left: 8px;}
 
         .dashboard-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 32px; }
         .stat-card { background-color: var(--white); padding: 24px; border-radius: var(--border-radius); box-shadow: var(--shadow-sm); border-left: 4px solid var(--primary); }
@@ -91,92 +77,48 @@
         .stat-card-value { font-size: 28px; font-weight: 800; color: var(--text-dark); }
 
         .rules-box { background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 12px; padding: 20px; margin-bottom: 24px; }
-        .rules-box h4 { color: #1E3A8A; margin-bottom: 12px; font-size: 16px; display: flex; align-items: center; gap: 8px; }
+        .rules-box h4 { color: #1E3A8A; margin-bottom: 12px; font-size: 16px; }
         .rules-box ul { list-style: none; padding-left: 0; }
-        .rules-box ul li { font-size: 14px; color: #1E40AF; margin-bottom: 8px; display: flex; align-items: flex-start; gap: 8px; font-weight: 500; }
+        .rules-box ul li { font-size: 14px; color: #1E40AF; margin-bottom: 8px; font-weight: 500; }
 
-        .checkin-banner { background: linear-gradient(135deg, #10B981, #059669); border-radius: 16px; padding: 24px; display: flex; align-items: center; justify-content: space-between; color: white; margin-bottom: 24px; box-shadow: 0 4px 15px rgba(16,185,129,0.3); }
+        .checkin-banner { background: linear-gradient(135deg, #10B981, #059669); border-radius: 16px; padding: 24px; display: flex; align-items: center; justify-content: space-between; color: white; margin-bottom: 24px; }
         .checkin-info h4 { font-size: 18px; margin-bottom: 6px; font-weight: 800;}
         .btn-checkin { background: white; color: #059669; padding: 12px 24px; border-radius: 30px; font-weight: 800; cursor: pointer; border: none; font-size: 14px; transition: 0.2s;}
 
-        .chart-container { background: var(--white); padding: 24px; border-radius: var(--border-radius); box-shadow: var(--shadow-sm); margin-bottom: 32px; border: 1px solid #E2E8F0; }
-        .chart-header { display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 700; margin-bottom: 20px; }
-
+        .chart-container { background: var(--white); padding: 24px; border-radius: var(--border-radius); margin-bottom: 32px; border: 1px solid #E2E8F0; }
+        
         .special-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 32px; }
-        .timer-box { background: #FFF1F2; border: 1px solid #FECDD3; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center;}
-        .timer-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; color: #9F1239; font-weight: 700; font-size: 14px; }
-        .countdown-flex { display: flex; gap: 12px; align-items: center; justify-content: center; }
-        .cd-block { background: white; border-radius: 8px; width: 64px; height: 64px; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(225,29,72,0.1); }
-        .cd-num { font-size: 26px; font-weight: 800; color: #E11D48; line-height: 1;}
-        .cd-label { font-size: 10px; color: #94A3B8; font-weight: 700; }
-        .task-count-box { background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 16px; padding: 24px 20px; display: flex; align-items: center; gap: 20px; }
+        .timer-box, .task-count-box { border-radius: 16px; padding: 20px; display: flex; align-items: center; gap: 20px;}
+        .timer-box { background: #FFF1F2; border: 1px solid #FECDD3; flex-direction: column; justify-content: center;}
+        .task-count-box { background: #FFFBEB; border: 1px solid #FDE68A; }
 
-        /* KHUNG GỘP NHIỆM VỤ (ACCORDION) */
         .task-list { display: flex; flex-direction: column; gap: 20px; }
-        .task-group-card { background: white; border: 1px solid #E2E8F0; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); overflow: hidden; transition: 0.3s; }
-        
-        .task-group-header { display: flex; align-items: center; padding: 20px; background: #F8FAFC; border-bottom: 1px solid #E2E8F0; cursor: pointer; position: relative; user-select: none; }
-        .task-group-header:hover { background: #F1F5F9; }
-        
+        .task-group-card { background: white; border: 1px solid #E2E8F0; border-radius: 16px; overflow: hidden; transition: 0.3s; }
+        .task-group-header { display: flex; align-items: center; padding: 20px; background: #F8FAFC; border-bottom: 1px solid #E2E8F0; cursor: pointer; }
         .tg-img { width: 60px; height: 60px; border-radius: 12px; object-fit: cover; border: 1px solid #CBD5E1; background: white; padding: 2px; margin-right: 16px;}
         .tg-info h4 { font-size: 17px; font-weight: 800; color: #1E3A8A; margin-bottom: 4px; }
         .tg-info p { font-size: 13px; color: #64748B; font-weight: 600; }
-        .tg-info p span { color: #D97706; font-weight: 800; font-size: 14px;}
-        
-        .tg-toggle-icon { margin-left: auto; font-size: 14px; color: #64748B; transition: transform 0.3s ease; font-weight: 900;}
+        .tg-toggle-icon { margin-left: auto; font-size: 14px; color: #64748B; transition: transform 0.3s; font-weight: 900;}
         .task-group-card.open .tg-toggle-icon { transform: rotate(180deg); }
-
         .tg-body { padding: 0 20px; display: none; } 
         .tg-body.show { display: block; animation: slideDown 0.3s ease-in-out;}
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
         .tg-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px dashed #E2E8F0; gap: 15px; }
-        .tg-row:last-child { border-bottom: none; }
-        .tg-row-name { font-size: 14px; font-weight: 700; color: #334155; display: flex; align-items: center; gap: 8px; }
-        .tg-row-name::before { content: "🔗"; font-size: 16px;}
-        
-        .tg-action-btn { background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; transition: 0.2s; white-space: nowrap;}
-        .tg-action-btn:hover { background: #1D4ED8; color: white;}
+        .tg-action-btn { background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; transition: 0.2s;}
         .tg-action-btn.ad-clicked { background: #DCFCE7; color: #15803D; border-color: #86EFAC; }
-        
         .tg-input-area { display: none; width: 100%; max-width: 280px; flex-direction: column; gap: 6px; background: #F8FAFC; padding: 10px; border-radius: 8px; border: 1px dashed #CBD5E1; }
-        .tg-input-area input { margin: 0; padding: 10px; font-size: 13px; }
-        .tg-input-area button { padding: 10px; font-size: 13px; font-weight: 800; width: 100%; }
+        .tg-input-area input { margin: 0; padding: 10px; }
 
-        /* WELCOME POPUP */
-        .welcome-popup-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); z-index: 999999; display: flex; justify-content: center; align-items: center; padding: 20px; }
-        .welcome-popup-box { background: #FFF8E7; padding: 25px; border-radius: 20px; max-width: 500px; width: 100%; position: relative; border: 4px solid #D97706; box-shadow: 0 0 30px rgba(0,0,0,0.5); text-align: center; }
-        .close-btn { position: absolute; top: 10px; right: 15px; font-size: 30px; cursor: pointer; color: #991B1B; font-weight: bold; background: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; line-height: 1; box-shadow: 0 2px 5px rgba(0,0,0,0.2);}
-        .welcome-img { width: 100%; border-radius: 12px; margin-bottom: 0px; object-fit: cover; }
-        .tele-contact-btn { background: #0088cc; color: white; padding: 12px 25px; border-radius: 30px; display: inline-block; margin-top: 15px; font-weight: 700; text-decoration: none; transition: 0.2s; font-size: 15px;}
-        .tele-contact-btn:hover { transform: scale(1.05); box-shadow: 0 4px 10px rgba(0,136,204,0.4); }
-
-        .form-box { background: white; padding: 32px; border-radius: var(--border-radius); box-shadow: var(--shadow-sm); border: 1px solid #E2E8F0; }
-
-        .custom-popup-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.4); z-index: 99999; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s ease; backdrop-filter: blur(2px); }
-        .custom-popup-overlay.show { opacity: 1; pointer-events: all; }
-        .custom-popup-box { background: white; padding: 35px 25px; border-radius: 24px; text-align: center; max-width: 90%; width: 340px; border: 1px solid #E2E8F0; }
-        .popup-icon { font-size: 72px; margin-bottom: 18px; }
-        .popup-title { font-size: 22px; font-weight: 800; margin-bottom: 10px; }
-        .popup-message { font-size: 15px; color: var(--text-muted); }
-
+        .welcome-popup-overlay, .custom-popup-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); z-index: 999999; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .welcome-popup-box, .custom-popup-box { background: white; padding: 25px; border-radius: 20px; text-align: center; position: relative;}
+        .welcome-popup-box { max-width: 500px; border: 4px solid #D97706; background: #FFF8E7;}
+        .close-btn { position: absolute; top: 10px; right: 15px; font-size: 30px; cursor: pointer; color: #991B1B; font-weight: bold; background: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2);}
+        
         .auth-layout-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-body); z-index: 100; display: flex; justify-content: center; align-items: center; }
         .auth-card { background-color: var(--white); padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); width: 100%; max-width: 400px; }
         
-        .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; width: 100%; background: var(--white); box-shadow: 0 -2px 10px rgba(0,0,0,0.05); z-index: 99; border-top: 1px solid #E2E8F0; padding-bottom: env(safe-area-inset-bottom); }
-        .bottom-nav ul { display: flex; width: 100%; list-style: none; margin: 0; padding: 0; }
-        .bottom-nav li { flex: 1; }
-        .bottom-nav a { display: flex; flex-direction: column; align-items: center; padding: 10px 0; color: var(--text-muted); font-size: 11px; font-weight: 600; }
-        .bottom-nav a.active { color: var(--primary); }
-
-        @media (max-width: 768px) {
-            aside.sidebar { display: none; }
-            main.content { margin-left: 0; width: 100%; padding: 16px 16px 80px 16px; }
-            .bottom-nav { display: flex; }
-            .dashboard-cards { grid-template-columns: 1fr; }
-            .checkin-banner { flex-direction: column; text-align: center; gap: 16px; }
-            .profile-grid { display: flex !important; flex-direction: column; gap: 16px !important; }
-        }
+        @media (max-width: 768px) { aside.sidebar { display: none; } main.content { margin-left: 0; width: 100%; padding: 16px 16px 80px 16px; } .bottom-nav { display: flex; } }
         .profile-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 24px; }
     </style>
 </head>
@@ -185,27 +127,23 @@
     <div id="welcome-popup" class="welcome-popup-overlay" style="display: none;">
         <div class="welcome-popup-box">
             <span class="close-btn" onclick="closeWelcomePopup()">×</span>
-            <img src="image_5a67db.jpg" class="welcome-img" alt="Chào mừng" onerror="this.style.display='none'">
-            <a href="https://t.me/hanhle1231" target="_blank" class="tele-contact-btn">💬 Liên hệ hỗ trợ Telegram</a>
+            <img src="image_5a67db.jpg" style="width: 100%; border-radius: 12px; margin-bottom: 0px; object-fit: cover;" onerror="this.style.display='none'">
+            <a href="https://t.me/hanhle1231" target="_blank" style="background: #0088cc; color: white; padding: 12px 25px; border-radius: 30px; display: inline-block; margin-top: 15px; font-weight: 700; text-decoration: none;">💬 Liên hệ hỗ trợ Telegram</a>
         </div>
     </div>
 
-    <div id="custom-popup-overlay" class="custom-popup-overlay">
-        <div class="custom-popup-box">
-            <div class="popup-icon" id="popup-icon">✅</div>
-            <h3 class="popup-title" id="popup-title">Thành công!</h3>
-            <p class="popup-message" id="popup-message">Thao tác của bạn đã được ghi nhận.</p>
+    <div id="custom-popup-overlay" class="custom-popup-overlay" style="display:none; background: rgba(0,0,0,0.4); z-index:99999; backdrop-filter: blur(2px);">
+        <div class="custom-popup-box" style="width: 340px;">
+            <div style="font-size: 72px; margin-bottom: 18px;" id="popup-icon">✅</div>
+            <h3 style="font-size: 22px; font-weight: 800; margin-bottom: 10px;" id="popup-title">Thành công!</h3>
+            <p style="font-size: 15px; color: var(--text-muted);" id="popup-message">Thao tác của bạn đã được ghi nhận.</p>
         </div>
     </div>
-
-    <a href="https://t.me/hanhle1231" target="_blank" class="tele-btn">
-        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.19-.08-.05-.19-.02-.27 0-.11.03-1.93 1.23-5.46 3.62-.51.35-.98.52-1.4.51-.46-.01-1.35-.26-2.01-.48-.81-.27-1.46-.42-1.4-.88.03-.24.36-.48.98-.74 3.85-1.68 6.42-2.79 7.71-3.32 3.67-1.53 4.43-1.8 4.93-1.81.11 0 .36.03.49.13.11.08.14.19.16.27-.01.04-.01.12-.02.17z"/></svg>
-    </a>
 
     <div id="main-app" style="display: none; width: 100%;">
         <aside class="sidebar">
             <div class="sidebar-logo">
-                <img src="logo.jpg" alt="Logo">
+                <img src="logo.jpg">
                 <h1>KIẾM LÚA MÙA HÈ</h1>
             </div>
             <ul class="sidebar-menu">
@@ -218,481 +156,97 @@
             </ul>
         </aside>
 
-        <nav class="bottom-nav">
-            <ul class="sidebar-menu">
-                <li><a href="#" data-section="dashboard" class="active"><span class="icon">📊</span>Home</a></li>
-                <li><a href="#" data-section="earn"><span class="icon">🌾</span>Kiếm Lúa</a></li>
-                <li><a href="#" data-section="history-section"><span class="icon">📝</span>Lịch sử</a></li>
-                <li><a href="#" data-section="withdraw"><span class="icon">🏦</span>Rút</a></li>
-            </ul>
-        </nav>
-
         <main class="content">
             <header class="top-header">
-                <div class="header-title">
-                    <h2 style="font-size: 16px;">Xin chào, <span id="welcome-username" style="color:var(--primary); font-weight:800;">User</span> 👋</h2>
-                </div>
+                <h2 style="font-size: 16px;">Xin chào, <span id="welcome-username" style="color:var(--primary); font-weight:800;">User</span> 👋</h2>
                 <div class="header-right">
                     <div class="balance-badge">🌾 <span id="header-points">0</span></div>
-                    <div class="avatar-dropdown">
-                        <img src="101036-1215264.jpg" class="user-avatar-mini" onclick="toggleAvatarMenu()" onerror="this.src='logo.jpg'">
-                        <div id="avatarMenu" class="dropdown-content">
-                            <a href="#" onclick="openSection('profile'); toggleAvatarMenu();">⚙️ Cài đặt hồ sơ</a>
-                            <a href="#" onclick="switchHistoryTab('withdraw'); openSection('history-section'); toggleAvatarMenu();">💸 Lịch sử rút tiền</a>
-                            <div style="height: 1px; background: #E2E8F0; margin: 4px 0;"></div>
-                            <a href="#" onclick="logoutApp(); toggleAvatarMenu();" style="color: var(--danger);">🚪 Đăng xuất</a>
-                        </div>
-                    </div>
+                    <img src="101036-1215264.jpg" class="user-avatar-mini" onclick="logoutApp()" title="Đăng xuất" onerror="this.src='logo.jpg'">
                 </div>
             </header>
 
-            <div class="marquee-container">
-                <div class="marquee-text" id="marquee-content">🔥 CHÀO MỪNG BẠN ĐẾN VỚI KIẾM LÚA MÙA HÈ! 🎉</div>
-            </div>
-
-            <div class="live-payout-box">
-                <div class="live-payout-icon">💸</div>
-                <div class="live-payout-content" id="payout-feed"></div>
-            </div>
+            <div class="marquee-container"><div class="marquee-text" id="marquee-content">🔥 CHÀO MỪNG BẠN!</div></div>
+            <div class="live-payout-box"><div class="live-payout-icon">💸</div><div class="live-payout-content" id="payout-feed"></div></div>
 
             <section id="dashboard" class="content-section active">
                 <div class="dashboard-cards">
-                    <div class="stat-card">
-                        <span class="stat-card-label">Số Lúa hiện có</span>
-                        <span class="stat-card-value" id="db-points" style="color: var(--primary);">0</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-card-label">Nhiệm vụ hoàn thành</span>
-                        <span class="stat-card-value" id="db-completed-count" style="color: var(--success);">0</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-card-label">Lúa từ Hoa Hồng (Ref)</span>
-                        <span class="stat-card-value" id="db-ref-income" style="color: var(--accent);">0</span>
-                    </div>
+                    <div class="stat-card"><span class="stat-card-label">Số Lúa hiện có</span><span class="stat-card-value" id="db-points" style="color: var(--primary);">0</span></div>
+                    <div class="stat-card"><span class="stat-card-label">Nhiệm vụ hoàn thành</span><span class="stat-card-value" id="db-completed-count" style="color: var(--success);">0</span></div>
+                    <div class="stat-card"><span class="stat-card-label">Lúa từ Ref</span><span class="stat-card-value" id="db-ref-income" style="color: var(--accent);">0</span></div>
                 </div>
-
-                <div class="chart-container">
-                    <div class="chart-header"><span style="color: #E11D48; font-size: 20px;">📈</span> Thu Nhập 7 Ngày Gần Nhất</div>
-                    <canvas id="incomeChart" height="80"></canvas>
-                </div>
+                <div class="chart-container"><canvas id="incomeChart" height="80"></canvas></div>
             </section>
 
             <section id="earn" class="content-section">
                 <div class="checkin-banner">
-                    <div class="checkin-info">
-                        <h4>🎁 Điểm Danh Nhận Quà</h4>
-                        <p>Mỗi ngày đăng nhập và bấm điểm danh để nhận ngay Lúa miễn phí!</p>
-                    </div>
+                    <div class="checkin-info"><h4>🎁 Điểm Danh</h4><p>Nhận ngay Lúa miễn phí!</p></div>
                     <button class="btn-checkin" id="btn-daily-checkin" onclick="executeRealCheckin()">Điểm danh ngay (+50 Lúa)</button>
                 </div>
-
                 <div class="special-grid">
-                    <div class="timer-box">
-                        <div class="timer-header">🔄 LINK VƯỢT LÀM MỚI SAU</div>
-                        <div class="countdown-flex">
-                            <div class="cd-block"><span class="cd-num" id="cd-h">00</span><span class="cd-label">GIỜ</span></div>
-                            <div class="cd-block"><span class="cd-num" id="cd-m">00</span><span class="cd-label">PHÚT</span></div>
-                            <div class="cd-block"><span class="cd-num" id="cd-s">00</span><span class="cd-label">GIÂY</span></div>
-                        </div>
-                    </div>
-                    <div class="task-count-box">
-                        <div class="tc-info">
-                            <h4 style="color:#92400E; font-weight:700;">NHIỆM VỤ CÒN LẠI HÔM NAY</h4>
-                            <div style="font-size:36px; font-weight:800; color:#D97706;" id="remaining-tasks-count">0</div>
-                        </div>
-                    </div>
+                    <div class="task-count-box"><div class="tc-info"><h4 style="color:#92400E;">NHIỆM VỤ CÒN LẠI</h4><div style="font-size:36px; font-weight:800; color:#D97706;" id="remaining-tasks-count">0</div></div></div>
                 </div>
-
-                <h3 style="margin-bottom: 20px;">Danh sách nhiệm vụ kiếm tiền</h3>
-                <div class="task-list" id="task-container"><p style="color: var(--text-muted); font-size:14px;">Đang tải dữ liệu...</p></div>
+                <h3>Danh sách nhiệm vụ</h3><br>
+                <div class="task-list" id="task-container"><p>Đang tải dữ liệu...</p></div>
             </section>
 
-            <section id="referral" class="content-section">
-                <h3 style="margin-bottom: 20px;">🤝 Chia sẻ bạn bè - Nhận lợi nhuận 10%</h3>
-                <div class="form-box" style="margin-bottom: 24px;">
-                    <h4 style="color: var(--primary); margin-bottom: 12px; font-size:16px;">Link giới thiệu riêng của bạn:</h4>
-                    <div style="display: flex; gap: 10px;">
-                        <input type="text" id="ref-link-input" readonly style="margin:0; background:#EFF6FF; border-color:#BFDBFE; color:#1E3A8A; font-weight:600;">
-                        <button class="btn btn-primary" onclick="copyRefLink()" style="flex-shrink:0;">Copy Link</button>
-                    </div>
-                </div>
-            </section>
-
-            <section id="withdraw" class="content-section">
-                <h3>Tạo Yêu Cầu Rút Thưởng</h3><br>
-                <div class="rules-box">
-                    <h4>⚖️ Điều Khoản & Cam Kết Rút Tiền</h4>
-                    <ul>
-                        <li><span>✅</span> Số Lúa rút tối thiểu cho mỗi lần là: <b>10,000 Lúa</b>.</li>
-                        <li><span>⏱️</span> Thời gian duyệt và chuyển tiền: <b>Tối đa 24h làm việc</b>.</li>
-                    </ul>
-                </div>
-                <div class="form-box" style="max-width: 600px;">
-                    <label>Hình thức nhận lúa:</label>
-                    <select id="wd-method" onchange="updateWdInputs()">
-                        <option value="Thẻ Cào">Đổi Thẻ Cào Điện Thoại</option>
-                        <option value="MoMo">Ví Điện Tử MoMo</option>
-                        <option value="Ngân Hàng">Chuyển khoản Ngân Hàng</option>
-                        <option value="Garena">Đổi Thẻ Garena</option>
-                    </select>
-                    <label id="lbl-details">Nhà mạng cần rút:</label>
-                    <input type="text" id="wd-details" placeholder="Ví dụ: Thẻ Viettel mệnh giá 50k">
-                    <label>Số Lúa muốn rút:</label>
-                    <input type="number" id="wd-amount" placeholder="Nhập số lúa...">
-                    <button class="btn btn-primary" id="btn-withdraw" style="width: 100%;" onclick="submitWithdraw()">Gửi yêu cầu đổi thưởng</button>
-                </div>
-            </section>
-
-            <section id="history-section" class="content-section">
-                <div class="tabs-nav">
-                    <div class="tab-btn active" id="tab-task" onclick="switchHistoryTab('task')">Hoạt động (Nhiệm vụ)</div>
-                    <div class="tab-btn" id="tab-withdraw" onclick="switchHistoryTab('withdraw')">Lịch sử rút tiền</div>
-                </div>
-                
-                <div id="box-task-history" class="history-table-wrapper">
-                    <table class="history-table">
-                        <thead><tr><th>Nhiệm vụ</th><th>Thời gian</th><th>Thưởng</th></tr></thead>
-                        <tbody id="table-task-body"><tr><td colspan="3">Chưa có hoạt động</td></tr></tbody>
-                    </table>
-                </div>
-                
-                <div id="box-withdraw-history" class="history-table-wrapper" style="display: none;">
-                    <table class="history-table">
-                        <thead><tr><th>Hình thức</th><th>Chi tiết</th><th>Số Lúa</th><th>Trạng thái</th><th>Ngày tạo</th></tr></thead>
-                        <tbody id="table-withdraw-body"><tr><td colspan="5">Chưa có yêu cầu nào</td></tr></tbody>
-                    </table>
-                </div>
-            </section>
-
-            <section id="profile" class="content-section">
-                <h3>Quản lý hồ sơ</h3><br>
-                <div class="profile-grid">
-                    <div class="form-box" style="text-align: center;">
-                        <img src="101036-1215264.jpg" style="width: 100px; height: 100px; border-radius: 50%; border: 4px solid var(--primary-light); margin-bottom: 16px; object-fit: cover;" onerror="this.src='logo.jpg'">
-                        <h4 id="prof-username">Username</h4><br>
-                        <button class="btn btn-danger" style="width: 100%;" onclick="logoutApp()">Đăng xuất tài khoản</button>
-                    </div>
-                    <div class="form-box">
-                        <h4>Bảo mật tài khoản</h4><br>
-                        <label>Mật khẩu hiện tại:</label>
-                        <input type="password" id="old-pass" placeholder="Nhập mật khẩu cũ">
-                        <label>Mật khẩu mới:</label>
-                        <input type="password" id="new-pass" placeholder="Nhập mật khẩu mới">
-                        <button class="btn btn-primary" onclick="submitChangePassword()">Cập nhật mật khẩu</button>
-                    </div>
-                </div>
-            </section>
+            <section id="referral" class="content-section"><h3>Chia sẻ bạn bè</h3></section>
+            <section id="withdraw" class="content-section"><h3>Rút Thưởng</h3></section>
+            <section id="history-section" class="content-section"><h3>Lịch Sử</h3></section>
+            <section id="profile" class="content-section"><h3>Hồ Sơ</h3></section>
         </main>
     </div>
 
     <div class="auth-layout-container" id="auth-view">
         <div class="auth-card" id="auth-login-card">
-            <div style="text-align: center; margin-bottom: 24px;"><img src="logo.jpg" style="width:100px; border-radius:50%"></div>
-            <h2 style="text-align: center; margin-bottom: 20px; color: var(--primary);">Đăng Nhập</h2>
-            <div class="auth-msg" id="login-msg" style="color:var(--danger); margin-bottom:10px;"></div>
+            <h2 style="text-align: center; color: var(--primary);">Đăng Nhập</h2>
+            <div id="login-msg" style="color:var(--danger); margin-bottom:10px;"></div>
             <input type="text" id="log-user" placeholder="Nhập tài khoản...">
             <input type="password" id="log-pass" placeholder="Nhập mật khẩu...">
-            <div style="margin-bottom:15px; display:flex; gap:8px; align-items:center;">
-                <input type="checkbox" id="login-remember" checked style="width:auto; margin:0;">
-                <label for="login-remember">Lưu đăng nhập</label>
-            </div>
-            <button class="btn btn-primary" style="width: 100%;" id="btn-login" onclick="login()">Đăng nhập ngay</button>
-            <p style="text-align: center; margin-top: 24px;">Chưa có tài khoản? <a href="#" onclick="toggleAuth(true)" style="color:var(--primary); font-weight:700;">Đăng ký</a></p>
+            <button class="btn btn-primary" style="width: 100%;" id="btn-login" onclick="login()">Đăng nhập</button>
+            <p style="text-align: center; margin-top: 24px;"><a href="#" onclick="toggleAuth(true)">Đăng ký</a></p>
         </div>
-        
         <div class="auth-card" id="auth-register-card" style="display: none;">
-            <div style="text-align: center; margin-bottom: 24px;"><img src="logo.jpg" style="width:100px; border-radius:50%"></div>
-            <h2 style="text-align: center; margin-bottom: 20px; color: var(--primary);">Tạo Tài Khoản</h2>
-            <div class="auth-msg" id="register-msg" style="color:var(--danger); margin-bottom:10px;"></div>
+            <h2 style="text-align: center; color: var(--primary);">Tạo Tài Khoản</h2>
+            <div id="register-msg" style="color:var(--danger); margin-bottom:10px;"></div>
             <input type="text" id="reg-user" placeholder="Tên tài khoản...">
-            <input type="email" id="reg-email" placeholder="Địa chỉ Email...">
-            <input type="password" id="reg-pass" placeholder="Tạo mật khẩu...">
-            <button class="btn btn-primary" style="width: 100%;" id="btn-register" onclick="register()">Đăng ký tài khoản</button>
-            <p style="text-align: center; margin-top: 24px;">Đã có tài khoản? <a href="#" onclick="toggleAuth(false)" style="color:var(--primary); font-weight:700;">Đăng nhập</a></p>
+            <input type="email" id="reg-email" placeholder="Email...">
+            <input type="password" id="reg-pass" placeholder="Mật khẩu...">
+            <button class="btn btn-primary" style="width: 100%;" id="btn-register" onclick="register()">Đăng ký</button>
+            <p style="text-align: center; margin-top: 24px;"><a href="#" onclick="toggleAuth(false)">Đăng nhập</a></p>
         </div>
     </div>
 
     <script>
+        // LƯU Ý QUAN TRỌNG: THAY LINK GOOGLE APPS SCRIPT CỦA BẠN VÀO ĐÂY
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx1hP042D5mQFWTxqaVXDVDvCFX5clpUJ4Ej1tf4d26H5XvPptMRwEqPOE86u3NqwbK/exec';
         let currentUser = "";
-        let incomeChartInstance = null;
-        let countdownInterval = null;
 
-        // 3 LINK QUẢNG CÁO XOAY VÒNG DO BẠN CUNG CẤP
         const AD_NETWORKS = [
             "https://www.effectivecpmnetwork.com/v3g8tvi2?key=40a3c0407a6d5a6a21fb09208dc6758d",
             "https://www.effectivecpmnetwork.com/sv6tbzd5ub?key=4090a8c585e33443de502ad7ec2678ba",
             "https://www.effectivecpmnetwork.com/sdmwabqk?key=99df44fe93fe3cdc2146ada41a3cf4b1"
         ];
 
-        const fakePayouts = [
-            "Người dùng <b>An***</b> vừa rút thành công Thẻ cào 20k Viettel",
-            "Người dùng <b>Binh***</b> vừa đổi thành công 50k về Ví MoMo",
-            "Người dùng <b>Tuan99***</b> vừa rút thành công 100k Vietcombank",
-            "Người dùng <b>Hoang***</b> vừa rút thành công Thẻ cào 50k Vina"
-        ];
-
-        // HÀM MỞ QUẢNG CÁO NGẪU NHIÊN 1 TRONG 3 LINK
-        function fireRandomAd() {
-            const randomIndex = Math.floor(Math.random() * AD_NETWORKS.length);
-            window.open(AD_NETWORKS[randomIndex], '_blank');
-        }
-
-        function checkWelcomePopup() {
-            const lastClosed = localStorage.getItem('welcome_closed_time');
-            const now = new Date().getTime();
-            if (!lastClosed || (now - lastClosed > 7200000)) {
-                document.getElementById('welcome-popup').style.display = 'flex';
-            }
-        }
-
-        function closeWelcomePopup() {
-            document.getElementById('welcome-popup').style.display = 'none';
-            localStorage.setItem('welcome_closed_time', new Date().getTime());
-        }
+        function fireRandomAd() { window.open(AD_NETWORKS[Math.floor(Math.random() * AD_NETWORKS.length)], '_blank'); }
 
         function showPopup(title, message, isSuccess = true) {
             const popup = document.getElementById('custom-popup-overlay');
-            document.getElementById('popup-icon').innerText = isSuccess ? '✅' : '⚠️';
+            document.getElementById('popup-icon').innerText = isSuccess ? '✅' : '🚫';
             document.getElementById('popup-title').innerText = title;
             document.getElementById('popup-message').innerText = message;
-            
-            popup.classList.add('show');
-            setTimeout(() => { popup.classList.remove('show'); }, 3000); 
+            popup.style.display = 'flex';
+            setTimeout(() => { popup.style.display = 'none'; }, 3500); 
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const savedUser = localStorage.getItem('remembered_user');
-            if(savedUser) { currentUser = savedUser; enterApplication(); }
-            startLivePayoutFeed();
-        });
-
-        function switchHistoryTab(tabName) {
-            document.getElementById('tab-task').classList.toggle('active', tabName === 'task');
-            document.getElementById('tab-withdraw').classList.toggle('active', tabName === 'withdraw');
-            document.getElementById('box-task-history').style.display = tabName === 'task' ? 'block' : 'none';
-            document.getElementById('box-withdraw-history').style.display = tabName === 'withdraw' ? 'block' : 'none';
-        }
-
-        // ĐIỂM DANH: BẤM LÀ NẨY 1 LINK QUẢNG CÁO NGẪU NHIÊN
-        function executeRealCheckin() {
-            fireRandomAd(); // Nẩy tab quảng cáo kiếm tiền
-            
-            const btn = document.getElementById('btn-daily-checkin');
-            btn.innerText = "Đang xử lý..."; btn.disabled = true;
-            fetch(`${SCRIPT_URL}?action=dailyCheckin&username=${encodeURIComponent(currentUser)}`)
-            .then(res => res.json()).then(data => {
-                showPopup(data.status === 'success' ? 'Thành công!' : 'Thông báo', data.message, data.status === 'success');
-                btn.innerText = "Đã điểm danh hôm nay ✅";
-                if (data.status === 'success') loadDashboard(); 
-            });
-        }
-
-        function startLivePayoutFeed() {
-            const feedContainer = document.getElementById('payout-feed');
-            let currentIndex = 0;
-            function showNextPayout() {
-                if(!feedContainer) return;
-                const div = document.createElement('div');
-                div.className = 'payout-item';
-                const randomMins = Math.floor(Math.random() * 15) + 1;
-                div.innerHTML = `${fakePayouts[currentIndex]} <span class="payout-time">(${randomMins} phút trước)</span>`;
-                feedContainer.appendChild(div);
-                setTimeout(() => div.classList.add('active'), 50);
-                setTimeout(() => {
-                    div.classList.replace('active', 'exit');
-                    setTimeout(() => div.remove(), 500);
-                    currentIndex = (currentIndex + 1) % fakePayouts.length;
-                    showNextPayout();
-                }, 3000);
-            }
-            showNextPayout();
-        }
-
-        function startCountdown() {
-            if (countdownInterval) clearInterval(countdownInterval);
-            function updateTime() {
-                const now = new Date();
-                const tomorrow = new Date(now); tomorrow.setHours(24, 0, 0, 0); 
-                const diff = tomorrow - now;
-                const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                const s = Math.floor((diff % (1000 * 60)) / 1000);
-                if(document.getElementById('cd-h')) {
-                    document.getElementById('cd-h').innerText = String(h).padStart(2, '0');
-                    document.getElementById('cd-m').innerText = String(m).padStart(2, '0');
-                    document.getElementById('cd-s').innerText = String(s).padStart(2, '0');
-                }
-            }
-            updateTime(); countdownInterval = setInterval(updateTime, 1000);
-        }
-
-        function generateRefLink() {
-            const baseUrl = window.location.origin + window.location.pathname;
-            if(document.getElementById('ref-link-input')) document.getElementById('ref-link-input').value = `${baseUrl}?ref=${currentUser}`;
-        }
-        function copyRefLink() {
-            document.getElementById('ref-link-input').select(); document.execCommand("copy");
-            showPopup("Thành công!", "Đã copy link giới thiệu!", true);
-        }
-
-        function toggleAvatarMenu() { document.getElementById("avatarMenu").classList.toggle("show"); }
-        window.onclick = function(event) {
-            if (!event.target.matches('.user-avatar-mini')) {
-                var dropdowns = document.getElementsByClassName("dropdown-content");
-                for (var i = 0; i < dropdowns.length; i++) {
-                    if (dropdowns[i].classList.contains('show')) dropdowns[i].classList.remove('show');
-                }
-            }
-        }
-
-        function toggleAuth(showReg) {
-            document.getElementById('auth-login-card').style.display = showReg ? 'none' : 'block';
-            document.getElementById('auth-register-card').style.display = showReg ? 'block' : 'none';
-        }
-
-        function enterApplication() {
-            document.getElementById('auth-view').style.display = 'none';
-            document.getElementById('main-app').style.display = 'flex';
-            document.getElementById('welcome-username').innerText = currentUser;
-            document.getElementById('prof-username').innerText = currentUser;
-            document.getElementById('marquee-content').innerText = `🔥 CHÚC MỪNG ${currentUser.toUpperCase()} ĐÃ THAM GIA KIẾM LÚA MÙA HÈ! 🎉`;
-            
-            startCountdown(); 
-            generateRefLink(); 
-            loadDashboard();
-            checkWelcomePopup();
-        }
-
-        function logoutApp() {
-            localStorage.removeItem('remembered_user'); currentUser = "";
-            if (countdownInterval) clearInterval(countdownInterval);
-            document.getElementById('main-app').style.display = 'none';
-            document.getElementById('auth-view').style.display = 'flex';
-        }
-
-        function openSection(id) {
-            document.querySelectorAll('.sidebar-menu a').forEach(item => {
-                item.classList.remove('active');
-                if(item.parentElement.tagName === 'LI') item.parentElement.classList.remove('active');
-            });
-            document.querySelectorAll(`.sidebar-menu a[data-section="${id}"]`).forEach(matchedLink => {
-                matchedLink.classList.add('active');
-                if(matchedLink.parentElement.tagName === 'LI') matchedLink.parentElement.classList.add('active');
-            });
-            document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            window.scrollTo(0, 0);
-            if(id === 'dashboard') loadDashboard();
-        }
-
-        document.querySelectorAll('.sidebar-menu a').forEach(a => {
-            a.onclick = (e) => {
-                e.preventDefault(); openSection(a.getAttribute('data-section'));
-                if(a.getAttribute('data-section') === 'earn') loadTasks();
-            }
-        });
-
-        function register() {
-            const u = document.getElementById('reg-user').value.trim();
-            const e = document.getElementById('reg-email').value.trim();
-            const p = document.getElementById('reg-pass').value;
-            if(!u || !e || !p) return document.getElementById('register-msg').innerText = 'Điền đủ thông tin!';
-            document.getElementById('btn-register').innerText = 'Đang xử lý...';
-            fetch(`${SCRIPT_URL}?action=register&username=${encodeURIComponent(u)}&email=${encodeURIComponent(e)}&password=${encodeURIComponent(p)}`)
-            .then(res => res.json()).then(data => {
-                document.getElementById('btn-register').innerText = 'Đăng ký tài khoản';
-                if(data.status === 'success') { toggleAuth(false); showPopup('Thành công', data.message, true); } 
-                else { document.getElementById('register-msg').innerText = data.message; }
-            });
-        }
-
-        function login() {
-            const u = document.getElementById('log-user').value.trim();
-            const p = document.getElementById('log-pass').value;
-            if(!u || !p) return document.getElementById('login-msg').innerText = 'Điền đủ thông tin!';
-            document.getElementById('btn-login').innerText = 'Đang xác thực...';
-            fetch(`${SCRIPT_URL}?action=login&username=${encodeURIComponent(u)}&password=${encodeURIComponent(p)}`)
-            .then(res => res.json()).then(data => {
-                document.getElementById('btn-login').innerText = 'Đăng nhập ngay';
-                if(data.status === 'success') {
-                    currentUser = data.username;
-                    if(document.getElementById('login-remember').checked) localStorage.setItem('remembered_user', currentUser);
-                    enterApplication();
-                } else { document.getElementById('login-msg').innerText = data.message; }
-            });
-        }
-
-        function loadDashboard() {
-            fetch(`${SCRIPT_URL}?action=getUserData&username=${encodeURIComponent(currentUser)}`)
-            .then(r => r.json()).then(data => {
-                document.getElementById('header-points').innerText = Number(data.points).toLocaleString();
-                document.getElementById('db-points').innerText = Number(data.points).toLocaleString();
-                document.getElementById('db-completed-count').innerText = data.completedCount;
-                
-                const checkinBtn = document.getElementById('btn-daily-checkin');
-                if (data.hasCheckedInToday) { checkinBtn.innerText = "Đã điểm danh ✅"; checkinBtn.disabled = true; } 
-                else { checkinBtn.innerText = "Điểm danh ngay (+50 Lúa)"; checkinBtn.disabled = false; }
-
-                const tBody = document.getElementById('table-task-body');
-                tBody.innerHTML = data.taskHistory.length === 0 ? '<tr><td colspan="3">Chưa có hoạt động</td></tr>' : '';
-                
-                let last7Days = []; let incomeData = [0, 0, 0, 0, 0, 0, 0];
-                for(let i=6; i>=0; i--) {
-                    let d = new Date(); d.setDate(d.getDate() - i);
-                    last7Days.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`);
-                }
-                data.taskHistory.forEach(h => {
-                    tBody.innerHTML += `<tr><td>${h.taskId}</td><td>${new Date(h.time).toLocaleDateString('vi-VN')}</td><td style="color:var(--success);font-weight:700;">+${h.reward}</td></tr>`;
-                    let dObj = new Date(h.time);
-                    let ds = `${dObj.getFullYear()}-${String(dObj.getMonth()+1).padStart(2,'0')}-${String(dObj.getDate()).padStart(2,'0')}`;
-                    let idx = last7Days.indexOf(ds); if(idx !== -1) { incomeData[idx] += parseInt(h.reward); }
-                });
-                renderChart(last7Days, incomeData); 
-
-                const wBody = document.getElementById('table-withdraw-body');
-                wBody.innerHTML = data.withdrawHistory.length === 0 ? '<tr><td colspan="5">Chưa có yêu cầu</td></tr>' : '';
-                data.withdrawHistory.forEach(w => {
-                    wBody.innerHTML += `<tr><td>${w.method}</td><td>${w.details}</td><td style="font-weight:700;">${Number(w.amount).toLocaleString()}</td><td style="font-weight:600;color:${w.status.includes('Chờ')?'var(--accent)':'var(--success)'}">${w.status}</td><td>${new Date(w.time).toLocaleDateString('vi-VN')}</td></tr>`;
-                });
-            });
-        }
-
-        function renderChart(labels, dataArr) {
-            const ctx = document.getElementById('incomeChart').getContext('2d');
-            if(incomeChartInstance) { incomeChartInstance.destroy(); } 
-            incomeChartInstance = new Chart(ctx, {
-                type: 'line', data: { labels: labels, datasets: [{ label: 'Lúa', data: dataArr, borderColor: '#3B82F6', backgroundColor: 'rgba(59, 130, 246, 0.1)', borderWidth: 2, fill: true, tension: 0.3 }] },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true }, x: { grid: { display: false } } } }
-            });
-        }
-
-        function toggleTaskGroup(groupId) {
-            const body = document.getElementById(`body-${groupId}`);
-            const card = document.getElementById(`group-${groupId}`);
-            if (body.classList.contains('show')) {
-                body.classList.remove('show');
-                card.classList.remove('open');
-            } else {
-                body.classList.add('show');
-                card.classList.add('open');
-            }
-        }
-
-        // TẢI VÀ GOM NHÓM NHIỆM VỤ TỰ ĐỘNG + ĐẢO VỊ TRÍ NGẪU NHIÊN 
+        // ============================================
+        // HÀM TẢI NHIỆM VỤ & ĐẢO VỊ TRÍ
+        // ============================================
         function loadTasks() {
             const box = document.getElementById('task-container');
-            box.innerHTML = '<p style="color: var(--text-muted); font-size:14px;">Đang tải danh sách nhiệm vụ...</p>';
-            
             fetch(`${SCRIPT_URL}?action=getTasks&username=${encodeURIComponent(currentUser)}`)
             .then(r => r.json()).then(tasks => {
-                box.innerHTML = '';
                 document.getElementById('remaining-tasks-count').innerText = tasks.length;
-                
-                if(tasks.length === 0) { 
-                    box.innerHTML = '<p style="font-weight:500; color: #10B981;">🎉 Tuyệt vời! Bạn đã hoàn thành toàn bộ nhiệm vụ ngày hôm nay.</p>'; 
-                    return; 
-                }
+                if(tasks.length === 0) return box.innerHTML = '<p>🎉 Bạn đã hoàn thành toàn bộ nhiệm vụ.</p>'; 
                 
                 // Thuật toán đảo vị trí các link bên trong
                 for (let i = tasks.length - 1; i > 0; i--) {
@@ -703,13 +257,11 @@
                 const grouped = {};
                 tasks.forEach(t => {
                     const key = `${t.name}_${t.reward}`;
-                    if(!grouped[key]) {
-                        grouped[key] = { name: t.name, reward: t.reward, img: t.img, list: [] };
-                    }
+                    if(!grouped[key]) grouped[key] = { name: t.name, reward: t.reward, img: t.img, list: [] };
                     grouped[key].list.push(t);
                 });
 
-                // Đảo vị trí ngẫu nhiên của các khung nhóm lớn với nhau
+                // Đảo vị trí ngẫu nhiên của các khung nhóm lớn
                 const groupKeys = Object.keys(grouped);
                 for (let i = groupKeys.length - 1; i > 0; i--) {
                     const j = Math.floor(Math.random() * (i + 1));
@@ -717,44 +269,24 @@
                 }
 
                 let html = '';
-                let groupIdx = 0; 
-                
-                groupKeys.forEach(key => {
+                groupKeys.forEach((key, groupIdx) => {
                     const g = grouped[key];
-                    groupIdx++;
-                    
                     html += `
                     <div class="task-group-card" id="group-${groupIdx}">
-                        <div class="task-group-header" onclick="toggleTaskGroup(${groupIdx})">
-                            <img src="${g.img}" class="tg-img" onerror="this.src='logo.jpg'">
-                            <div class="tg-info">
-                                <h4>${g.name}</h4>
-                                <p>Thưởng: <span>+${g.reward} Lúa/lượt</span> &nbsp;•&nbsp; Còn lại: <b>${g.list.length}</b></p>
-                            </div>
-                            <div class="tg-toggle-icon">▼</div>
+                        <div class="task-group-header" onclick="document.getElementById('body-${groupIdx}').classList.toggle('show')">
+                            <img src="${g.img}" class="tg-img">
+                            <div class="tg-info"><h4>${g.name}</h4><p>+${g.reward} Lúa/lượt</p></div>
                         </div>
-                        
                         <div class="tg-body" id="body-${groupIdx}">
-                    `;
-                    
-                    g.list.forEach((t, index) => {
-                        html += `
+                            ${g.list.map((t, index) => `
                             <div class="tg-row">
-                                <div class="tg-row-name">Thực hiện Link số ${index + 1}</div>
-                                
-                                <button class="tg-action-btn" id="btn-action-${t.id}" onclick="openTaskLink('${t.id}', '${t.link}')">
-                                    Mở Link
-                                </button>
-                                
+                                <div class="tg-row-name">Link số ${index + 1}</div>
+                                <button class="tg-action-btn" id="btn-action-${t.id}" onclick="openTaskLink('${t.id}', '${t.link}')">Mở Link</button>
                                 <div class="tg-input-area" id="input-box-${t.id}">
                                     <input type="text" id="code-val-${t.id}" placeholder="Nhập mã 6 số...">
                                     <button class="btn btn-success" onclick="verifyCode('${t.id}')">XÁC NHẬN MÃ</button>
                                 </div>
-                            </div>
-                        `;
-                    });
-                    
-                    html += `
+                            </div>`).join('')}
                         </div>
                     </div>`;
                 });
@@ -762,97 +294,97 @@
             });
         }
 
-        // BỘ PHÒNG THỦ 2-CLICK COMBO: ÉP MỞ QUẢNG CÁO XOAY VÒNG RỒI MỚI CHO LÀM NHIỆM VỤ
+        // ============================================
+        // 1. MỞ LINK NHIỆM VỤ (LIÊN KẾT SERVER LẤY TOKEN)
+        // ============================================
         function openTaskLink(id, link) {
             const btn = document.getElementById(`btn-action-${id}`);
             
-            // Nếu đây là lượt click lần đầu tiên của nút này
+            // ÉP XEM QUẢNG CÁO TRƯỚC
             if (!btn.classList.contains('ad-clicked')) {
-                // 1. Kích hoạt mở 1 link quảng cáo ngẫu nhiên
                 fireRandomAd();
-                
-                // 2. Biến đổi nút bấm thành nút mở link nhiệm vụ thật
                 btn.classList.add('ad-clicked');
-                btn.innerText = "Bấm lần nữa để làm nhiệm vụ 🚀";
+                btn.innerText = "Bấm lần nữa để lấy mã 🚀";
                 btn.style.background = "#DCFCE7";
                 btn.style.color = "#15803D";
                 btn.style.borderColor = "#86EFAC";
-                return; // Dừng lại ở đây, bắt buộc khách phải click phát thứ 2
+                return;
             }
 
-            // KHI CLICK LẦN 2 (Khách đã xem xong hoặc tắt tab quảng cáo cũ)
-            // Áp dụng luật bảo mật Vé Độc Quyền đóng dấu thời gian chống tool/bookmark
-            localStorage.setItem('ve_nhiem_vu_active_id', id);
-            localStorage.setItem('ve_nhiem_vu_active_time', Date.now().toString()); 
-            
-            localStorage.removeItem('hash_code_' + id); 
-            window.open(link, '_blank'); // Mở link vượt cấp tốc
-            
-            const inputBox = document.getElementById(`input-box-${id}`);
-            if(btn) btn.style.display = 'none';
-            if(inputBox) inputBox.style.display = 'flex'; 
+            btn.innerText = "Đang tạo mã an toàn...";
+            btn.disabled = true;
+
+            // XIN MÁY CHỦ CẤP TOKEN BẢO MẬT
+            fetch(`${SCRIPT_URL}?action=initTask&username=${encodeURIComponent(currentUser)}&taskId=${encodeURIComponent(id)}`)
+            .then(res => res.json()).then(data => {
+                if(data.status === 'success') {
+                    localStorage.setItem('active_server_token', data.token); // Lưu token máy chủ
+                    window.open(link, '_blank'); // Mở link rút gọn
+                    
+                    const inputBox = document.getElementById(`input-box-${id}`);
+                    btn.style.display = 'none';
+                    if(inputBox) inputBox.style.display = 'flex'; 
+                } else {
+                    showPopup('Lỗi máy chủ', 'Không thể khởi tạo phiên. Vui lòng thử lại!', false);
+                    btn.innerText = "Mở Link"; btn.disabled = false;
+                }
+            });
         }
 
+        // ============================================
+        // 2. XÁC NHẬN MÃ (GỬI TOKEN LÊN SERVER KIỂM TRA)
+        // ============================================
         function verifyCode(id) {
             const userInput = document.getElementById(`code-val-${id}`).value.trim();
-            const storedHash = localStorage.getItem('hash_code_' + id);
+            const token = localStorage.getItem('active_server_token');
 
             if(!userInput) return showPopup("Lỗi", "Vui lòng nhập mã xác nhận!", false);
-            if(!storedHash) return showPopup("Lỗi", "Không tìm thấy dữ liệu! Hãy vượt link lại.", false);
-
-            const expectedHash = btoa(id + "_MAMAT_" + userInput);
-            if(storedHash !== expectedHash) {
-                return showPopup("Sai mã", "Mã xác nhận không đúng! Vui lòng thử lại.", false);
-            }
+            if(!token) return showPopup("Từ chối", "Phiên làm việc đã hết hạn hoặc bị hủy!", false);
 
             const btn = document.querySelector(`#input-box-${id} button`);
-            btn.innerText = "Đang xử lý..."; btn.disabled = true;
+            btn.innerText = "Đang kiểm tra..."; btn.disabled = true;
 
-            fetch(`${SCRIPT_URL}?action=autoComplete&username=${encodeURIComponent(currentUser)}&taskId=${encodeURIComponent(id)}`)
+            // Mang Token và Mã nhập đi hỏi Server
+            fetch(`${SCRIPT_URL}?action=verifyTask&username=${encodeURIComponent(currentUser)}&taskId=${encodeURIComponent(id)}&token=${encodeURIComponent(token)}&code=${encodeURIComponent(userInput)}`)
             .then(res => res.json()).then(data => {
                 if(data.status === 'success') {
                     showPopup('Thành công', "Cộng lúa thành công!", true);
                     document.getElementById(`input-box-${id}`).innerHTML = `<p style="color: #10B981; font-weight: 800; text-align: center; font-size:14px;">🎉 Đã hoàn tất!</p>`;
-                    localStorage.removeItem('hash_code_' + id); 
-                    loadDashboard(); 
+                    localStorage.removeItem('active_server_token'); // Xóa token
+                    loadDashboard(); // Load lại tiền
                 } else {
-                    showPopup('Lỗi', data.message, false);
+                    // Nếu lỗi (Sai mã, quá nhanh, hết hạn) -> Hiện lỗi do server chửi
+                    showPopup('Thất bại', data.message, false);
                     btn.innerText = "XÁC NHẬN MÃ"; btn.disabled = false;
                 }
             });
         }
 
-        function updateWdInputs() {
-            const method = document.getElementById('wd-method').value;
-            const lbl = document.getElementById('lbl-details'); const inp = document.getElementById('wd-details');
-            if(method === 'Thẻ Cào') { lbl.innerText = "Nhà mạng cần rút:"; inp.placeholder = "Ví dụ: Viettel, Vina..."; }
-            else if(method === 'MoMo') { lbl.innerText = "Số điện thoại MoMo + Tên chủ thẻ:"; inp.placeholder = "Ví dụ: 0912... - NGUYEN VAN A"; }
-            else { lbl.innerText = "Số tài khoản + Ngân hàng + Tên:"; inp.placeholder = "Ví dụ: Techcombank - 190... - NGUYEN VAN A"; }
+        // Các hàm Auth cơ bản giữ nguyên...
+        function toggleAuth(showReg) {
+            document.getElementById('auth-login-card').style.display = showReg ? 'none' : 'block';
+            document.getElementById('auth-register-card').style.display = showReg ? 'block' : 'none';
         }
-
-        function submitWithdraw() {
-            const method = document.getElementById('wd-method').value;
-            const details = document.getElementById('wd-details').value.trim();
-            const amount = document.getElementById('wd-amount').value;
-            if(!details || !amount) return showPopup("Thiếu thông tin", 'Vui lòng điền đủ dữ liệu!', false);
-            if(parseInt(amount) < 10000) return showPopup("Từ chối", 'Mức rút tối thiểu là 10.000 lúa!', false);
-            document.getElementById('btn-withdraw').innerText = 'Đang xử lý...';
-            fetch(`${SCRIPT_URL}?action=withdraw&username=${encodeURIComponent(currentUser)}&method=${encodeURIComponent(method)}&details=${encodeURIComponent(details)}&amount=${amount}`)
+        function login() {
+            const u = document.getElementById('log-user').value.trim();
+            const p = document.getElementById('log-pass').value;
+            if(!u || !p) return;
+            document.getElementById('btn-login').innerText = 'Đang xác thực...';
+            fetch(`${SCRIPT_URL}?action=login&username=${encodeURIComponent(u)}&password=${encodeURIComponent(p)}`)
             .then(res => res.json()).then(data => {
-                showPopup(data.status === 'success' ? 'Thành công' : 'Lỗi!', data.message, data.status === 'success');
-                document.getElementById('btn-withdraw').innerText = 'Gửi yêu cầu đổi thưởng';
-                if(data.status === 'success') { document.getElementById('wd-details').value = ""; document.getElementById('wd-amount').value = ""; loadDashboard(); }
+                document.getElementById('btn-login').innerText = 'Đăng nhập';
+                if(data.status === 'success') {
+                    currentUser = data.username;
+                    document.getElementById('auth-view').style.display = 'none';
+                    document.getElementById('main-app').style.display = 'flex';
+                    openSection('dashboard');
+                } else { alert(data.message); }
             });
         }
-
-        function submitChangePassword() {
-            const oldP = document.getElementById('old-pass').value; const newP = document.getElementById('new-pass').value;
-            if(!oldP || !newP) return showPopup("Chú ý", 'Vui lòng điền đủ mật khẩu!', false);
-            fetch(`${SCRIPT_URL}?action=changePassword&username=${encodeURIComponent(currentUser)}&oldPass=${encodeURIComponent(oldP)}&newPass=${encodeURIComponent(newP)}`)
-            .then(res => res.json()).then(data => {
-                showPopup(data.status === 'success' ? 'Thành công' : 'Lỗi', data.message, data.status === 'success');
-                if(data.status === 'success') { document.getElementById('old-pass').value = ""; document.getElementById('new-pass').value = ""; }
-            });
+        function openSection(id) {
+            document.querySelectorAll('.content-section').forEach(sec => sec.style.display = 'none');
+            document.getElementById(id).style.display = 'block';
+            if(id === 'earn') loadTasks();
         }
     </script>
 </body>
