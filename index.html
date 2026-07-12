@@ -140,6 +140,10 @@
         </div>
     </div>
 
+    <a href="https://t.me/hanhle1231" target="_blank" class="tele-btn">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.19-.08-.05-.19-.02-.27 0-.11.03-1.93 1.23-5.46 3.62-.51.35-.98.52-1.4.51-.46-.01-1.35-.26-2.01-.48-.81-.27-1.46-.42-1.4-.88.03-.24.36-.48.98-.74 3.85-1.68 6.42-2.79 7.71-3.32 3.67-1.53 4.43-1.8 4.93-1.81.11 0 .36.03.49.13.11.08.14.19.16.27-.01.04-.01.12-.02.17z"/></svg>
+    </a>
+
     <div id="main-app" style="display: none; width: 100%;">
         <aside class="sidebar">
             <div class="sidebar-logo">
@@ -156,12 +160,29 @@
             </ul>
         </aside>
 
+        <nav class="bottom-nav">
+            <ul class="sidebar-menu">
+                <li><a href="#" data-section="dashboard" class="active"><span class="icon">📊</span>Home</a></li>
+                <li><a href="#" data-section="earn"><span class="icon">🌾</span>Kiếm Lúa</a></li>
+                <li><a href="#" data-section="history-section"><span class="icon">📝</span>Lịch sử</a></li>
+                <li><a href="#" data-section="withdraw"><span class="icon">🏦</span>Rút</a></li>
+            </ul>
+        </nav>
+
         <main class="content">
             <header class="top-header">
                 <h2 style="font-size: 16px;">Xin chào, <span id="welcome-username" style="color:var(--primary); font-weight:800;">User</span> 👋</h2>
                 <div class="header-right">
                     <div class="balance-badge">🌾 <span id="header-points">0</span></div>
-                    <img src="101036-1215264.jpg" class="user-avatar-mini" onclick="logoutApp()" title="Đăng xuất" onerror="this.src='logo.jpg'">
+                    <div class="avatar-dropdown">
+                        <img src="101036-1215264.jpg" class="user-avatar-mini" onclick="toggleAvatarMenu()" onerror="this.src='logo.jpg'">
+                        <div id="avatarMenu" class="dropdown-content">
+                            <a href="#" onclick="openSection('profile'); toggleAvatarMenu();">⚙️ Cài đặt hồ sơ</a>
+                            <a href="#" onclick="switchHistoryTab('withdraw'); openSection('history-section'); toggleAvatarMenu();">💸 Lịch sử rút tiền</a>
+                            <div style="height: 1px; background: #E2E8F0; margin: 4px 0;"></div>
+                            <a href="#" onclick="logoutApp(); toggleAvatarMenu();" style="color: var(--danger);">🚪 Đăng xuất</a>
+                        </div>
+                    </div>
                 </div>
             </header>
 
@@ -174,52 +195,133 @@
                     <div class="stat-card"><span class="stat-card-label">Nhiệm vụ hoàn thành</span><span class="stat-card-value" id="db-completed-count" style="color: var(--success);">0</span></div>
                     <div class="stat-card"><span class="stat-card-label">Lúa từ Ref</span><span class="stat-card-value" id="db-ref-income" style="color: var(--accent);">0</span></div>
                 </div>
-                <div class="chart-container"><canvas id="incomeChart" height="80"></canvas></div>
+                <div class="chart-container">
+                    <div class="chart-header"><span style="color: #E11D48; font-size: 20px;">📈</span> Thu Nhập 7 Ngày Gần Nhất</div>
+                    <canvas id="incomeChart" height="80"></canvas>
+                </div>
             </section>
 
             <section id="earn" class="content-section">
                 <div class="checkin-banner">
-                    <div class="checkin-info"><h4>🎁 Điểm Danh</h4><p>Nhận ngay Lúa miễn phí!</p></div>
+                    <div class="checkin-info"><h4>🎁 Điểm Danh</h4><p>Mỗi ngày đăng nhập để nhận Lúa miễn phí!</p></div>
                     <button class="btn-checkin" id="btn-daily-checkin" onclick="executeRealCheckin()">Điểm danh ngay (+50 Lúa)</button>
                 </div>
                 <div class="special-grid">
+                    <div class="timer-box">
+                        <div class="timer-header">🔄 LINK LÀM MỚI SAU</div>
+                        <div class="countdown-flex">
+                            <div class="cd-block"><span class="cd-num" id="cd-h">00</span><span class="cd-label">GIỜ</span></div>
+                            <div class="cd-block"><span class="cd-num" id="cd-m">00</span><span class="cd-label">PHÚT</span></div>
+                            <div class="cd-block"><span class="cd-num" id="cd-s">00</span><span class="cd-label">GIÂY</span></div>
+                        </div>
+                    </div>
                     <div class="task-count-box"><div class="tc-info"><h4 style="color:#92400E;">NHIỆM VỤ CÒN LẠI</h4><div style="font-size:36px; font-weight:800; color:#D97706;" id="remaining-tasks-count">0</div></div></div>
                 </div>
                 <h3>Danh sách nhiệm vụ</h3><br>
                 <div class="task-list" id="task-container"><p>Đang tải dữ liệu...</p></div>
             </section>
 
-            <section id="referral" class="content-section"><h3>Chia sẻ bạn bè</h3></section>
-            <section id="withdraw" class="content-section"><h3>Rút Thưởng</h3></section>
-            <section id="history-section" class="content-section"><h3>Lịch Sử</h3></section>
-            <section id="profile" class="content-section"><h3>Hồ Sơ</h3></section>
+            <section id="referral" class="content-section">
+                <h3>🤝 Chia sẻ bạn bè - Nhận lợi nhuận 10%</h3><br>
+                <div class="form-box" style="margin-bottom: 24px;">
+                    <h4 style="color: var(--primary); margin-bottom: 12px; font-size:16px;">Link giới thiệu riêng của bạn:</h4>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="ref-link-input" readonly style="margin:0; background:#EFF6FF; border-color:#BFDBFE; color:#1E3A8A; font-weight:600;">
+                        <button class="btn btn-primary" onclick="copyRefLink()" style="flex-shrink:0;">Copy Link</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="withdraw" class="content-section">
+                <h3>Tạo Yêu Cầu Rút Thưởng</h3><br>
+                <div class="form-box" style="max-width: 600px;">
+                    <label>Hình thức nhận lúa:</label>
+                    <select id="wd-method" onchange="updateWdInputs()">
+                        <option value="Thẻ Cào">Đổi Thẻ Cào</option>
+                        <option value="MoMo">Ví MoMo</option>
+                        <option value="Ngân Hàng">Chuyển khoản</option>
+                    </select>
+                    <label id="lbl-details">Chi tiết:</label>
+                    <input type="text" id="wd-details" placeholder="Ví dụ: Thẻ Viettel 50k">
+                    <label>Số Lúa rút:</label>
+                    <input type="number" id="wd-amount" placeholder="Tối thiểu 10,000">
+                    <button class="btn btn-primary" id="btn-withdraw" style="width: 100%;" onclick="submitWithdraw()">Rút ngay</button>
+                </div>
+            </section>
+
+            <section id="history-section" class="content-section">
+                <div class="tabs-nav">
+                    <div class="tab-btn active" id="tab-task" onclick="switchHistoryTab('task')">Hoạt động (Nhiệm vụ)</div>
+                    <div class="tab-btn" id="tab-withdraw" onclick="switchHistoryTab('withdraw')">Lịch sử rút tiền</div>
+                </div>
+                <div id="box-task-history" class="history-table-wrapper">
+                    <table class="history-table">
+                        <thead><tr><th>Nhiệm vụ</th><th>Thời gian</th><th>Thưởng</th></tr></thead>
+                        <tbody id="table-task-body"><tr><td colspan="3">Đang tải...</td></tr></tbody>
+                    </table>
+                </div>
+                <div id="box-withdraw-history" class="history-table-wrapper" style="display: none;">
+                    <table class="history-table">
+                        <thead><tr><th>Hình thức</th><th>Chi tiết</th><th>Số Lúa</th><th>Trạng thái</th></tr></thead>
+                        <tbody id="table-withdraw-body"><tr><td colspan="4">Đang tải...</td></tr></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="profile" class="content-section">
+                <h3>Quản lý hồ sơ</h3><br>
+                <div class="profile-grid">
+                    <div class="form-box" style="text-align: center;">
+                        <img src="101036-1215264.jpg" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;" onerror="this.src='logo.jpg'">
+                        <h4 id="prof-username">Username</h4><br>
+                        <button class="btn btn-danger" style="width: 100%;" onclick="logoutApp()">Đăng xuất</button>
+                    </div>
+                    <div class="form-box">
+                        <h4>Đổi mật khẩu</h4><br>
+                        <input type="password" id="old-pass" placeholder="Mật khẩu cũ">
+                        <input type="password" id="new-pass" placeholder="Mật khẩu mới">
+                        <button class="btn btn-primary" onclick="submitChangePassword()">Cập nhật</button>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
 
     <div class="auth-layout-container" id="auth-view">
         <div class="auth-card" id="auth-login-card">
+            <div style="text-align: center; margin-bottom: 24px;"><img src="logo.jpg" style="width:100px; border-radius:50%"></div>
             <h2 style="text-align: center; color: var(--primary);">Đăng Nhập</h2>
             <div id="login-msg" style="color:var(--danger); margin-bottom:10px;"></div>
             <input type="text" id="log-user" placeholder="Nhập tài khoản...">
             <input type="password" id="log-pass" placeholder="Nhập mật khẩu...">
+            <div style="margin-bottom:15px; display:flex; gap:8px; align-items:center;">
+                <input type="checkbox" id="login-remember" checked style="width:auto; margin:0;">
+                <label for="login-remember">Lưu đăng nhập</label>
+            </div>
             <button class="btn btn-primary" style="width: 100%;" id="btn-login" onclick="login()">Đăng nhập</button>
-            <p style="text-align: center; margin-top: 24px;"><a href="#" onclick="toggleAuth(true)">Đăng ký</a></p>
+            <p style="text-align: center; margin-top: 24px;"><a href="#" onclick="toggleAuth(true)">Chưa có tài khoản? Đăng ký</a></p>
         </div>
+        
         <div class="auth-card" id="auth-register-card" style="display: none;">
+            <div style="text-align: center; margin-bottom: 24px;"><img src="logo.jpg" style="width:100px; border-radius:50%"></div>
             <h2 style="text-align: center; color: var(--primary);">Tạo Tài Khoản</h2>
             <div id="register-msg" style="color:var(--danger); margin-bottom:10px;"></div>
             <input type="text" id="reg-user" placeholder="Tên tài khoản...">
             <input type="email" id="reg-email" placeholder="Email...">
             <input type="password" id="reg-pass" placeholder="Mật khẩu...">
             <button class="btn btn-primary" style="width: 100%;" id="btn-register" onclick="register()">Đăng ký</button>
-            <p style="text-align: center; margin-top: 24px;"><a href="#" onclick="toggleAuth(false)">Đăng nhập</a></p>
+            <p style="text-align: center; margin-top: 24px;"><a href="#" onclick="toggleAuth(false)">Đã có tài khoản? Đăng nhập</a></p>
         </div>
     </div>
 
     <script>
-        // LƯU Ý QUAN TRỌNG: THAY LINK GOOGLE APPS SCRIPT CỦA BẠN VÀO ĐÂY
+        // ============================================
+        // CẤU HÌNH HỆ THỐNG
+        // ============================================
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx1hP042D5mQFWTxqaVXDVDvCFX5clpUJ4Ej1tf4d26H5XvPptMRwEqPOE86u3NqwbK/exec';
         let currentUser = "";
+        let incomeChartInstance = null;
+        let countdownInterval = null;
 
         const AD_NETWORKS = [
             "https://www.effectivecpmnetwork.com/v3g8tvi2?key=40a3c0407a6d5a6a21fb09208dc6758d",
@@ -227,7 +329,31 @@
             "https://www.effectivecpmnetwork.com/sdmwabqk?key=99df44fe93fe3cdc2146ada41a3cf4b1"
         ];
 
-        function fireRandomAd() { window.open(AD_NETWORKS[Math.floor(Math.random() * AD_NETWORKS.length)], '_blank'); }
+        const fakePayouts = [
+            "Người dùng <b>An***</b> vừa rút thành công Thẻ cào 20k Viettel",
+            "Người dùng <b>Binh***</b> vừa đổi thành công 50k về Ví MoMo",
+            "Người dùng <b>Tuan99***</b> vừa rút thành công 100k Vietcombank",
+            "Người dùng <b>Hoang***</b> vừa rút thành công Thẻ cào 50k Vina"
+        ];
+
+        // ============================================
+        // KHỞI CHẠY WEB KHI VỪA VÀO
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedUser = localStorage.getItem('remembered_user');
+            if(savedUser) { 
+                currentUser = savedUser; 
+                enterApplication(); 
+            }
+            startLivePayoutFeed();
+        });
+
+        // ============================================
+        // HÀM TIỆN ÍCH CHUNG
+        // ============================================
+        function fireRandomAd() { 
+            window.open(AD_NETWORKS[Math.floor(Math.random() * AD_NETWORKS.length)], '_blank'); 
+        }
 
         function showPopup(title, message, isSuccess = true) {
             const popup = document.getElementById('custom-popup-overlay');
@@ -238,17 +364,270 @@
             setTimeout(() => { popup.style.display = 'none'; }, 3500); 
         }
 
+        function checkWelcomePopup() {
+            const lastClosed = localStorage.getItem('welcome_closed_time');
+            const now = new Date().getTime();
+            if (!lastClosed || (now - lastClosed > 7200000)) {
+                document.getElementById('welcome-popup').style.display = 'flex';
+            }
+        }
+
+        function closeWelcomePopup() {
+            document.getElementById('welcome-popup').style.display = 'none';
+            localStorage.setItem('welcome_closed_time', new Date().getTime());
+        }
+
+        function startCountdown() {
+            if (countdownInterval) clearInterval(countdownInterval);
+            function updateTime() {
+                const now = new Date();
+                const tomorrow = new Date(now); tomorrow.setHours(24, 0, 0, 0); 
+                const diff = tomorrow - now;
+                const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((diff % (1000 * 60)) / 1000);
+                if(document.getElementById('cd-h')) {
+                    document.getElementById('cd-h').innerText = String(h).padStart(2, '0');
+                    document.getElementById('cd-m').innerText = String(m).padStart(2, '0');
+                    document.getElementById('cd-s').innerText = String(s).padStart(2, '0');
+                }
+            }
+            updateTime(); countdownInterval = setInterval(updateTime, 1000);
+        }
+
+        function startLivePayoutFeed() {
+            const feedContainer = document.getElementById('payout-feed');
+            let currentIndex = 0;
+            function showNextPayout() {
+                if(!feedContainer) return;
+                const div = document.createElement('div');
+                div.className = 'payout-item';
+                const randomMins = Math.floor(Math.random() * 15) + 1;
+                div.innerHTML = `${fakePayouts[currentIndex]} <span class="payout-time">(${randomMins} phút trước)</span>`;
+                feedContainer.appendChild(div);
+                setTimeout(() => div.classList.add('active'), 50);
+                setTimeout(() => {
+                    div.classList.replace('active', 'exit');
+                    setTimeout(() => div.remove(), 500);
+                    currentIndex = (currentIndex + 1) % fakePayouts.length;
+                    showNextPayout();
+                }, 3000);
+            }
+            showNextPayout();
+        }
+
+        function generateRefLink() {
+            const baseUrl = window.location.origin + window.location.pathname;
+            if(document.getElementById('ref-link-input')) document.getElementById('ref-link-input').value = `${baseUrl}?ref=${currentUser}`;
+        }
+        function copyRefLink() {
+            document.getElementById('ref-link-input').select(); document.execCommand("copy");
+            showPopup("Thành công!", "Đã copy link giới thiệu!", true);
+        }
+
+        function toggleAvatarMenu() { document.getElementById("avatarMenu").classList.toggle("show"); }
+        window.onclick = function(event) {
+            if (!event.target.matches('.user-avatar-mini')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    if (dropdowns[i].classList.contains('show')) dropdowns[i].classList.remove('show');
+                }
+            }
+        }
+
         // ============================================
-        // HÀM TẢI NHIỆM VỤ & ĐẢO VỊ TRÍ
+        // ĐĂNG NHẬP / ĐĂNG KÝ / ĐĂNG XUẤT
+        // ============================================
+        function toggleAuth(showReg) {
+            document.getElementById('auth-login-card').style.display = showReg ? 'none' : 'block';
+            document.getElementById('auth-register-card').style.display = showReg ? 'block' : 'none';
+        }
+
+        function enterApplication() {
+            document.getElementById('auth-view').style.display = 'none';
+            document.getElementById('main-app').style.display = 'flex';
+            document.getElementById('welcome-username').innerText = currentUser;
+            document.getElementById('prof-username').innerText = currentUser;
+            document.getElementById('marquee-content').innerText = `🔥 CHÚC MỪNG ${currentUser.toUpperCase()} ĐÃ THAM GIA KIẾM LÚA MÙA HÈ! 🎉`;
+            
+            startCountdown(); 
+            generateRefLink(); 
+            loadDashboard();
+            checkWelcomePopup();
+        }
+
+        function logoutApp() {
+            localStorage.removeItem('remembered_user'); 
+            currentUser = "";
+            if (countdownInterval) clearInterval(countdownInterval);
+            document.getElementById('main-app').style.display = 'none';
+            document.getElementById('auth-view').style.display = 'flex';
+        }
+
+        function register() {
+            const u = document.getElementById('reg-user').value.trim();
+            const e = document.getElementById('reg-email').value.trim();
+            const p = document.getElementById('reg-pass').value;
+            if(!u || !e || !p) return document.getElementById('register-msg').innerText = 'Điền đủ thông tin!';
+            document.getElementById('btn-register').innerText = 'Đang xử lý...';
+            fetch(`${SCRIPT_URL}?action=register&username=${encodeURIComponent(u)}&email=${encodeURIComponent(e)}&password=${encodeURIComponent(p)}`)
+            .then(res => res.json()).then(data => {
+                document.getElementById('btn-register').innerText = 'Đăng ký';
+                if(data.status === 'success') { toggleAuth(false); showPopup('Thành công', data.message, true); } 
+                else { document.getElementById('register-msg').innerText = data.message; }
+            });
+        }
+
+        function login() {
+            const u = document.getElementById('log-user').value.trim();
+            const p = document.getElementById('log-pass').value;
+            if(!u || !p) return document.getElementById('login-msg').innerText = 'Điền đủ thông tin!';
+            document.getElementById('btn-login').innerText = 'Đang xác thực...';
+            fetch(`${SCRIPT_URL}?action=login&username=${encodeURIComponent(u)}&password=${encodeURIComponent(p)}`)
+            .then(res => res.json()).then(data => {
+                document.getElementById('btn-login').innerText = 'Đăng nhập';
+                if(data.status === 'success') {
+                    currentUser = data.username;
+                    if(document.getElementById('login-remember').checked) localStorage.setItem('remembered_user', currentUser);
+                    enterApplication();
+                } else { document.getElementById('login-msg').innerText = data.message; }
+            });
+        }
+
+        // ============================================
+        // CHUYỂN TRANG VÀ DASHBOARD
+        // ============================================
+        function openSection(id) {
+            document.querySelectorAll('.sidebar-menu a').forEach(item => {
+                item.classList.remove('active');
+                if(item.parentElement.tagName === 'LI') item.parentElement.classList.remove('active');
+            });
+            document.querySelectorAll(`.sidebar-menu a[data-section="${id}"]`).forEach(matchedLink => {
+                matchedLink.classList.add('active');
+                if(matchedLink.parentElement.tagName === 'LI') matchedLink.parentElement.classList.add('active');
+            });
+            document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            window.scrollTo(0, 0);
+            if(id === 'dashboard') loadDashboard();
+            if(id === 'earn') loadTasks();
+        }
+
+        document.querySelectorAll('.sidebar-menu a').forEach(a => {
+            a.onclick = (e) => { e.preventDefault(); openSection(a.getAttribute('data-section')); }
+        });
+
+        function switchHistoryTab(tabName) {
+            document.getElementById('tab-task').classList.toggle('active', tabName === 'task');
+            document.getElementById('tab-withdraw').classList.toggle('active', tabName === 'withdraw');
+            document.getElementById('box-task-history').style.display = tabName === 'task' ? 'block' : 'none';
+            document.getElementById('box-withdraw-history').style.display = tabName === 'withdraw' ? 'block' : 'none';
+        }
+
+        function loadDashboard() {
+            fetch(`${SCRIPT_URL}?action=getUserData&username=${encodeURIComponent(currentUser)}`)
+            .then(r => r.json()).then(data => {
+                document.getElementById('header-points').innerText = Number(data.points).toLocaleString();
+                document.getElementById('db-points').innerText = Number(data.points).toLocaleString();
+                document.getElementById('db-completed-count').innerText = data.completedCount;
+                
+                const checkinBtn = document.getElementById('btn-daily-checkin');
+                if (data.hasCheckedInToday) { checkinBtn.innerText = "Đã điểm danh ✅"; checkinBtn.disabled = true; } 
+                else { checkinBtn.innerText = "Điểm danh ngay (+50 Lúa)"; checkinBtn.disabled = false; }
+
+                const tBody = document.getElementById('table-task-body');
+                tBody.innerHTML = data.taskHistory.length === 0 ? '<tr><td colspan="3">Chưa có hoạt động</td></tr>' : '';
+                
+                let last7Days = []; let incomeData = [0, 0, 0, 0, 0, 0, 0];
+                for(let i=6; i>=0; i--) {
+                    let d = new Date(); d.setDate(d.getDate() - i);
+                    last7Days.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`);
+                }
+                data.taskHistory.forEach(h => {
+                    tBody.innerHTML += `<tr><td>${h.taskId}</td><td>${new Date(h.time).toLocaleDateString('vi-VN')}</td><td style="color:var(--success);font-weight:700;">+${h.reward}</td></tr>`;
+                    let dObj = new Date(h.time);
+                    let ds = `${dObj.getFullYear()}-${String(dObj.getMonth()+1).padStart(2,'0')}-${String(dObj.getDate()).padStart(2,'0')}`;
+                    let idx = last7Days.indexOf(ds); if(idx !== -1) { incomeData[idx] += parseInt(h.reward); }
+                });
+                renderChart(last7Days, incomeData); 
+
+                const wBody = document.getElementById('table-withdraw-body');
+                wBody.innerHTML = data.withdrawHistory.length === 0 ? '<tr><td colspan="5">Chưa có yêu cầu</td></tr>' : '';
+                data.withdrawHistory.forEach(w => {
+                    wBody.innerHTML += `<tr><td>${w.method}</td><td>${w.details}</td><td style="font-weight:700;">${Number(w.amount).toLocaleString()}</td><td style="font-weight:600;color:${w.status.includes('Chờ')?'var(--accent)':'var(--success)'}">${w.status}</td></tr>`;
+                });
+            });
+        }
+
+        function renderChart(labels, dataArr) {
+            const ctx = document.getElementById('incomeChart').getContext('2d');
+            if(incomeChartInstance) { incomeChartInstance.destroy(); } 
+            incomeChartInstance = new Chart(ctx, {
+                type: 'line', data: { labels: labels, datasets: [{ label: 'Lúa', data: dataArr, borderColor: '#3B82F6', backgroundColor: 'rgba(59, 130, 246, 0.1)', borderWidth: 2, fill: true, tension: 0.3 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true }, x: { grid: { display: false } } } }
+            });
+        }
+
+        // ============================================
+        // ĐIỂM DANH & RÚT TIỀN & ĐỔI PASS
+        // ============================================
+        function executeRealCheckin() {
+            fireRandomAd(); // Nẩy tab quảng cáo kiếm tiền
+            const btn = document.getElementById('btn-daily-checkin');
+            btn.innerText = "Đang xử lý..."; btn.disabled = true;
+            fetch(`${SCRIPT_URL}?action=dailyCheckin&username=${encodeURIComponent(currentUser)}`)
+            .then(res => res.json()).then(data => {
+                showPopup(data.status === 'success' ? 'Thành công!' : 'Thông báo', data.message, data.status === 'success');
+                btn.innerText = "Đã điểm danh hôm nay ✅";
+                if (data.status === 'success') loadDashboard(); 
+            });
+        }
+
+        function updateWdInputs() {
+            const method = document.getElementById('wd-method').value;
+            const lbl = document.getElementById('lbl-details'); const inp = document.getElementById('wd-details');
+            if(method === 'Thẻ Cào') { lbl.innerText = "Nhà mạng cần rút:"; inp.placeholder = "Ví dụ: Viettel, Vina..."; }
+            else if(method === 'MoMo') { lbl.innerText = "Số điện thoại MoMo + Tên chủ thẻ:"; inp.placeholder = "Ví dụ: 0912... - NGUYEN VAN A"; }
+            else { lbl.innerText = "Số tài khoản + Ngân hàng + Tên:"; inp.placeholder = "Ví dụ: Techcombank - 190... - NGUYEN VAN A"; }
+        }
+
+        function submitWithdraw() {
+            const method = document.getElementById('wd-method').value;
+            const details = document.getElementById('wd-details').value.trim();
+            const amount = document.getElementById('wd-amount').value;
+            if(!details || !amount) return showPopup("Thiếu thông tin", 'Vui lòng điền đủ dữ liệu!', false);
+            if(parseInt(amount) < 10000) return showPopup("Từ chối", 'Mức rút tối thiểu là 10.000 lúa!', false);
+            document.getElementById('btn-withdraw').innerText = 'Đang xử lý...';
+            fetch(`${SCRIPT_URL}?action=withdraw&username=${encodeURIComponent(currentUser)}&method=${encodeURIComponent(method)}&details=${encodeURIComponent(details)}&amount=${amount}`)
+            .then(res => res.json()).then(data => {
+                showPopup(data.status === 'success' ? 'Thành công' : 'Lỗi!', data.message, data.status === 'success');
+                document.getElementById('btn-withdraw').innerText = 'Rút ngay';
+                if(data.status === 'success') { document.getElementById('wd-details').value = ""; document.getElementById('wd-amount').value = ""; loadDashboard(); }
+            });
+        }
+
+        function submitChangePassword() {
+            const oldP = document.getElementById('old-pass').value; const newP = document.getElementById('new-pass').value;
+            if(!oldP || !newP) return showPopup("Chú ý", 'Vui lòng điền đủ mật khẩu!', false);
+            fetch(`${SCRIPT_URL}?action=changePassword&username=${encodeURIComponent(currentUser)}&oldPass=${encodeURIComponent(oldP)}&newPass=${encodeURIComponent(newP)}`)
+            .then(res => res.json()).then(data => {
+                showPopup(data.status === 'success' ? 'Thành công' : 'Lỗi', data.message, data.status === 'success');
+                if(data.status === 'success') { document.getElementById('old-pass').value = ""; document.getElementById('new-pass').value = ""; }
+            });
+        }
+
+        // ============================================
+        // NHIỆM VỤ (TẢI, ĐẢO NGẪU NHIÊN & XÁC THỰC SERVER)
         // ============================================
         function loadTasks() {
             const box = document.getElementById('task-container');
+            box.innerHTML = '<p>Đang tải dữ liệu...</p>';
             fetch(`${SCRIPT_URL}?action=getTasks&username=${encodeURIComponent(currentUser)}`)
             .then(r => r.json()).then(tasks => {
                 document.getElementById('remaining-tasks-count').innerText = tasks.length;
-                if(tasks.length === 0) return box.innerHTML = '<p>🎉 Bạn đã hoàn thành toàn bộ nhiệm vụ.</p>'; 
+                if(tasks.length === 0) return box.innerHTML = '<p style="color:#10B981;font-weight:bold;">🎉 Bạn đã hoàn thành toàn bộ nhiệm vụ.</p>'; 
                 
-                // Thuật toán đảo vị trí các link bên trong
+                // Đảo vị trí các link
                 for (let i = tasks.length - 1; i > 0; i--) {
                     const j = Math.floor(Math.random() * (i + 1));
                     [tasks[i], tasks[j]] = [tasks[j], tasks[i]];
@@ -261,7 +640,7 @@
                     grouped[key].list.push(t);
                 });
 
-                // Đảo vị trí ngẫu nhiên của các khung nhóm lớn
+                // Đảo vị trí nhóm
                 const groupKeys = Object.keys(grouped);
                 for (let i = groupKeys.length - 1; i > 0; i--) {
                     const j = Math.floor(Math.random() * (i + 1));
@@ -274,8 +653,9 @@
                     html += `
                     <div class="task-group-card" id="group-${groupIdx}">
                         <div class="task-group-header" onclick="document.getElementById('body-${groupIdx}').classList.toggle('show')">
-                            <img src="${g.img}" class="tg-img">
+                            <img src="${g.img}" class="tg-img" onerror="this.src='logo.jpg'">
                             <div class="tg-info"><h4>${g.name}</h4><p>+${g.reward} Lúa/lượt</p></div>
+                            <div class="tg-toggle-icon">▼</div>
                         </div>
                         <div class="tg-body" id="body-${groupIdx}">
                             ${g.list.map((t, index) => `
@@ -294,9 +674,6 @@
             });
         }
 
-        // ============================================
-        // 1. MỞ LINK NHIỆM VỤ (LIÊN KẾT SERVER LẤY TOKEN)
-        // ============================================
         function openTaskLink(id, link) {
             const btn = document.getElementById(`btn-action-${id}`);
             
@@ -304,7 +681,7 @@
             if (!btn.classList.contains('ad-clicked')) {
                 fireRandomAd();
                 btn.classList.add('ad-clicked');
-                btn.innerText = "Bấm lần nữa để lấy mã 🚀";
+                btn.innerText = "Bấm lần nữa để làm nhiệm vụ 🚀";
                 btn.style.background = "#DCFCE7";
                 btn.style.color = "#15803D";
                 btn.style.borderColor = "#86EFAC";
@@ -314,26 +691,22 @@
             btn.innerText = "Đang tạo mã an toàn...";
             btn.disabled = true;
 
-            // XIN MÁY CHỦ CẤP TOKEN BẢO MẬT
             fetch(`${SCRIPT_URL}?action=initTask&username=${encodeURIComponent(currentUser)}&taskId=${encodeURIComponent(id)}`)
             .then(res => res.json()).then(data => {
                 if(data.status === 'success') {
                     localStorage.setItem('active_server_token', data.token); // Lưu token máy chủ
-                    window.open(link, '_blank'); // Mở link rút gọn
+                    window.open(link, '_blank'); // Mở link vượt cấp tốc
                     
                     const inputBox = document.getElementById(`input-box-${id}`);
                     btn.style.display = 'none';
                     if(inputBox) inputBox.style.display = 'flex'; 
                 } else {
-                    showPopup('Lỗi máy chủ', 'Không thể khởi tạo phiên. Vui lòng thử lại!', false);
+                    showPopup('Lỗi máy chủ', 'Không thể khởi tạo phiên bảo mật!', false);
                     btn.innerText = "Mở Link"; btn.disabled = false;
                 }
             });
         }
 
-        // ============================================
-        // 2. XÁC NHẬN MÃ (GỬI TOKEN LÊN SERVER KIỂM TRA)
-        // ============================================
         function verifyCode(id) {
             const userInput = document.getElementById(`code-val-${id}`).value.trim();
             const token = localStorage.getItem('active_server_token');
@@ -344,47 +717,18 @@
             const btn = document.querySelector(`#input-box-${id} button`);
             btn.innerText = "Đang kiểm tra..."; btn.disabled = true;
 
-            // Mang Token và Mã nhập đi hỏi Server
             fetch(`${SCRIPT_URL}?action=verifyTask&username=${encodeURIComponent(currentUser)}&taskId=${encodeURIComponent(id)}&token=${encodeURIComponent(token)}&code=${encodeURIComponent(userInput)}`)
             .then(res => res.json()).then(data => {
                 if(data.status === 'success') {
                     showPopup('Thành công', "Cộng lúa thành công!", true);
                     document.getElementById(`input-box-${id}`).innerHTML = `<p style="color: #10B981; font-weight: 800; text-align: center; font-size:14px;">🎉 Đã hoàn tất!</p>`;
-                    localStorage.removeItem('active_server_token'); // Xóa token
-                    loadDashboard(); // Load lại tiền
+                    localStorage.removeItem('active_server_token'); 
+                    loadDashboard(); 
                 } else {
-                    // Nếu lỗi (Sai mã, quá nhanh, hết hạn) -> Hiện lỗi do server chửi
                     showPopup('Thất bại', data.message, false);
                     btn.innerText = "XÁC NHẬN MÃ"; btn.disabled = false;
                 }
             });
-        }
-
-        // Các hàm Auth cơ bản giữ nguyên...
-        function toggleAuth(showReg) {
-            document.getElementById('auth-login-card').style.display = showReg ? 'none' : 'block';
-            document.getElementById('auth-register-card').style.display = showReg ? 'block' : 'none';
-        }
-        function login() {
-            const u = document.getElementById('log-user').value.trim();
-            const p = document.getElementById('log-pass').value;
-            if(!u || !p) return;
-            document.getElementById('btn-login').innerText = 'Đang xác thực...';
-            fetch(`${SCRIPT_URL}?action=login&username=${encodeURIComponent(u)}&password=${encodeURIComponent(p)}`)
-            .then(res => res.json()).then(data => {
-                document.getElementById('btn-login').innerText = 'Đăng nhập';
-                if(data.status === 'success') {
-                    currentUser = data.username;
-                    document.getElementById('auth-view').style.display = 'none';
-                    document.getElementById('main-app').style.display = 'flex';
-                    openSection('dashboard');
-                } else { alert(data.message); }
-            });
-        }
-        function openSection(id) {
-            document.querySelectorAll('.content-section').forEach(sec => sec.style.display = 'none');
-            document.getElementById(id).style.display = 'block';
-            if(id === 'earn') loadTasks();
         }
     </script>
 </body>
