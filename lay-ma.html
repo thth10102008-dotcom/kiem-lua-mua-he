@@ -8,17 +8,11 @@
         body { font-family: sans-serif; background: #F4F7FE; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
         .box { background: white; padding: 30px; border-radius: 16px; text-align: center; width: 340px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border: 1px solid #E2E8F0; }
         .timer { font-size: 55px; font-weight: bold; color: #EF4444; margin: 20px 0; }
-        
-        /* Giao diện Captcha */
-        .captcha-box { display: none; margin-top: 15px; }
+        .captcha-box, .result-box { display: none; margin-top: 15px; }
         canvas { border: 1px solid #CBD5E1; border-radius: 8px; margin-bottom: 10px; background: #F8FAFC; }
         .cap-input { width: 90%; padding: 12px; border: 1.5px solid #CBD5E1; border-radius: 8px; font-size: 16px; text-align: center; text-transform: uppercase; margin-bottom: 15px; font-weight: bold;}
-        .btn-cap { background: #1E3A8A; color: white; padding: 12px; width: 100%; border: none; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; }
-        
-        /* Giao diện Báo Mã */
-        .result-box { display: none; margin-top: 20px; }
+        .btn-cap { background: #1E3A8A; color: white; padding: 12px; width: 100%; border: none; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer;}
         .code-display { font-size: 36px; font-weight: 900; color: #10B981; background: #ECFDF5; padding: 15px; border-radius: 8px; border: 2px dashed #34D399; letter-spacing: 5px;}
-        .guide { color: #1E3A8A; font-weight: 600; font-size: 14px; margin-top: 15px; line-height: 1.5; }
     </style>
 </head>
 <body>
@@ -29,107 +23,84 @@
         <div class="timer" id="countdown-timer">30</div>
 
         <div class="captcha-box" id="captcha-section">
-            <p style="color: #F59E0B; font-weight: bold; font-size: 14px;">Vui lòng xác minh bạn là con người:</p>
+            <p style="color: #F59E0B; font-weight: bold;">Xác minh con người:</p>
             <canvas id="captchaCanvas" width="160" height="60"></canvas><br>
             <input type="text" id="captchaInput" class="cap-input" placeholder="Nhập chữ trong ảnh">
-            <button class="btn-cap" onclick="verifyCaptcha()">XÁC NHẬN</button>
+            <button class="btn-cap" onclick="verifyCaptcha()">LẤY MÃ NGAY</button>
         </div>
 
         <div class="result-box" id="result-section">
-            <p style="color: #64748B; font-size: 14px; margin-bottom:10px;">Mã của bạn đây. Hãy COPY nó nhé!</p>
+            <p style="color: #64748B;">Mã của bạn đây. Hãy COPY nó nhé!</p>
             <div class="code-display" id="final-code"></div>
-            <p class="guide">Quay lại trang chủ, dán mã này vào ô trống để nhận Lúa ngay!</p>
         </div>
     </div>
 
     <script>
-        // KIỂM TRA ĐỒNG BỘ VÉ TỪ TRANG CHỦ ĐỂ PHÁT HIỆN TOOL
-        const taskId = localStorage.getItem('ve_nhiem_vu');
+        // LƯU Ý QUAN TRỌNG: THAY LINK GOOGLE APPS SCRIPT VÀO ĐÂY
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx1hP042D5mQFWTxqaVXDVDvCFX5clpUJ4Ej1tf4d26H5XvPptMRwEqPOE86u3NqwbK/exec';
         
+        const activeToken = localStorage.getItem('active_server_token'); 
         let captchaText = "";
-        let secondsLeft = 30; // Đặt số giây đếm ngược tại đây
+        let secondsLeft = 30; 
 
-        if(!taskId) {
-            // Hiển thị khung thông báo lỗi chặn tool chuẩn xác như ảnh chụp
+        function showError(msg) {
             document.getElementById('main-content').innerHTML = `
                 <div style="font-size: 40px; margin-bottom: 10px;">🚫</div>
-                <h2 style="color: red; margin-top: 0;">LỖI XÁC THỰC!</h2>
-                <p style="color: #475569; font-size: 15px; margin-bottom: 20px;">Bạn chưa nhận nhiệm vụ từ trang chủ, hoặc bạn đã lưu link để gian lận.</p>
-                <p style="color: #1E3A8A; font-weight: bold; font-size: 15px;">Vui lòng quay lại trang chủ và bấm nút "Thực hiện nhiệm vụ" để bắt đầu lại nhé!</p>
+                <h2 style="color: red; margin-top: 0;">LỖI BẢO MẬT</h2>
+                <p style="color: #475569; font-size: 15px; line-height: 1.5;">${msg}</p>
+                <p style="color: #1E3A8A; font-weight: bold;">Vui lòng quay lại trang chủ làm lại!</p>
             `;
+        }
+
+        // Kiểm tra xem khách có mang Token nội bộ sang không (Chống lưu Bookmark)
+        if (!activeToken) {
+            showError("Không tìm thấy phiên làm việc hợp lệ. Hệ thống nghi ngờ bạn dùng Bookmark hoặc Mở Link trực tiếp.");
         } else {
-            // Chạy thời gian chờ
             const interval = setInterval(() => {
                 secondsLeft--;
                 document.getElementById('countdown-timer').innerText = secondsLeft;
-                
                 if (secondsLeft <= 0) {
                     clearInterval(interval);
                     document.getElementById('countdown-timer').style.display = 'none';
                     document.getElementById('status-text').style.display = 'none';
-                    
-                    // Hiện Captcha chống bot
                     document.getElementById('captcha-section').style.display = 'block';
                     drawCaptcha();
                 }
             }, 1000);
         }
 
-        // Tạo ảnh captcha vằn nhiễu chống tool quét chữ (OCR)
         function drawCaptcha() {
             const canvas = document.getElementById('captchaCanvas');
             const ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            ctx.fillStyle = "#F8FAFC";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            // Tạo các vạch sọc làm rối loạn mắt đọc của bot
-            for(let i=0; i<6; i++) {
-                ctx.strokeStyle = ['#94A3B8', '#CBD5E1', '#F1F5F9'][Math.floor(Math.random()*3)];
-                ctx.lineWidth = Math.random() * 2 + 1;
-                ctx.beginPath();
-                ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
-                ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
-                ctx.stroke();
-            }
-
+            ctx.fillStyle = "#F8FAFC"; ctx.fillRect(0, 0, canvas.width, canvas.height);
             const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; 
             captchaText = "";
             for(let i=0; i<5; i++) captchaText += chars[Math.floor(Math.random() * chars.length)];
-
-            ctx.font = "bold 28px sans-serif";
-            ctx.fillStyle = "#1E3A8A";
+            ctx.font = "bold 28px sans-serif"; ctx.fillStyle = "#1E3A8A";
             for(let i=0; i<captchaText.length; i++) {
-                ctx.save();
-                ctx.translate(20 + i * 25, 40);
-                ctx.rotate((Math.random() - 0.5) * 0.4); // Xoay chữ ngẫu nhiên
-                ctx.fillText(captchaText[i], 0, 0);
-                ctx.restore();
+                ctx.save(); ctx.translate(20 + i * 25, 40); ctx.rotate((Math.random() - 0.5) * 0.4); ctx.fillText(captchaText[i], 0, 0); ctx.restore();
             }
         }
 
         function verifyCaptcha() {
             const inputVal = document.getElementById('captchaInput').value.trim().toUpperCase();
-            
-            if(inputVal !== captchaText) {
-                alert("❌ Bạn nhập sai Captcha. Vui lòng thử lại!");
-                document.getElementById('captchaInput').value = "";
-                drawCaptcha(); 
-                return;
-            }
+            if(inputVal !== captchaText) { alert("❌ Sai Captcha!"); drawCaptcha(); return; }
 
-            // Tạo ngẫu nhiên chuỗi mã thưởng bí mật 6 số
-            const rewardCode = Math.floor(100000 + Math.random() * 900000).toString();
-            
-            // Mã hóa chuỗi kiểm tra bằng Base64 (btoa) để tool quét bộ nhớ máy không đọc được số thật
-            const encryptedCode = btoa(taskId + "_MAMAT_" + rewardCode);
-            localStorage.setItem('hash_code_' + taskId, encryptedCode);
+            const btn = document.querySelector('.btn-cap');
+            btn.innerText = "Đang kết nối Máy Chủ..."; btn.disabled = true;
 
-            // Ẩn bảng captcha, hiện mã số cho khách sao chép
-            document.getElementById('captcha-section').style.display = 'none';
-            document.getElementById('result-section').style.display = 'block';
-            document.getElementById('final-code').innerText = rewardCode;
+            // Cầm Token mang lên Server để lấy cái MÃ 6 SỐ
+            fetch(`${SCRIPT_URL}?action=getCode&token=${activeToken}`)
+            .then(res => res.json()).then(data => {
+                if(data.status === 'success') {
+                    document.getElementById('captcha-section').style.display = 'none';
+                    document.getElementById('result-section').style.display = 'block';
+                    document.getElementById('final-code').innerText = data.code; 
+                } else {
+                    showError(data.message);
+                }
+            }).catch(err => showError("Mất kết nối tới máy chủ bảo mật."));
         }
     </script>
 </body>
