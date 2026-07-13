@@ -512,7 +512,67 @@
                 });
             });
         }
+        
+// ============================================
+        // ĐIỂM DANH & RÚT TIỀN & ĐỔI MẬT KHẨU
+        // ============================================
+        
+        function executeRealCheckin() {
+            const btn = document.getElementById('btn-daily-checkin');
+            btn.innerText = "Đang xử lý..."; btn.disabled = true;
+            
+            fetch(`${SCRIPT_URL}?action=dailyCheckin&username=${encodeURIComponent(currentUser)}`)
+            .then(res => res.json()).then(data => {
+                showPopup(data.status === 'success' ? 'Thành công!' : 'Thông báo', data.message, data.status === 'success');
+                if (data.status === 'success') {
+                    btn.innerText = "Đã điểm danh ✅";
+                    loadDashboard(); // Cập nhật lại số tiền
+                } else {
+                    btn.innerText = "Điểm danh ngay (+50 Lúa)";
+                    btn.disabled = false;
+                }
+            }).catch(() => {
+                showPopup('Lỗi', 'Mất kết nối với máy chủ!', false);
+                btn.innerText = "Điểm danh ngay (+50 Lúa)";
+                btn.disabled = false;
+            });
+        }
 
+        function updateWdInputs() {
+            const method = document.getElementById('wd-method').value;
+            const lbl = document.getElementById('lbl-details'); 
+            const inp = document.getElementById('wd-details');
+            if(method === 'Thẻ Cào') { lbl.innerText = "Nhà mạng cần rút:"; inp.placeholder = "Ví dụ: Viettel, Vina..."; }
+            else if(method === 'MoMo') { lbl.innerText = "Số điện thoại MoMo + Tên chủ thẻ:"; inp.placeholder = "Ví dụ: 0912... - NGUYEN VAN A"; }
+            else { lbl.innerText = "Số tài khoản + Ngân hàng + Tên:"; inp.placeholder = "Ví dụ: Techcombank - 190... - NGUYEN VAN A"; }
+        }
+
+        function submitWithdraw() {
+            const method = document.getElementById('wd-method').value;
+            const details = document.getElementById('wd-details').value.trim();
+            const amount = document.getElementById('wd-amount').value;
+            if(!details || !amount) return showPopup("Thiếu thông tin", 'Vui lòng điền đủ dữ liệu!', false);
+            if(parseInt(amount) < 10000) return showPopup("Từ chối", 'Mức rút tối thiểu là 10.000 lúa!', false);
+            document.getElementById('btn-withdraw').innerText = 'Đang xử lý...';
+            fetch(`${SCRIPT_URL}?action=withdraw&username=${encodeURIComponent(currentUser)}&method=${encodeURIComponent(method)}&details=${encodeURIComponent(details)}&amount=${amount}`)
+            .then(res => res.json()).then(data => {
+                showPopup(data.status === 'success' ? 'Thành công' : 'Lỗi!', data.message, data.status === 'success');
+                document.getElementById('btn-withdraw').innerText = 'Rút ngay';
+                if(data.status === 'success') { document.getElementById('wd-details').value = ""; document.getElementById('wd-amount').value = ""; loadDashboard(); }
+            });
+        }
+
+        function submitChangePassword() {
+            const oldP = document.getElementById('old-pass').value; 
+            const newP = document.getElementById('new-pass').value;
+            if(!oldP || !newP) return showPopup("Chú ý", 'Vui lòng điền đủ mật khẩu!', false);
+            fetch(`${SCRIPT_URL}?action=changePassword&username=${encodeURIComponent(currentUser)}&oldPass=${encodeURIComponent(oldP)}&newPass=${encodeURIComponent(newP)}`)
+            .then(res => res.json()).then(data => {
+                showPopup(data.status === 'success' ? 'Thành công' : 'Lỗi', data.message, data.status === 'success');
+                if(data.status === 'success') { document.getElementById('old-pass').value = ""; document.getElementById('new-pass').value = ""; }
+            });
+        }
+        
         // ============================================
         // BỘ LỌC TÌM KIẾM NHIỆM VỤ
         // ============================================
