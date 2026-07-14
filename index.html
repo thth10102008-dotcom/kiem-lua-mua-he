@@ -7,64 +7,95 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root { --primary: #1E3A8A; --primary-light: #EFF6FF; --accent: #F59E0B; --success: #10B981; --danger: #EF4444; --bg-body: #F4F7FE; --white: #FFFFFF; --text-dark: #0F172A; --text-muted: #64748B; --border-color: #E2E8F0; --shadow-sm: 0 2px 10px rgba(0,0,0,0.04); --border-radius: 14px; }
-        body.dark-mode { --primary: #3B82F6; --primary-light: #1E3A8A; --bg-body: #0F172A; --white: #1E293B; --text-dark: #F8FAFC; --text-muted: #94A3B8; --border-color: #334155; }
+        :root { 
+            --primary: #1E3A8A; --primary-light: #EFF6FF; --accent: #F59E0B; --success: #10B981; 
+            --danger: #EF4444; --bg-body: #F4F7FE; --white: #FFFFFF; --text-dark: #0F172A; 
+            --text-muted: #64748B; --border-color: #E2E8F0; --shadow-sm: 0 2px 10px rgba(0,0,0,0.04); 
+            --border-radius: 14px; 
+        }
+        body.dark-mode { 
+            --primary: #3B82F6; --primary-light: #1E3A8A; --bg-body: #0F172A; --white: #1E293B; 
+            --text-dark: #F8FAFC; --text-muted: #94A3B8; --border-color: #334155; 
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg-body); color: var(--text-dark); display: flex; min-height: 100vh; overflow-x: hidden; transition: 0.3s; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-body); color: var(--text-dark); display: flex; min-height: 100vh; overflow-x: hidden; transition: background-color 0.3s, color 0.3s; }
         input, select { width: 100%; padding: 14px 16px; margin-top: 8px; margin-bottom: 16px; border: 1.5px solid var(--border-color); border-radius: 8px; font-family: 'Inter', sans-serif; font-size: 14px; background: var(--bg-body); color: var(--text-dark); }
         label { font-size: 13px; font-weight: 600; color: var(--text-dark); }
         .btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 24px; border-radius: 8px; cursor: pointer; border: none; font-weight: 600; font-size: 14px; transition: all 0.2s ease; }
-        .btn-primary { background-color: var(--primary); color: #fff; } .btn-success { background-color: var(--success); color: #fff; } .btn-danger { background-color: var(--danger); color: white; }
+        .btn-primary { background-color: var(--primary); color: #fff; } 
+        .btn-success { background-color: var(--success); color: #fff; } 
+        .btn-danger { background-color: var(--danger); color: white; }
+        
         aside.sidebar { width: 260px; background-color: var(--white); display: flex; flex-direction: column; padding: 24px 16px; box-shadow: var(--shadow-sm); position: fixed; height: 100vh; z-index: 10; border-right: 1px solid var(--border-color); }
-        .sidebar-logo { text-align: center; margin-bottom: 32px; } .sidebar-logo img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary-light); padding: 3px; }
+        .sidebar-logo { text-align: center; margin-bottom: 32px; } 
+        .sidebar-logo img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary-light); padding: 3px; }
         .sidebar-logo h1 { color: var(--primary); font-size: 1.1rem; margin-top: 12px; font-weight: 800; }
-        .sidebar-menu { list-style: none; } .sidebar-menu a { display: flex; align-items: center; padding: 12px 16px; border-radius: 8px; transition: 0.2s; font-weight: 600; color: var(--text-muted); font-size: 14px; margin-bottom: 6px; text-decoration: none;}
+        .sidebar-menu { list-style: none; } 
+        .sidebar-menu a { display: flex; align-items: center; padding: 12px 16px; border-radius: 8px; transition: 0.2s; font-weight: 600; color: var(--text-muted); font-size: 14px; margin-bottom: 6px; text-decoration: none;}
         .sidebar-menu a:hover, .sidebar-menu .active a { background-color: var(--primary-light); color: var(--primary); }
+        
         .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; width: 100%; background: var(--white); box-shadow: 0 -2px 10px rgba(0,0,0,0.05); z-index: 99; border-top: 1px solid var(--border-color); }
-        .bottom-nav ul { display: flex; width: 100%; list-style: none; padding: 0; margin:0;} .bottom-nav li { flex: 1; }
+        .bottom-nav ul { display: flex; width: 100%; list-style: none; padding: 0; margin: 0; } 
+        .bottom-nav li { flex: 1; }
         .bottom-nav a { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px 0; color: var(--text-muted); font-size: 11px; font-weight: 700; gap: 4px; text-decoration: none;}
+        
         main.content { margin-left: 260px; padding: 32px 40px; flex: 1; width: calc(100% - 260px); }
         header.top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; background: var(--white); padding: 12px 24px; border-radius: var(--border-radius); box-shadow: var(--shadow-sm); border: 1px solid var(--border-color); }
         .header-right { display: flex; align-items: center; gap: 16px; }
         .balance-badge { background-color: #FEF3C7; color: #B45309; padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 14px; }
-        .dark-mode-toggle, .music-toggle { background: var(--bg-body); border: 1px solid var(--border-color); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; }
+        .dark-mode-toggle, .music-toggle { background: var(--bg-body); border: 1px solid var(--border-color); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; transition: 0.3s; }
+        
         .marquee-container { background: #FEF3C7; padding: 12px 20px; border-radius: 8px; margin-bottom: 24px; overflow: hidden; white-space: nowrap; border-left: 4px solid var(--accent); }
         .marquee-text { display: inline-block; animation: marqueeScroll 15s linear infinite; font-size: 14px; font-weight: 700; color: #B45309; padding-left: 100%; }
         @keyframes marqueeScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
-        .content-section { display: none; animation: fadeIn 0.3s; } .content-section.active { display: block; }
+        
+        .content-section { display: none; animation: fadeIn 0.3s; } 
+        .content-section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
         .dashboard-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 32px; }
         .stat-card { background-color: var(--white); padding: 24px; border-radius: var(--border-radius); box-shadow: var(--shadow-sm); border-left: 4px solid var(--primary); border: 1px solid var(--border-color);}
-        .stat-card:nth-child(2) { border-left-color: var(--success); } .stat-card:nth-child(3) { border-left-color: var(--danger); }
+        .stat-card:nth-child(2) { border-left-color: var(--success); } 
+        .stat-card:nth-child(3) { border-left-color: var(--danger); }
         .stat-card-value { font-size: 28px; font-weight: 800; color: var(--text-dark); }
         .chart-container { background: var(--white); padding: 24px; border-radius: var(--border-radius); margin-bottom: 32px; border: 1px solid var(--border-color); }
+        
         .progress-box { background: var(--white); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; margin-bottom: 24px;}
         .progress-bar-bg { background: var(--bg-body); height: 12px; border-radius: 10px; overflow: hidden; margin-top: 10px;}
         .progress-bar-fill { background: linear-gradient(90deg, #10B981, #34D399); height: 100%; width: 0%; transition: width 1s;}
-        .streak-container { display: flex; gap: 10px; margin-top: 15px; justify-content: space-between; overflow-x: auto; }
+        
+        .streak-container { display: flex; gap: 10px; margin-top: 15px; justify-content: space-between; overflow-x: auto; padding-bottom: 10px; }
         .streak-day { display: flex; flex-direction: column; align-items: center; padding: 10px; background: var(--bg-body); border: 1px solid var(--border-color); border-radius: 12px; min-width: 60px; opacity: 0.5; }
         .streak-day.active { background: #DCFCE7; border-color: #22C55E; opacity: 1; }
         .streak-day span { font-weight: 800; font-size: 12px; margin-top: 5px;}
+        
         .timer-box { background: var(--primary-light); border: 1px solid var(--primary); border-radius: 16px; padding: 20px; text-align: center; margin-bottom: 24px;}
         .countdown-flex { display: flex; gap: 10px; align-items: center; justify-content: center; margin-top: 10px; }
         .cd-block { background: var(--white); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; min-width: 65px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
-        .cd-num { font-size: 22px; font-weight: 900; color: #EF4444; display: block;} .cd-label { font-size: 10px; color: var(--text-muted); font-weight: 800; }
+        .cd-num { font-size: 22px; font-weight: 900; color: #EF4444; display: block;} 
+        .cd-label { font-size: 10px; color: var(--text-muted); font-weight: 800; }
+        
         .task-list { display: flex; flex-direction: column; gap: 15px; }
         .task-group-card { background: var(--white); border: 1px solid var(--border-color); border-radius: 16px; overflow: hidden; }
         .task-group-header { display: flex; align-items: center; padding: 16px; background: var(--bg-body); cursor: pointer; }
         .tg-img { width: 50px; height: 50px; border-radius: 10px; object-fit: cover; margin-right: 12px;}
-        .tg-info h4 { font-size: 16px; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 6px; margin-bottom:5px;}
+        .tg-info h4 { font-size: 16px; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 6px; margin-bottom: 5px;}
         .featured-badge { background: #FEF08A; color: #854D0E; font-size: 10px; padding: 2px 6px; border-radius: 10px; }
-        .tg-body { padding: 0 16px; display: none; } .tg-body.show { display: block; }
+        .tg-body { padding: 0 16px; display: none; } 
+        .tg-body.show { display: block; }
         .tg-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px dashed var(--border-color); }
+        
         .leaderboard-list { display: flex; flex-direction: column; gap: 8px; margin-top: 12px;}
         .lb-item { display: flex; justify-content: space-between; background: var(--bg-body); padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); }
-        .lb-rank { font-weight: 900; color: var(--text-muted); width: 25px; } .lb-name { flex: 1; font-weight: 700; } .lb-points { font-weight: 800; color: var(--accent); }
+        .lb-rank { font-weight: 900; color: var(--text-muted); width: 25px; } 
+        .lb-name { flex: 1; font-weight: 700; } 
+        .lb-points { font-weight: 800; color: var(--accent); }
+        
         .form-box { background: var(--white); padding: 24px; border-radius: var(--border-radius); border: 1px solid var(--border-color); margin-bottom: 24px; }
         
-        /* CSS TAB LỊCH SỬ MỚI */
-        .history-tabs { display: flex; gap: 10px; margin-bottom: 15px; }
-        .history-tab-btn { padding: 10px 20px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--white); color: var(--text-muted); cursor: pointer; font-weight: 700; font-size: 14px; transition: 0.2s; }
+        /* CSS LỊCH SỬ TÁCH TAB */
+        .history-tabs { display: flex; gap: 10px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 5px;}
+        .history-tab-btn { padding: 10px 20px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--white); color: var(--text-muted); cursor: pointer; font-weight: 700; font-size: 14px; transition: 0.2s; white-space: nowrap;}
         .history-tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
         .history-table { width: 100%; border-collapse: collapse; min-width: 500px; }
         .history-table th, .history-table td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 14px; }
@@ -75,15 +106,18 @@
         .custom-popup-box { background: var(--white); padding: 30px; border-radius: 20px; text-align: center; width: 320px; border: 1px solid var(--border-color); position: relative;}
         .welcome-popup-box { max-width: 450px; border: 4px solid #D97706; background: #FFF8E7; padding: 30px; border-radius: 20px; text-align: center; position: relative; width: 90%;}
         .close-btn { position: absolute; top: -10px; right: -10px; font-size: 24px; cursor: pointer; color: white; background: #EF4444; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3); border: 2px solid white; font-weight: bold;}
+        
         .auth-layout-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-body); z-index: 100; display: flex; justify-content: center; align-items: center; }
         .auth-card { background-color: var(--white); padding: 35px; border-radius: 16px; width: 100%; max-width: 380px; border: 1px solid var(--border-color);}
+        
         @media (max-width: 768px) { aside.sidebar { display: none; } main.content { margin-left: 0; width: 100%; padding: 16px 16px 80px 16px; } .bottom-nav { display: flex; } }
     </style>
 </head>
 <body>
 
+    <!-- BỘ PHÁT NHẠC (Đã gán tên file bài hát mà bạn tải) -->
     <audio id="bg-music" loop>
-        <source src="nhac-nen.mp3" type="audio/mpeg">
+        <source src="thang-tu.mp3" type="audio/mpeg">
     </audio>
 
     <div id="welcome-popup" class="custom-popup-overlay" style="z-index: 999999;">
@@ -123,6 +157,7 @@
                 <li><a href="#" data-section="earn"><span>🌾</span>Nhiệm vụ</a></li>
                 <li><a href="#" data-section="withdraw"><span>🏦</span>Rút tiền</a></li>
                 <li><a href="#" data-section="history-section"><span>📝</span>Lịch sử</a></li>
+                <li><a href="#" data-section="profile"><span>👤</span>Hồ sơ</a></li>
             </ul>
         </nav>
 
@@ -271,6 +306,7 @@
         </main>
     </div>
 
+    <!-- AUTH SYSTEM -->
     <div class="auth-layout-container" id="auth-view">
         <div class="auth-card" id="auth-login-card">
             <h2 style="text-align: center; color: var(--primary); margin-bottom:15px;">ĐĂNG NHẬP</h2>
@@ -292,23 +328,45 @@
     </div>
 
     <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx1hP042D5mQFWTxqaVXDVDvCFX5clpUJ4Ej1tf4d26H5XvPptMRwEqPOE86u3NqwbK/exec'; // ĐIỀN LINK CỦA BẠN VÀO ĐÊÝ
+        // LƯU Ý: THAY ĐƯỜNG LINK APPS SCRIPT CỦA BẠN VÀO DƯỚI ĐÂY NHA (Ví dụ: https://script.google.com/macros/s/.../exec)
+        const SCRIPT_URL = 'DÁN_LINK_APPS_SCRIPT_WEB_APP_MỚI_CỦA_BẠN_VÀO_ĐÂY'; 
+        
         let currentUser = ""; let incomeChartInstance = null; let countdownInterval = null;
         let isMusicPlaying = false;
 
         function toggleMusic() {
-            const audio = document.getElementById('bg-music'); const btn = document.getElementById('music-btn');
+            const audio = document.getElementById('bg-music'); 
+            const btn = document.getElementById('music-btn');
             if (!audio) return;
-            if (isMusicPlaying) { audio.pause(); isMusicPlaying = false; btn.innerText = '🔇'; } 
-            else { audio.volume = 0.5; audio.play().then(() => { isMusicPlaying = true; btn.innerText = '🎵'; }).catch(e => console.log(e)); }
+            if (isMusicPlaying) { 
+                audio.pause(); 
+                isMusicPlaying = false; 
+                btn.innerText = '🔇'; 
+            } else { 
+                audio.volume = 0.5; 
+                audio.play().then(() => { 
+                    isMusicPlaying = true; 
+                    btn.innerText = '🎵'; 
+                }).catch(e => console.log(e)); 
+            }
         }
 
         function playMusic() {
-            const audio = document.getElementById('bg-music'); const btn = document.getElementById('music-btn');
-            if (audio && !isMusicPlaying) { audio.volume = 0.5; audio.play().then(() => { isMusicPlaying = true; btn.innerText = '🎵'; }).catch(e => console.log(e)); }
+            const audio = document.getElementById('bg-music'); 
+            const btn = document.getElementById('music-btn');
+            if (audio && !isMusicPlaying) { 
+                audio.volume = 0.5; 
+                audio.play().then(() => { 
+                    isMusicPlaying = true; 
+                    btn.innerText = '🎵'; 
+                }).catch(e => console.log(e)); 
+            }
         }
 
-        function closeWelcomePopup() { document.getElementById('welcome-popup').classList.remove('show'); playMusic(); }
+        function closeWelcomePopup() { 
+            document.getElementById('welcome-popup').classList.remove('show'); 
+            playMusic(); 
+        }
 
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
@@ -354,26 +412,42 @@
         }
 
         function login() {
-            const u = document.getElementById('log-user').value.trim(); const p = document.getElementById('log-pass').value;
+            const u = document.getElementById('log-user').value.trim(); 
+            const p = document.getElementById('log-pass').value;
             if(!u || !p) return;
             fetch(`${SCRIPT_URL}?action=login&username=${encodeURIComponent(u)}&password=${encodeURIComponent(p)}`)
             .then(res => res.json()).then(data => {
-                if(data.status === 'success') { currentUser = data.username; localStorage.setItem('remembered_user', currentUser); enterApplication(); playMusic(); } 
-                else { document.getElementById('login-msg').innerText = data.message; }
+                if(data.status === 'success') { 
+                    currentUser = data.username; 
+                    localStorage.setItem('remembered_user', currentUser); 
+                    enterApplication(); 
+                    playMusic(); 
+                } else { 
+                    document.getElementById('login-msg').innerText = data.message; 
+                }
             });
         }
 
         function register() {
-            const u = document.getElementById('reg-user').value.trim(); const e = document.getElementById('reg-email').value.trim(); const p = document.getElementById('reg-pass').value;
+            const u = document.getElementById('reg-user').value.trim(); 
+            const e = document.getElementById('reg-email').value.trim(); 
+            const p = document.getElementById('reg-pass').value;
             if(!u || !e || !p) return;
             fetch(`${SCRIPT_URL}?action=register&username=${encodeURIComponent(u)}&email=${encodeURIComponent(e)}&password=${encodeURIComponent(p)}`)
             .then(res => res.json()).then(data => {
-                if(data.status === 'success') { toggleAuth(false); showPopup('Thành công', data.message, true); }
-                else { document.getElementById('register-msg').innerText = data.message; }
+                if(data.status === 'success') { 
+                    toggleAuth(false); 
+                    showPopup('Thành công', data.message, true); 
+                } else { 
+                    document.getElementById('register-msg').innerText = data.message; 
+                }
             });
         }
 
-        function logoutApp() { localStorage.removeItem('remembered_user'); location.reload(); }
+        function logoutApp() { 
+            localStorage.removeItem('remembered_user'); 
+            location.reload(); 
+        }
 
         function enterApplication() {
             document.getElementById('auth-view').style.display = 'none';
@@ -381,7 +455,8 @@
             document.getElementById('welcome-username').innerText = currentUser;
             document.getElementById('prof-username').innerText = currentUser;
             document.getElementById('ref-link-input').value = `${window.location.origin}${window.location.pathname}?ref=${currentUser}`;
-            startCountdown(); loadDashboard();
+            startCountdown(); 
+            loadDashboard();
         }
 
         function openSection(id) {
@@ -389,14 +464,16 @@
             document.querySelectorAll(`.sidebar-menu a[data-section="${id}"]`).forEach(matched => { matched.classList.add('active'); if(matched.parentElement.tagName === 'LI') matched.parentElement.classList.add('active');});
             document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
             document.getElementById(id).classList.add('active');
+            
             if(id === 'dashboard') loadDashboard();
             if(id === 'earn') loadTasks();
-            if(id === 'history-section') loadDashboard(); // Tự động đồng bộ lịch sử khi mở tab
+            if(id === 'history-section') loadDashboard(); 
         }
 
-        document.querySelectorAll('.sidebar-menu a').forEach(a => { a.onclick = (e) => { e.preventDefault(); openSection(a.getAttribute('data-section')); } });
+        document.querySelectorAll('.sidebar-menu a').forEach(a => { 
+            a.onclick = (e) => { e.preventDefault(); openSection(a.getAttribute('data-section')); } 
+        });
 
-        // CHUYỂN ĐỔI TAB TRÊN WEB CHO NGƯỜI DÙNG
         function switchHistoryTab(tabName) {
             document.querySelectorAll('.history-tab-btn').forEach(btn => btn.classList.remove('active'));
             if (tabName === 'completed') {
@@ -433,20 +510,25 @@
                 let labels = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ Nhật"];
                 if(incomeChartInstance) incomeChartInstance.destroy();
                 const ctx = document.getElementById('incomeChart').getContext('2d');
-                incomeChartInstance = new Chart(ctx, { type: 'line', data: { labels: labels, datasets: [{ data: [1200, 1900, 800, 1500, 2000, 3400, 4100], borderColor: '#10B981', backgroundColor: 'rgba(16, 185, 129, 0.05)', fill: true, tension: 0.3 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } } });
+                incomeChartInstance = new Chart(ctx, { 
+                    type: 'line', 
+                    data: { labels: labels, datasets: [{ data: [1200, 1900, 800, 1500, 2000, 3400, 4100], borderColor: '#10B981', backgroundColor: 'rgba(16, 185, 129, 0.05)', fill: true, tension: 0.3 }] }, 
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } } 
+                });
 
-                // FIX TRIỆT ĐỂ: Hiển thị đúng thứ tự cột của Lịch sử nhiệm vụ (Completed)
+                // Tải Lịch sử Nhiệm vụ
                 const tBody = document.getElementById('table-task-body');
                 tBody.innerHTML = data.taskHistory.length === 0 ? '<tr><td colspan="3">Chưa có bản ghi hoạt động nào.</td></tr>' : '';
                 data.taskHistory.forEach(h => { 
+                    let taskNameDisplay = h.taskId === "Điểm danh ngày" ? "Điểm danh hàng ngày" : "Nhiệm vụ " + h.taskId;
                     tBody.innerHTML += `<tr>
-                        <td style="font-weight: 600; color: var(--primary);">Nhiệm vụ ${h.taskId}</td>
+                        <td style="font-weight: 600; color: var(--primary);">${taskNameDisplay}</td>
                         <td>${h.time}</td>
                         <td style="color:var(--success);font-weight:800;">+${h.reward} Lúa</td>
                     </tr>`; 
                 });
 
-                // Tải danh sách Lịch sử rút tiền (Withdrawals)
+                // Tải Lịch sử Rút tiền
                 const wBody = document.getElementById('table-withdraw-body');
                 wBody.innerHTML = data.withdrawHistory.length === 0 ? '<tr><td colspan="5">Chưa có giao dịch rút tiền nào.</td></tr>' : '';
                 data.withdrawHistory.forEach(w => {
@@ -486,7 +568,8 @@
 
                 let html = '';
                 Object.keys(grouped).forEach((key, idx) => {
-                    const g = grouped[key]; const isFeatured = idx < 1 ? '<span class="featured-badge">⭐ Nổi bật</span>' : '';
+                    const g = grouped[key]; 
+                    const isFeatured = idx < 1 ? '<span class="featured-badge">⭐ Nổi bật</span>' : '';
                     html += `
                     <div class="task-group-card">
                         <div class="task-group-header" onclick="this.nextElementSibling.classList.toggle('show')">
@@ -508,10 +591,16 @@
             fetch(`${SCRIPT_URL}?action=initTask&username=${encodeURIComponent(currentUser)}&taskId=${encodeURIComponent(id)}`)
             .then(res => res.json()).then(data => {
                 if(data.status === 'success') {
-                    btn.innerText = "Đang mở link nhiệm vụ..."; window.open(data.shortLink, '_blank'); 
+                    btn.innerText = "Đang mở link nhiệm vụ..."; 
+                    window.open(data.shortLink, '_blank'); 
                     setTimeout(() => { btn.innerText = "Đang chờ vượt link..."; }, 2000);
-                } else { showPopup('Thất bại', 'Không phản hồi được cấu hình dịch vụ API!', false); btn.innerText = "Thử lại"; btn.disabled = false; }
-            }).catch(() => { btn.innerText = "Lỗi mạng!"; btn.disabled = false; });
+                } else { 
+                    showPopup('Thất bại', 'Không phản hồi được cấu hình dịch vụ API!', false); 
+                    btn.innerText = "Thử lại"; btn.disabled = false; 
+                }
+            }).catch(() => { 
+                btn.innerText = "Lỗi mạng!"; btn.disabled = false; 
+            });
         }
 
         function executeRealCheckin() { 
@@ -520,21 +609,28 @@
             fetch(`${SCRIPT_URL}?action=dailyCheckin&username=${encodeURIComponent(currentUser)}`)
             .then(res => res.json()).then(data => {
                 showPopup(data.status === 'success' ? 'Thành công!' : 'Thông báo', data.message, data.status === 'success');
-                if (data.status === 'success') { btn.innerText = "Đã điểm danh ✅"; loadDashboard(); } 
-                else { btn.innerText = "Điểm danh ngay (+50 Lúa)"; btn.disabled = false; }
-            }).catch(() => { showPopup('Lỗi', 'Mất kết nối với máy chủ!', false); btn.innerText = "Điểm danh ngay (+50 Lúa)"; btn.disabled = false; });
+                if (data.status === 'success') { 
+                    btn.innerText = "Đã điểm danh ✅"; 
+                    loadDashboard(); 
+                } else { 
+                    btn.innerText = "Điểm danh ngay (+50 Lúa)"; btn.disabled = false; 
+                }
+            }).catch(() => { 
+                showPopup('Lỗi', 'Mất kết nối với máy chủ!', false); 
+                btn.innerText = "Điểm danh ngay (+50 Lúa)"; btn.disabled = false; 
+            });
         }
 
         function updateWdInputs() {
             const method = document.getElementById('wd-method').value;
-            const lbl = document.getElementById('lbl-details'); const inp = document.getElementById('wd-details');
+            const lbl = document.getElementById('lbl-details'); 
+            const inp = document.getElementById('wd-details');
             if(method === 'Thẻ Cào') { lbl.innerText = "Nhà mạng cần rút:"; inp.placeholder = "Ví dụ: Viettel, Vina..."; }
             else if(method === 'MoMo') { lbl.innerText = "Số ĐT MoMo + Tên chủ thẻ:"; inp.placeholder = "Ví dụ: 0912... - NGUYEN VAN A"; }
             else if(method === 'Garena') { lbl.innerText = "Mệnh giá thẻ Garena:"; inp.placeholder = "Ví dụ: Thẻ Garena 20k"; }
             else { lbl.innerText = "Số tài khoản + Ngân hàng + Tên:"; inp.placeholder = "Ví dụ: Techcombank - 190... - NGUYEN VAN A"; }
         }
 
-        // TÍNH NĂNG GỬI LỆNH RÚT LÚA THẬT LÊN APPS SCRIPT
         function submitWithdraw() {
             const method = document.getElementById('wd-method').value; 
             const details = document.getElementById('wd-details').value.trim(); 
@@ -553,7 +649,7 @@
                 if (data.status === 'success') {
                     document.getElementById('wd-details').value = ""; 
                     document.getElementById('wd-amount').value = "";
-                    loadDashboard(); // Load lại để trừ tiền và cập nhật lịch sử rút
+                    loadDashboard(); 
                 }
             }).catch(() => {
                 btn.innerText = 'Xác Nhận Rút'; btn.disabled = false;
