@@ -61,8 +61,15 @@
         .lb-item { display: flex; justify-content: space-between; background: var(--bg-body); padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); }
         .lb-rank { font-weight: 900; color: var(--text-muted); width: 25px; } .lb-name { flex: 1; font-weight: 700; } .lb-points { font-weight: 800; color: var(--accent); }
         .form-box { background: var(--white); padding: 24px; border-radius: var(--border-radius); border: 1px solid var(--border-color); margin-bottom: 24px; }
+        
+        /* CSS TAB LỊCH SỬ MỚI */
+        .history-tabs { display: flex; gap: 10px; margin-bottom: 15px; }
+        .history-tab-btn { padding: 10px 20px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--white); color: var(--text-muted); cursor: pointer; font-weight: 700; font-size: 14px; transition: 0.2s; }
+        .history-tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
         .history-table { width: 100%; border-collapse: collapse; min-width: 500px; }
         .history-table th, .history-table td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 14px; }
+        .history-table th { background: var(--primary-light); color: var(--primary); font-weight: 700; }
+        
         .custom-popup-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 99999; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.2s; }
         .custom-popup-overlay.show { opacity: 1; pointer-events: all; }
         .custom-popup-box { background: var(--white); padding: 30px; border-radius: 20px; text-align: center; width: 320px; border: 1px solid var(--border-color); position: relative;}
@@ -115,7 +122,7 @@
                 <li><a href="#" data-section="dashboard" class="active"><span>📊</span>Trang chủ</a></li>
                 <li><a href="#" data-section="earn"><span>🌾</span>Nhiệm vụ</a></li>
                 <li><a href="#" data-section="withdraw"><span>🏦</span>Rút tiền</a></li>
-                <li><a href="#" data-section="profile"><span>👤</span>Hồ sơ</a></li>
+                <li><a href="#" data-section="history-section"><span>📝</span>Lịch sử</a></li>
             </ul>
         </nav>
 
@@ -224,11 +231,23 @@
             </section>
 
             <section id="history-section" class="content-section">
-                <h3>📝 Sổ Cái Lịch Sử Giao Dịch</h3><br>
-                <div style="overflow-x: auto; background: var(--white); border-radius: 8px; border: 1px solid var(--border-color);">
+                <h3>📝 Quản Lý Sổ Cái Lịch Sử</h3><br>
+                <div class="history-tabs">
+                    <button class="history-tab-btn active" id="btn-tab-completed" onclick="switchHistoryTab('completed')">🌾 Lịch Sử Làm Nhiệm Vụ</button>
+                    <button class="history-tab-btn" id="btn-tab-withdrawals" onclick="switchHistoryTab('withdrawals')">🏦 Lịch Sử Rút Lúa</button>
+                </div>
+
+                <div id="table-completed-wrapper" style="overflow-x: auto; background: var(--white); border-radius: 8px; border: 1px solid var(--border-color);">
                     <table class="history-table">
-                        <thead><tr><th>Nhiệm vụ</th><th>Thời gian</th><th>Lúa thưởng</th></tr></thead>
-                        <tbody id="table-task-body"><tr><td colspan="3">Đang đồng bộ...</td></tr></tbody>
+                        <thead><tr><th>Tên nhiệm vụ</th><th>Mốc thời gian</th><th>Lúa thưởng</th></tr></thead>
+                        <tbody id="table-task-body"><tr><td colspan="3">Đang đồng bộ dữ liệu...</td></tr></tbody>
+                    </table>
+                </div>
+
+                <div id="table-withdrawals-wrapper" style="overflow-x: auto; background: var(--white); border-radius: 8px; border: 1px solid var(--border-color); display: none;">
+                    <table class="history-table">
+                        <thead><tr><th>Hình thức</th><th>Thông tin chi tiết</th><th>Số Lúa rút</th><th>Trạng thái</th><th>Thời gian</th></tr></thead>
+                        <tbody id="table-withdraw-body"><tr><td colspan="5">Chưa có giao dịch rút tiền nào.</td></tr></tbody>
                     </table>
                 </div>
             </section>
@@ -273,7 +292,7 @@
     </div>
 
     <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx1hP042D5mQFWTxqaVXDVDvCFX5clpUJ4Ej1tf4d26H5XvPptMRwEqPOE86u3NqwbK/exec'; // ĐIỀN LINK CỦA BẠN VÀO ĐÂY
+        const SCRIPT_URL = 'DÁN_LINK_APPS_SCRIPT_WEB_APP_MỚI_CỦA_BẠN'; // ĐIỀN LINK CỦA BẠN VÀO ĐÊÝ
         let currentUser = ""; let incomeChartInstance = null; let countdownInterval = null;
         let isMusicPlaying = false;
 
@@ -372,9 +391,24 @@
             document.getElementById(id).classList.add('active');
             if(id === 'dashboard') loadDashboard();
             if(id === 'earn') loadTasks();
+            if(id === 'history-section') loadDashboard(); // Tự động đồng bộ lịch sử khi mở tab
         }
 
         document.querySelectorAll('.sidebar-menu a').forEach(a => { a.onclick = (e) => { e.preventDefault(); openSection(a.getAttribute('data-section')); } });
+
+        // CHUYỂN ĐỔI TAB TRÊN WEB CHO NGƯỜI DÙNG
+        function switchHistoryTab(tabName) {
+            document.querySelectorAll('.history-tab-btn').forEach(btn => btn.classList.remove('active'));
+            if (tabName === 'completed') {
+                document.getElementById('btn-tab-completed').classList.add('active');
+                document.getElementById('table-completed-wrapper').style.display = 'block';
+                document.getElementById('table-withdrawals-wrapper').style.display = 'none';
+            } else {
+                document.getElementById('btn-tab-withdrawals').classList.add('active');
+                document.getElementById('table-completed-wrapper').style.display = 'none';
+                document.getElementById('table-withdrawals-wrapper').style.display = 'block';
+            }
+        }
 
         function loadDashboard() {
             fetch(`${SCRIPT_URL}?action=getUserData&username=${encodeURIComponent(currentUser)}`)
@@ -401,9 +435,30 @@
                 const ctx = document.getElementById('incomeChart').getContext('2d');
                 incomeChartInstance = new Chart(ctx, { type: 'line', data: { labels: labels, datasets: [{ data: [1200, 1900, 800, 1500, 2000, 3400, 4100], borderColor: '#10B981', backgroundColor: 'rgba(16, 185, 129, 0.05)', fill: true, tension: 0.3 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } } });
 
+                // FIX TRIỆT ĐỂ: Hiển thị đúng thứ tự cột của Lịch sử nhiệm vụ (Completed)
                 const tBody = document.getElementById('table-task-body');
-                tBody.innerHTML = data.taskHistory.length === 0 ? '<tr><td colspan="3">Chưa có bản ghi hoạt động</td></tr>' : '';
-                data.taskHistory.forEach(h => { tBody.innerHTML += `<tr><td>Nhiệm vụ ${h.taskId}</td><td>${new Date(h.time).toLocaleDateString('vi-VN')}</td><td style="color:var(--success);font-weight:700;">+${h.reward}</td></tr>`; });
+                tBody.innerHTML = data.taskHistory.length === 0 ? '<tr><td colspan="3">Chưa có bản ghi hoạt động nào.</td></tr>' : '';
+                data.taskHistory.forEach(h => { 
+                    tBody.innerHTML += `<tr>
+                        <td style="font-weight: 600; color: var(--primary);">Nhiệm vụ ${h.taskId}</td>
+                        <td>${h.time}</td>
+                        <td style="color:var(--success);font-weight:800;">+${h.reward} Lúa</td>
+                    </tr>`; 
+                });
+
+                // Tải danh sách Lịch sử rút tiền (Withdrawals)
+                const wBody = document.getElementById('table-withdraw-body');
+                wBody.innerHTML = data.withdrawHistory.length === 0 ? '<tr><td colspan="5">Chưa có giao dịch rút tiền nào.</td></tr>' : '';
+                data.withdrawHistory.forEach(w => {
+                    let badgeColor = w.status.includes('Duyệt') || w.status.includes('thành công') ? 'var(--success)' : 'var(--accent)';
+                    wBody.innerHTML += `<tr>
+                        <td><b>${w.method}</b></td>
+                        <td>${w.details}</td>
+                        <td style="font-weight: 700; color: var(--danger);">${Number(w.amount).toLocaleString()}</td>
+                        <td style="font-weight: 800; color: ${badgeColor};">${w.status}</td>
+                        <td>${w.time}</td>
+                    </tr>`;
+                });
             });
         }
 
@@ -479,17 +534,31 @@
             else { lbl.innerText = "Số tài khoản + Ngân hàng + Tên:"; inp.placeholder = "Ví dụ: Techcombank - 190... - NGUYEN VAN A"; }
         }
 
+        // TÍNH NĂNG GỬI LỆNH RÚT LÚA THẬT LÊN APPS SCRIPT
         function submitWithdraw() {
-            const method = document.getElementById('wd-method').value; const details = document.getElementById('wd-details').value.trim(); const amount = document.getElementById('wd-amount').value;
+            const method = document.getElementById('wd-method').value; 
+            const details = document.getElementById('wd-details').value.trim(); 
+            const amount = document.getElementById('wd-amount').value;
+            
             if(!details || !amount) return showPopup("Thiếu thông tin", 'Vui lòng điền đủ dữ liệu!', false);
             if(parseInt(amount) < 10000) return showPopup("Từ chối", 'Mức rút tối thiểu là 10.000 lúa!', false);
             
-            document.getElementById('btn-withdraw').innerText = 'Đang gửi yêu cầu...';
-            setTimeout(() => {
-                showPopup("Thành công", "Đã gửi yêu cầu rút tiền cho Admin duyệt!", true);
-                document.getElementById('btn-withdraw').innerText = 'Xác Nhận Rút';
-                document.getElementById('wd-details').value = ""; document.getElementById('wd-amount').value = "";
-            }, 1000);
+            const btn = document.getElementById('btn-withdraw');
+            btn.innerText = 'Đang xử lý...'; btn.disabled = true;
+            
+            fetch(`${SCRIPT_URL}?action=submitWithdraw&username=${encodeURIComponent(currentUser)}&method=${encodeURIComponent(method)}&details=${encodeURIComponent(details)}&amount=${amount}`)
+            .then(res => res.json()).then(data => {
+                btn.innerText = 'Xác Nhận Rút'; btn.disabled = false;
+                showPopup(data.status === 'success' ? 'Thành công!' : 'Lỗi!', data.message, data.status === 'success');
+                if (data.status === 'success') {
+                    document.getElementById('wd-details').value = ""; 
+                    document.getElementById('wd-amount').value = "";
+                    loadDashboard(); // Load lại để trừ tiền và cập nhật lịch sử rút
+                }
+            }).catch(() => {
+                btn.innerText = 'Xác Nhận Rút'; btn.disabled = false;
+                showPopup('Lỗi', 'Yêu cầu của bạn không gửi đi được!', false);
+            });
         }
 
         function submitChangePassword() { showPopup("Thông báo", "Tính năng đổi mật khẩu đang bảo trì, vui lòng liên hệ Admin.", false); }
