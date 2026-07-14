@@ -19,12 +19,14 @@
     <div class="box" id="content-box">
         <h2 id="title-status" style="color: #1E3A8A; margin: 0; font-size:22px;">ĐANG KIỂM TRA PHIÊN</h2>
         <div class="loader" id="spinner"></div>
-        <p class="status-msg" id="msg-status">Đang thiết lập kênh mã hóa, vui lòng giữ nguyên màn hình, hệ thống đang thực hiện quét dữ liệu bảo mật vượt link...</p>
+        <p class="status-msg" id="msg-status">Hệ thống đang thực hiện quét dữ liệu bảo mật vượt link, vui lòng không tắt tab này...</p>
         <button class="btn-home" id="btn-back" onclick="window.close()">ĐÓNG TRANG VÀ QUAY LẠI</button>
     </div>
 
     <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx1hP042D5mQFWTxqaVXDVDvCFX5clpUJ4Ej1tf4d26H5XvPptMRwEqPOE86u3NqwbK/exec'; // ĐIỀN LINK APPS SCRIPT VÀO ĐÂY
+        // DÁN ĐƯỜNG LINK APPS SCRIPT WEB APP MỚI CỦA BẠN VÀO DƯỚI ĐÂY
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx1hP042D5mQFWTxqaVXDVDvCFX5clpUJ4Ej1tf4d26H5XvPptMRwEqPOE86u3NqwbK/exec'; 
+        
         const urlParams = new URLSearchParams(window.location.search);
         const token = urlParams.get('token');
 
@@ -36,14 +38,14 @@
         if (!token) {
             titleEl.innerText = "❌ TỪ CHỐI TRUY CẬP"; titleEl.style.color = "#EF4444";
             spinnerEl.style.display = "none";
-            msgEl.innerText = "Không phát hiện mã phiên xác thực. Bạn không thể truy cập trực tiếp trang tính này.";
+            msgEl.innerText = "Không phát hiện mã phiên xác thực. Bạn không thể truy cập trực tiếp trang này.";
         } else {
             fetch(`${SCRIPT_URL}?action=verifyToken&token=${encodeURIComponent(token)}`)
             .then(res => res.json()).then(data => {
                 spinnerEl.style.display = "none"; btnEl.style.display = "block";
                 if (data.status === 'success') {
                     titleEl.innerText = "✅ THÀNH CÔNG!"; titleEl.style.color = "#10B981";
-                    msgEl.innerHTML = `<b style="color:#0F172A;">${data.message}</b><br><br>Hệ thống đã ghi nhận. Số dư tài khoản lúa của bạn đã được cập nhật thành công!`;
+                    msgEl.innerHTML = `<b style="color:#0F172A;">${data.message}</b><br><br>Hệ thống đã ghi nhận thành công, số dư của bạn đã được cập nhật tự động!`;
                 } else {
                     titleEl.innerText = "🚫 THẤT BẠI!"; titleEl.style.color = "#EF4444";
                     msgEl.innerText = data.message;
@@ -51,7 +53,7 @@
             }).catch(() => {
                 spinnerEl.style.display = "none"; btnEl.style.display = "block";
                 titleEl.innerText = "💥 LỖI KẾT NỐI"; titleEl.style.color = "#EF4444";
-                msgEl.innerText = "Đường truyền kết nối mạng tới máy chủ bị gián đoạn.";
+                msgEl.innerText = "Đường truyền kết nối mạng tới máy chủ Google Apps Script bị gián đoạn.";
             });
         }
     </script>
