@@ -115,7 +115,6 @@
 </head>
 <body>
 
-    <!-- BỘ PHÁT NHẠC (Đã gán tên file bài hát mà bạn tải) -->
     <audio id="bg-music" loop>
         <source src="thang-tu.mp3" type="audio/mpeg">
     </audio>
@@ -168,7 +167,7 @@
                     <div class="balance-badge">🌾 <span id="header-points">0</span></div>
                     <div class="music-toggle" onclick="toggleMusic()" id="music-btn" title="Bật/Tắt Nhạc">🔇</div>
                     <div class="dark-mode-toggle" onclick="toggleDarkMode()">🌙</div>
-                    <img src="101036-1215264.jpg" style="width: 40px; height: 40px; border-radius: 50%; cursor: pointer; object-fit: cover;" onclick="logoutApp()" onerror="this.src='https://via.placeholder.com/40'">
+                    <img src="101036-1215264.jpg" style="width: 40px; height: 40px; border-radius: 50%; cursor: pointer; object-fit: cover; border: 2px solid var(--primary);" onclick="openSection('profile')" title="Bấm vào để mở Hồ Sơ" onerror="this.src='https://via.placeholder.com/40'">
                 </div>
             </header>
 
@@ -247,6 +246,7 @@
                     <select id="wd-method" onchange="updateWdInputs()">
                         <option value="Thẻ Cào">Đổi Thẻ Cào Điện Thoại</option>
                         <option value="MoMo">Chuyển Ví MoMo</option>
+                        <option value="ZaloPay">Chuyển Ví ZaloPay</option>
                         <option value="Ngân Hàng">Chuyển Khoản Ngân Hàng</option>
                         <option value="Garena">Đổi Thẻ Garena</option>
                     </select>
@@ -306,7 +306,6 @@
         </main>
     </div>
 
-    <!-- AUTH SYSTEM -->
     <div class="auth-layout-container" id="auth-view">
         <div class="auth-card" id="auth-login-card">
             <h2 style="text-align: center; color: var(--primary); margin-bottom:15px;">ĐĂNG NHẬP</h2>
@@ -328,11 +327,16 @@
     </div>
 
     <script>
-        // LƯU Ý: THAY ĐƯỜNG LINK APPS SCRIPT CỦA BẠN VÀO DƯỚI ĐÂY NHA (Ví dụ: https://script.google.com/macros/s/.../exec)
+        // MÌNH ĐÃ GẮN ĐÚNG LINK SCRIPT CỦA BẠN VÀO ĐÂY RỒI NHÉ
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx1hP042D5mQFWTxqaVXDVDvCFX5clpUJ4Ej1tf4d26H5XvPptMRwEqPOE86u3NqwbK/exec'; 
         
-        let currentUser = ""; let incomeChartInstance = null; let countdownInterval = null;
+        let currentUser = ""; 
+        let incomeChartInstance = null; 
+        let countdownInterval = null;
         let isMusicPlaying = false;
+        
+        // Mảng lưu ID các nhiệm vụ đã làm xong trong ngày
+        let completedTodayList = []; 
 
         function toggleMusic() {
             const audio = document.getElementById('bg-music'); 
@@ -456,7 +460,7 @@
             document.getElementById('prof-username').innerText = currentUser;
             document.getElementById('ref-link-input').value = `${window.location.origin}${window.location.pathname}?ref=${currentUser}`;
             startCountdown(); 
-            loadDashboard();
+            loadDashboard(); // Sẽ tải dữ liệu đồng thời lấy mảng nhiệm vụ đã xong
         }
 
         function openSection(id) {
@@ -490,6 +494,10 @@
         function loadDashboard() {
             fetch(`${SCRIPT_URL}?action=getUserData&username=${encodeURIComponent(currentUser)}`)
             .then(r => r.json()).then(data => {
+                
+                // LƯU LẠI NHỮNG NHIỆM VỤ ĐÃ LÀM VÀO MẢNG TRÊN WEB
+                completedTodayList = data.completedToday || [];
+
                 document.getElementById('header-points').innerText = Number(data.points).toLocaleString();
                 document.getElementById('db-points').innerText = Number(data.points).toLocaleString();
                 document.getElementById('db-completed-count').innerText = data.completedCount;
@@ -520,7 +528,7 @@
                 const tBody = document.getElementById('table-task-body');
                 tBody.innerHTML = data.taskHistory.length === 0 ? '<tr><td colspan="3">Chưa có bản ghi hoạt động nào.</td></tr>' : '';
                 data.taskHistory.forEach(h => { 
-                    let taskNameDisplay = h.taskId === "Điểm danh ngày" ? "Điểm danh hàng ngày" : "Nhiệm vụ " + h.taskId;
+                    let taskNameDisplay = h.taskId === "daily_checkin" ? "Điểm danh hàng ngày" : "Nhiệm vụ " + h.taskId;
                     tBody.innerHTML += `<tr>
                         <td style="font-weight: 600; color: var(--primary);">${taskNameDisplay}</td>
                         <td>${h.time}</td>
@@ -554,13 +562,29 @@
 
         function loadTasks() {
             const box = document.getElementById('task-container');
-            box.innerHTML = '<p>Đang liên kết dữ liệu máy chủ...</p>';
-            fetch(`${SCRIPT_URL}?action=getTasks&username=${encodeURIComponent(currentUser)}`)
-            .then(r => r.json()).then(tasks => {
-                if(tasks.length === 0) return box.innerHTML = '<p style="color:var(--success);font-weight:bold;">🎉 Hoàn thành xuất sắc toàn bộ nhiệm vụ ngày hôm nay!</p>';
-                tasks.sort(() => Math.random() - 0.5);
+            box.innerHTML = '<p>Đang tải danh sách nhiệm vụ...</p>';
+            
+            // Lấy lại dữ liệu người dùng để quét chắc chắn nhiệm vụ nào đã làm
+            fetch(`${SCRIPT_URL}?action=getUserData&username=${encodeURIComponent(currentUser)}`)
+            .then(r => r.json())
+            .then(userData => {
+                completedTodayList = userData.completedToday || [];
+                
+                // Sau đó mới lấy danh sách tất cả nhiệm vụ
+                return fetch(`${SCRIPT_URL}?action=getTasks`);
+            })
+            .then(r => r.json())
+            .then(tasks => {
+                // TỰ ĐỘNG LỌC: Bỏ qua những nhiệm vụ nằm trong danh sách đã làm hôm nay
+                const availableTasks = tasks.filter(t => !completedTodayList.includes(t.id.toString()));
+
+                if(availableTasks.length === 0) {
+                    return box.innerHTML = '<p style="color:var(--success);font-weight:bold;font-size:16px;">🎉 Bạn đã hoàn thành xuất sắc toàn bộ nhiệm vụ ngày hôm nay! Hãy quay lại vào ngày mai để nhận link mới nhé.</p>';
+                }
+
+                // Không sort (đảo ngẫu nhiên) nữa để giữ đúng thứ tự từ Google Sheet
                 const grouped = {};
-                tasks.forEach(t => {
+                availableTasks.forEach(t => {
                     const key = `${t.name}_${t.reward}`;
                     if(!grouped[key]) grouped[key] = { name: t.name, reward: t.reward, img: t.img, list: [] };
                     grouped[key].list.push(t);
@@ -577,7 +601,7 @@
                             <div class="tg-info"><h4>${g.name} ${isFeatured}</h4><p>+${g.reward} Lúa/lượt • Số link khả dụng: ${g.list.length}</p></div>
                         </div>
                         <div class="tg-body">
-                            ${g.list.map((t, index) => `<div class="tg-row"><span>Liên kết số ${index + 1}</span><button class="btn btn-primary" id="btn-action-${t.id}" onclick="openTaskLink('${t.id}')">Bắt đầu vượt link 🚀</button></div>`).join('')}
+                            ${g.list.map((t, index) => `<div class="tg-row"><span>Liên kết mã: ${t.id}</span><button class="btn btn-primary" id="btn-action-${t.id}" onclick="openTaskLink('${t.id}')">Bắt đầu vượt link 🚀</button></div>`).join('')}
                         </div>
                     </div>`;
                 });
@@ -593,7 +617,7 @@
                 if(data.status === 'success') {
                     btn.innerText = "Đang mở link nhiệm vụ..."; 
                     window.open(data.shortLink, '_blank'); 
-                    setTimeout(() => { btn.innerText = "Đang chờ vượt link..."; }, 2000);
+                    setTimeout(() => { btn.innerText = "Đang chờ bạn vượt link..."; }, 2000);
                 } else { 
                     showPopup('Thất bại', 'Không phản hồi được cấu hình dịch vụ API!', false); 
                     btn.innerText = "Thử lại"; btn.disabled = false; 
@@ -625,10 +649,24 @@
             const method = document.getElementById('wd-method').value;
             const lbl = document.getElementById('lbl-details'); 
             const inp = document.getElementById('wd-details');
-            if(method === 'Thẻ Cào') { lbl.innerText = "Nhà mạng cần rút:"; inp.placeholder = "Ví dụ: Viettel, Vina..."; }
-            else if(method === 'MoMo') { lbl.innerText = "Số ĐT MoMo + Tên chủ thẻ:"; inp.placeholder = "Ví dụ: 0912... - NGUYEN VAN A"; }
-            else if(method === 'Garena') { lbl.innerText = "Mệnh giá thẻ Garena:"; inp.placeholder = "Ví dụ: Thẻ Garena 20k"; }
-            else { lbl.innerText = "Số tài khoản + Ngân hàng + Tên:"; inp.placeholder = "Ví dụ: Techcombank - 190... - NGUYEN VAN A"; }
+            
+            // XỬ LÝ PHÂN LOẠI CÁC TRƯỜNG THÔNG TIN KHI ĐỔI PHƯƠNG THỨC RÚT
+            if(method === 'Thẻ Cào') { 
+                lbl.innerText = "Nhà mạng cần rút:"; 
+                inp.placeholder = "Ví dụ: Viettel, Vina..."; 
+            }
+            else if(method === 'MoMo' || method === 'ZaloPay') { 
+                lbl.innerText = "Số ĐT " + method + " + Tên chủ thẻ:"; 
+                inp.placeholder = "Ví dụ: 0912... - NGUYEN VAN A"; 
+            }
+            else if(method === 'Garena') { 
+                lbl.innerText = "Mệnh giá thẻ Garena:"; 
+                inp.placeholder = "Ví dụ: Thẻ Garena 20k"; 
+            }
+            else { 
+                lbl.innerText = "Số tài khoản + Ngân hàng + Tên:"; 
+                inp.placeholder = "Ví dụ: Techcombank - 190... - NGUYEN VAN A"; 
+            }
         }
 
         function submitWithdraw() {
