@@ -15,7 +15,6 @@
     </style>
 </head>
 <body>
-
     <div class="box" id="content-box">
         <h2 id="title-status" style="color: #1E3A8A; margin: 0; font-size:22px;">ĐANG KIỂM TRA PHIÊN</h2>
         <div class="loader" id="spinner"></div>
@@ -24,7 +23,6 @@
     </div>
 
     <script>
-        // DÁN ĐƯỜNG LINK APPS SCRIPT WEB APP MỚI CỦA BẠN VÀO DƯỚI ĐÂY
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx1hP042D5mQFWTxqaVXDVDvCFX5clpUJ4Ej1tf4d26H5XvPptMRwEqPOE86u3NqwbK/exec'; 
         
         const urlParams = new URLSearchParams(window.location.search);
@@ -53,7 +51,7 @@
             }).catch(() => {
                 spinnerEl.style.display = "none"; btnEl.style.display = "block";
                 titleEl.innerText = "💥 LỖI KẾT NỐI"; titleEl.style.color = "#EF4444";
-                msgEl.innerText = "Đường truyền kết nối mạng tới máy chủ Google Apps Script bị gián đoạn.";
+                msgEl.innerText = "Đường truyền kết nối mạng bị gián đoạn.";
             });
         }
     </script>
