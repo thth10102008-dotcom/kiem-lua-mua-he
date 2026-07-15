@@ -65,8 +65,9 @@
         .progress-bar-fill { background: linear-gradient(90deg, #10B981, #34D399); height: 100%; width: 0%; transition: width 1s;}
         
         .streak-container { display: flex; gap: 10px; margin-top: 15px; justify-content: space-between; overflow-x: auto; padding-bottom: 10px; }
-        .streak-day { display: flex; flex-direction: column; align-items: center; padding: 10px; background: var(--bg-body); border: 1px solid var(--border-color); border-radius: 12px; min-width: 60px; opacity: 0.5; }
-        .streak-day.active { background: #DCFCE7; border-color: #22C55E; opacity: 1; }
+        .streak-day { display: flex; flex-direction: column; align-items: center; padding: 10px; background: var(--bg-body); border: 1px solid var(--border-color); border-radius: 12px; min-width: 60px; opacity: 0.5; transition: 0.3s;}
+        .streak-day.active { background: #DCFCE7; border-color: #22C55E; opacity: 1; box-shadow: 0 4px 10px rgba(34, 197, 94, 0.2); }
+        .streak-day.next-day { border-color: var(--primary); opacity: 1; border-width: 2px; }
         .streak-day span { font-weight: 800; font-size: 12px; margin-top: 5px;}
         
         .timer-box { background: var(--primary-light); border: 1px solid var(--primary); border-radius: 16px; padding: 20px; text-align: center; margin-bottom: 24px;}
@@ -76,14 +77,7 @@
         .cd-label { font-size: 10px; color: var(--text-muted); font-weight: 800; }
         
         .task-list { display: flex; flex-direction: column; gap: 15px; }
-        .task-group-card { background: var(--white); border: 1px solid var(--border-color); border-radius: 16px; overflow: hidden; }
-        .task-group-header { display: flex; align-items: center; padding: 16px; background: var(--bg-body); cursor: pointer; }
-        .tg-img { width: 50px; height: 50px; border-radius: 10px; object-fit: cover; margin-right: 12px;}
-        .tg-info h4 { font-size: 16px; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 6px; margin-bottom: 5px;}
-        .featured-badge { background: #FEF08A; color: #854D0E; font-size: 10px; padding: 2px 6px; border-radius: 10px; }
-        .tg-body { padding: 0 16px; display: none; } 
-        .tg-body.show { display: block; }
-        .tg-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px dashed var(--border-color); }
+        .featured-badge { background: #FEF08A; color: #854D0E; font-size: 10px; padding: 2px 6px; border-radius: 10px; margin-left: 8px;}
         
         .leaderboard-list { display: flex; flex-direction: column; gap: 8px; margin-top: 12px;}
         .lb-item { display: flex; justify-content: space-between; background: var(--bg-body); padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); }
@@ -93,7 +87,6 @@
         
         .form-box { background: var(--white); padding: 24px; border-radius: var(--border-radius); border: 1px solid var(--border-color); margin-bottom: 24px; }
         
-        /* CSS LỊCH SỬ TÁCH TAB */
         .history-tabs { display: flex; gap: 10px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 5px;}
         .history-tab-btn { padding: 10px 20px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--white); color: var(--text-muted); cursor: pointer; font-weight: 700; font-size: 14px; transition: 0.2s; white-space: nowrap;}
         .history-tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
@@ -203,14 +196,8 @@
             <section id="earn" class="content-section">
                 <div class="progress-box" style="text-align:center;">
                     <h3>🎁 Điểm danh chuỗi 7 ngày</h3>
-                    <div class="streak-container">
-                        <div class="streak-day active">🎁<span>Ngày 1</span></div>
-                        <div class="streak-day">🎁<span>Ngày 2</span></div>
-                        <div class="streak-day">🎁<span>Ngày 3</span></div>
-                        <div class="streak-day">🎁<span>Ngày 4</span></div>
-                        <div class="streak-day">🎁<span>Ngày 5</span></div>
-                        <div class="streak-day">🎁<span>Ngày 6</span></div>
-                        <div class="streak-day" style="border-color:#F59E0B; background:#FEF3C7; opacity:1;">💎<span>Ngày 7</span></div>
+                    <div class="streak-container" id="streak-box">
+                        <!-- Code JS sẽ tự động vẽ ngày sáng đèn vào đây -->
                     </div>
                     <button class="btn btn-primary" id="btn-daily-checkin" onclick="executeRealCheckin()" style="margin-top:12px;">Điểm danh ngay (+50 Lúa)</button>
                 </div>
@@ -225,6 +212,8 @@
                 </div>
 
                 <div class="search-box"><input type="text" id="task-search" placeholder="🔍 Gõ từ khóa để tìm kiếm nhiệm vụ..." onkeyup="filterTasks()"></div>
+                
+                <!-- DANH SÁCH NHIỆM VỤ GỘP CHUNG 1 Ô SẼ HIỂN THỊ Ở ĐÂY -->
                 <div class="task-list" id="task-container"><p>Đang quét danh sách dữ liệu...</p></div>
             </section>
 
@@ -306,6 +295,7 @@
         </main>
     </div>
 
+    <!-- AUTH SYSTEM -->
     <div class="auth-layout-container" id="auth-view">
         <div class="auth-card" id="auth-login-card">
             <h2 style="text-align: center; color: var(--primary); margin-bottom:15px;">ĐĂNG NHẬP</h2>
@@ -327,15 +317,12 @@
     </div>
 
     <script>
-        // MÌNH ĐÃ GẮN ĐÚNG LINK SCRIPT CỦA BẠN VÀO ĐÂY RỒI NHÉ
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx1hP042D5mQFWTxqaVXDVDvCFX5clpUJ4Ej1tf4d26H5XvPptMRwEqPOE86u3NqwbK/exec'; 
         
         let currentUser = ""; 
         let incomeChartInstance = null; 
         let countdownInterval = null;
         let isMusicPlaying = false;
-        
-        // Mảng lưu ID các nhiệm vụ đã làm xong trong ngày
         let completedTodayList = []; 
 
         function toggleMusic() {
@@ -343,15 +330,9 @@
             const btn = document.getElementById('music-btn');
             if (!audio) return;
             if (isMusicPlaying) { 
-                audio.pause(); 
-                isMusicPlaying = false; 
-                btn.innerText = '🔇'; 
+                audio.pause(); isMusicPlaying = false; btn.innerText = '🔇'; 
             } else { 
-                audio.volume = 0.5; 
-                audio.play().then(() => { 
-                    isMusicPlaying = true; 
-                    btn.innerText = '🎵'; 
-                }).catch(e => console.log(e)); 
+                audio.volume = 0.5; audio.play().then(() => { isMusicPlaying = true; btn.innerText = '🎵'; }).catch(e => console.log(e)); 
             }
         }
 
@@ -359,18 +340,11 @@
             const audio = document.getElementById('bg-music'); 
             const btn = document.getElementById('music-btn');
             if (audio && !isMusicPlaying) { 
-                audio.volume = 0.5; 
-                audio.play().then(() => { 
-                    isMusicPlaying = true; 
-                    btn.innerText = '🎵'; 
-                }).catch(e => console.log(e)); 
+                audio.volume = 0.5; audio.play().then(() => { isMusicPlaying = true; btn.innerText = '🎵'; }).catch(e => console.log(e)); 
             }
         }
 
-        function closeWelcomePopup() { 
-            document.getElementById('welcome-popup').classList.remove('show'); 
-            playMusic(); 
-        }
+        function closeWelcomePopup() { document.getElementById('welcome-popup').classList.remove('show'); playMusic(); }
 
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
@@ -416,42 +390,26 @@
         }
 
         function login() {
-            const u = document.getElementById('log-user').value.trim(); 
-            const p = document.getElementById('log-pass').value;
+            const u = document.getElementById('log-user').value.trim(); const p = document.getElementById('log-pass').value;
             if(!u || !p) return;
             fetch(`${SCRIPT_URL}?action=login&username=${encodeURIComponent(u)}&password=${encodeURIComponent(p)}`)
             .then(res => res.json()).then(data => {
-                if(data.status === 'success') { 
-                    currentUser = data.username; 
-                    localStorage.setItem('remembered_user', currentUser); 
-                    enterApplication(); 
-                    playMusic(); 
-                } else { 
-                    document.getElementById('login-msg').innerText = data.message; 
-                }
+                if(data.status === 'success') { currentUser = data.username; localStorage.setItem('remembered_user', currentUser); enterApplication(); playMusic(); } 
+                else { document.getElementById('login-msg').innerText = data.message; }
             });
         }
 
         function register() {
-            const u = document.getElementById('reg-user').value.trim(); 
-            const e = document.getElementById('reg-email').value.trim(); 
-            const p = document.getElementById('reg-pass').value;
+            const u = document.getElementById('reg-user').value.trim(); const e = document.getElementById('reg-email').value.trim(); const p = document.getElementById('reg-pass').value;
             if(!u || !e || !p) return;
             fetch(`${SCRIPT_URL}?action=register&username=${encodeURIComponent(u)}&email=${encodeURIComponent(e)}&password=${encodeURIComponent(p)}`)
             .then(res => res.json()).then(data => {
-                if(data.status === 'success') { 
-                    toggleAuth(false); 
-                    showPopup('Thành công', data.message, true); 
-                } else { 
-                    document.getElementById('register-msg').innerText = data.message; 
-                }
+                if(data.status === 'success') { toggleAuth(false); showPopup('Thành công', data.message, true); } 
+                else { document.getElementById('register-msg').innerText = data.message; }
             });
         }
 
-        function logoutApp() { 
-            localStorage.removeItem('remembered_user'); 
-            location.reload(); 
-        }
+        function logoutApp() { localStorage.removeItem('remembered_user'); location.reload(); }
 
         function enterApplication() {
             document.getElementById('auth-view').style.display = 'none';
@@ -459,8 +417,7 @@
             document.getElementById('welcome-username').innerText = currentUser;
             document.getElementById('prof-username').innerText = currentUser;
             document.getElementById('ref-link-input').value = `${window.location.origin}${window.location.pathname}?ref=${currentUser}`;
-            startCountdown(); 
-            loadDashboard(); // Sẽ tải dữ liệu đồng thời lấy mảng nhiệm vụ đã xong
+            startCountdown(); loadDashboard(); 
         }
 
         function openSection(id) {
@@ -474,9 +431,7 @@
             if(id === 'history-section') loadDashboard(); 
         }
 
-        document.querySelectorAll('.sidebar-menu a').forEach(a => { 
-            a.onclick = (e) => { e.preventDefault(); openSection(a.getAttribute('data-section')); } 
-        });
+        document.querySelectorAll('.sidebar-menu a').forEach(a => { a.onclick = (e) => { e.preventDefault(); openSection(a.getAttribute('data-section')); } });
 
         function switchHistoryTab(tabName) {
             document.querySelectorAll('.history-tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -495,7 +450,6 @@
             fetch(`${SCRIPT_URL}?action=getUserData&username=${encodeURIComponent(currentUser)}`)
             .then(r => r.json()).then(data => {
                 
-                // LƯU LẠI NHỮNG NHIỆM VỤ ĐÃ LÀM VÀO MẢNG TRÊN WEB
                 completedTodayList = data.completedToday || [];
 
                 document.getElementById('header-points').innerText = Number(data.points).toLocaleString();
@@ -506,6 +460,28 @@
                 document.getElementById('progress-bar').style.width = progress + '%';
                 document.getElementById('progress-text').innerText = data.completedCount + '/10';
                 
+                // THUẬT TOÁN ĐIỂM DANH SÁNG ĐÈN 7 NGÀY
+                let totalCheckins = data.taskHistory.filter(h => h.taskId === "daily_checkin").length;
+                let cycleDay = totalCheckins % 7; 
+                if (cycleDay === 0 && totalCheckins > 0 && data.hasCheckedInToday) cycleDay = 7;
+
+                let streakHtml = '';
+                for (let i = 1; i <= 7; i++) {
+                    let isActive = "";
+                    let icon = i === 7 ? "💎" : "🎁";
+                    
+                    if (i <= cycleDay) {
+                        isActive = "active"; // Ngày đã điểm danh thành công
+                    } else if (i === cycleDay + 1 && !data.hasCheckedInToday) {
+                        isActive = "next-day"; // Sáng đèn viền ngày chuẩn bị điểm danh hôm nay
+                    }
+
+                    streakHtml += `<div class="streak-day ${isActive}">
+                        ${icon}<span>Ngày ${i}</span>
+                    </div>`;
+                }
+                document.getElementById('streak-box').innerHTML = streakHtml;
+
                 const btnCheckin = document.getElementById('btn-daily-checkin');
                 if (data.hasCheckedInToday) {
                     btnCheckin.innerText = "Đã điểm danh ✅";
@@ -518,36 +494,20 @@
                 let labels = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ Nhật"];
                 if(incomeChartInstance) incomeChartInstance.destroy();
                 const ctx = document.getElementById('incomeChart').getContext('2d');
-                incomeChartInstance = new Chart(ctx, { 
-                    type: 'line', 
-                    data: { labels: labels, datasets: [{ data: [1200, 1900, 800, 1500, 2000, 3400, 4100], borderColor: '#10B981', backgroundColor: 'rgba(16, 185, 129, 0.05)', fill: true, tension: 0.3 }] }, 
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } } 
-                });
+                incomeChartInstance = new Chart(ctx, { type: 'line', data: { labels: labels, datasets: [{ data: [1200, 1900, 800, 1500, 2000, 3400, 4100], borderColor: '#10B981', backgroundColor: 'rgba(16, 185, 129, 0.05)', fill: true, tension: 0.3 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } } });
 
-                // Tải Lịch sử Nhiệm vụ
                 const tBody = document.getElementById('table-task-body');
                 tBody.innerHTML = data.taskHistory.length === 0 ? '<tr><td colspan="3">Chưa có bản ghi hoạt động nào.</td></tr>' : '';
                 data.taskHistory.forEach(h => { 
                     let taskNameDisplay = h.taskId === "daily_checkin" ? "Điểm danh hàng ngày" : "Nhiệm vụ " + h.taskId;
-                    tBody.innerHTML += `<tr>
-                        <td style="font-weight: 600; color: var(--primary);">${taskNameDisplay}</td>
-                        <td>${h.time}</td>
-                        <td style="color:var(--success);font-weight:800;">+${h.reward} Lúa</td>
-                    </tr>`; 
+                    tBody.innerHTML += `<tr><td style="font-weight: 600; color: var(--primary);">${taskNameDisplay}</td><td>${h.time}</td><td style="color:var(--success);font-weight:800;">+${h.reward} Lúa</td></tr>`; 
                 });
 
-                // Tải Lịch sử Rút tiền
                 const wBody = document.getElementById('table-withdraw-body');
                 wBody.innerHTML = data.withdrawHistory.length === 0 ? '<tr><td colspan="5">Chưa có giao dịch rút tiền nào.</td></tr>' : '';
                 data.withdrawHistory.forEach(w => {
                     let badgeColor = w.status.includes('Duyệt') || w.status.includes('thành công') ? 'var(--success)' : 'var(--accent)';
-                    wBody.innerHTML += `<tr>
-                        <td><b>${w.method}</b></td>
-                        <td>${w.details}</td>
-                        <td style="font-weight: 700; color: var(--danger);">${Number(w.amount).toLocaleString()}</td>
-                        <td style="font-weight: 800; color: ${badgeColor};">${w.status}</td>
-                        <td>${w.time}</td>
-                    </tr>`;
+                    wBody.innerHTML += `<tr><td><b>${w.method}</b></td><td>${w.details}</td><td style="font-weight: 700; color: var(--danger);">${Number(w.amount).toLocaleString()}</td><td style="font-weight: 800; color: ${badgeColor};">${w.status}</td><td>${w.time}</td></tr>`;
                 });
             });
         }
@@ -560,29 +520,26 @@
             });
         }
 
+        // TẢI NHIỆM VỤ VÀ GỘP CHUNG VÀO 1 Ô
         function loadTasks() {
             const box = document.getElementById('task-container');
             box.innerHTML = '<p>Đang tải danh sách nhiệm vụ...</p>';
             
-            // Lấy lại dữ liệu người dùng để quét chắc chắn nhiệm vụ nào đã làm
             fetch(`${SCRIPT_URL}?action=getUserData&username=${encodeURIComponent(currentUser)}`)
             .then(r => r.json())
             .then(userData => {
                 completedTodayList = userData.completedToday || [];
-                
-                // Sau đó mới lấy danh sách tất cả nhiệm vụ
                 return fetch(`${SCRIPT_URL}?action=getTasks`);
             })
             .then(r => r.json())
             .then(tasks => {
-                // TỰ ĐỘNG LỌC: Bỏ qua những nhiệm vụ nằm trong danh sách đã làm hôm nay
                 const availableTasks = tasks.filter(t => !completedTodayList.includes(t.id.toString()));
 
                 if(availableTasks.length === 0) {
-                    return box.innerHTML = '<p style="color:var(--success);font-weight:bold;font-size:16px;">🎉 Bạn đã hoàn thành xuất sắc toàn bộ nhiệm vụ ngày hôm nay! Hãy quay lại vào ngày mai để nhận link mới nhé.</p>';
+                    return box.innerHTML = '<div style="background:#DCFCE7; padding:20px; border-radius:12px; border:1px solid #22C55E; text-align:center;"><p style="color:#15803D; font-weight:bold; font-size:15px;">🎉 Bạn đã hoàn thành xuất sắc toàn bộ nhiệm vụ ngày hôm nay!<br>Hãy quay lại vào ngày mai để nhận link mới nhé.</p></div>';
                 }
 
-                // Không sort (đảo ngẫu nhiên) nữa để giữ đúng thứ tự từ Google Sheet
+                // Gộp nhóm nhiệm vụ
                 const grouped = {};
                 availableTasks.forEach(t => {
                     const key = `${t.name}_${t.reward}`;
@@ -594,14 +551,24 @@
                 Object.keys(grouped).forEach((key, idx) => {
                     const g = grouped[key]; 
                     const isFeatured = idx < 1 ? '<span class="featured-badge">⭐ Nổi bật</span>' : '';
+                    
+                    // GIAO DIỆN GỘP CHUNG 1 Ô
                     html += `
-                    <div class="task-group-card">
-                        <div class="task-group-header" onclick="this.nextElementSibling.classList.toggle('show')">
-                            <img src="${g.img}" class="tg-img" onerror="this.src='https://via.placeholder.com/60'">
-                            <div class="tg-info"><h4>${g.name} ${isFeatured}</h4><p>+${g.reward} Lúa/lượt • Số link khả dụng: ${g.list.length}</p></div>
+                    <div class="task-group-card" style="margin-bottom: 20px; border: 1px solid var(--border-color); border-radius: 16px; background: var(--white); overflow: hidden; box-shadow: var(--shadow-sm);">
+                        <div style="display: flex; align-items: center; padding: 16px; background: var(--bg-body); border-bottom: 1px solid var(--border-color);">
+                            <img src="${g.img}" style="width: 55px; height: 55px; border-radius: 12px; object-fit: cover; margin-right: 15px; border: 2px solid var(--white);" onerror="this.src='https://via.placeholder.com/60'">
+                            <div>
+                                <h4 style="font-size: 16px; font-weight: 800; color: var(--primary); margin-bottom: 5px;">${g.name} ${isFeatured}</h4>
+                                <p style="font-size: 13px; color: var(--success); font-weight: 700;">+${g.reward} Lúa/lượt • Số lượng: ${g.list.length} nhiệm vụ</p>
+                            </div>
                         </div>
-                        <div class="tg-body">
-                            ${g.list.map((t, index) => `<div class="tg-row"><span>Liên kết mã: ${t.id}</span><button class="btn btn-primary" id="btn-action-${t.id}" onclick="openTaskLink('${t.id}')">Bắt đầu vượt link 🚀</button></div>`).join('')}
+                        <div style="padding: 16px; display: flex; flex-direction: column; gap: 10px;">
+                            ${g.list.map((t, index) => `
+                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: var(--bg-body); border-radius: 10px; border: 1px dashed var(--border-color);">
+                                    <span style="font-weight: 700; font-size: 14px; color: var(--text-dark);">🏷️ Mã hệ thống: ${t.id}</span>
+                                    <button class="btn btn-primary" id="btn-action-${t.id}" onclick="openTaskLink('${t.id}')">Làm nhiệm vụ 🚀</button>
+                                </div>
+                            `).join('')}
                         </div>
                     </div>`;
                 });
@@ -609,22 +576,20 @@
             });
         }
 
+        // BẮT LỖI TỪ MÁY CHỦ NẾU API LỖI
         function openTaskLink(id) {
             const btn = document.getElementById(`btn-action-${id}`);
             btn.innerText = "Đang xin API tạo link ngắn..."; btn.disabled = true;
             fetch(`${SCRIPT_URL}?action=initTask&username=${encodeURIComponent(currentUser)}&taskId=${encodeURIComponent(id)}`)
             .then(res => res.json()).then(data => {
                 if(data.status === 'success') {
-                    btn.innerText = "Đang mở link nhiệm vụ..."; 
-                    window.open(data.shortLink, '_blank'); 
+                    btn.innerText = "Đang mở link nhiệm vụ..."; window.open(data.shortLink, '_blank'); 
                     setTimeout(() => { btn.innerText = "Đang chờ bạn vượt link..."; }, 2000);
                 } else { 
-                    showPopup('Thất bại', 'Không phản hồi được cấu hình dịch vụ API!', false); 
+                    showPopup('Thất bại', data.message, false); 
                     btn.innerText = "Thử lại"; btn.disabled = false; 
                 }
-            }).catch(() => { 
-                btn.innerText = "Lỗi mạng!"; btn.disabled = false; 
-            });
+            }).catch(() => { btn.innerText = "Lỗi mạng!"; btn.disabled = false; });
         }
 
         function executeRealCheckin() { 
@@ -633,66 +598,33 @@
             fetch(`${SCRIPT_URL}?action=dailyCheckin&username=${encodeURIComponent(currentUser)}`)
             .then(res => res.json()).then(data => {
                 showPopup(data.status === 'success' ? 'Thành công!' : 'Thông báo', data.message, data.status === 'success');
-                if (data.status === 'success') { 
-                    btn.innerText = "Đã điểm danh ✅"; 
-                    loadDashboard(); 
-                } else { 
-                    btn.innerText = "Điểm danh ngay (+50 Lúa)"; btn.disabled = false; 
-                }
-            }).catch(() => { 
-                showPopup('Lỗi', 'Mất kết nối với máy chủ!', false); 
-                btn.innerText = "Điểm danh ngay (+50 Lúa)"; btn.disabled = false; 
-            });
+                if (data.status === 'success') { btn.innerText = "Đã điểm danh ✅"; loadDashboard(); } 
+                else { btn.innerText = "Điểm danh ngay (+50 Lúa)"; btn.disabled = false; }
+            }).catch(() => { showPopup('Lỗi', 'Mất kết nối với máy chủ!', false); btn.innerText = "Điểm danh ngay (+50 Lúa)"; btn.disabled = false; });
         }
 
         function updateWdInputs() {
             const method = document.getElementById('wd-method').value;
-            const lbl = document.getElementById('lbl-details'); 
-            const inp = document.getElementById('wd-details');
-            
-            // XỬ LÝ PHÂN LOẠI CÁC TRƯỜNG THÔNG TIN KHI ĐỔI PHƯƠNG THỨC RÚT
-            if(method === 'Thẻ Cào') { 
-                lbl.innerText = "Nhà mạng cần rút:"; 
-                inp.placeholder = "Ví dụ: Viettel, Vina..."; 
-            }
-            else if(method === 'MoMo' || method === 'ZaloPay') { 
-                lbl.innerText = "Số ĐT " + method + " + Tên chủ thẻ:"; 
-                inp.placeholder = "Ví dụ: 0912... - NGUYEN VAN A"; 
-            }
-            else if(method === 'Garena') { 
-                lbl.innerText = "Mệnh giá thẻ Garena:"; 
-                inp.placeholder = "Ví dụ: Thẻ Garena 20k"; 
-            }
-            else { 
-                lbl.innerText = "Số tài khoản + Ngân hàng + Tên:"; 
-                inp.placeholder = "Ví dụ: Techcombank - 190... - NGUYEN VAN A"; 
-            }
+            const lbl = document.getElementById('lbl-details'); const inp = document.getElementById('wd-details');
+            if(method === 'Thẻ Cào') { lbl.innerText = "Nhà mạng cần rút:"; inp.placeholder = "Ví dụ: Viettel, Vina..."; }
+            else if(method === 'MoMo' || method === 'ZaloPay') { lbl.innerText = "Số ĐT " + method + " + Tên chủ thẻ:"; inp.placeholder = "Ví dụ: 0912... - NGUYEN VAN A"; }
+            else if(method === 'Garena') { lbl.innerText = "Mệnh giá thẻ Garena:"; inp.placeholder = "Ví dụ: Thẻ Garena 20k"; }
+            else { lbl.innerText = "Số tài khoản + Ngân hàng + Tên:"; inp.placeholder = "Ví dụ: Techcombank - 190... - NGUYEN VAN A"; }
         }
 
         function submitWithdraw() {
-            const method = document.getElementById('wd-method').value; 
-            const details = document.getElementById('wd-details').value.trim(); 
-            const amount = document.getElementById('wd-amount').value;
-            
+            const method = document.getElementById('wd-method').value; const details = document.getElementById('wd-details').value.trim(); const amount = document.getElementById('wd-amount').value;
             if(!details || !amount) return showPopup("Thiếu thông tin", 'Vui lòng điền đủ dữ liệu!', false);
             if(parseInt(amount) < 10000) return showPopup("Từ chối", 'Mức rút tối thiểu là 10.000 lúa!', false);
             
             const btn = document.getElementById('btn-withdraw');
             btn.innerText = 'Đang xử lý...'; btn.disabled = true;
-            
             fetch(`${SCRIPT_URL}?action=submitWithdraw&username=${encodeURIComponent(currentUser)}&method=${encodeURIComponent(method)}&details=${encodeURIComponent(details)}&amount=${amount}`)
             .then(res => res.json()).then(data => {
                 btn.innerText = 'Xác Nhận Rút'; btn.disabled = false;
                 showPopup(data.status === 'success' ? 'Thành công!' : 'Lỗi!', data.message, data.status === 'success');
-                if (data.status === 'success') {
-                    document.getElementById('wd-details').value = ""; 
-                    document.getElementById('wd-amount').value = "";
-                    loadDashboard(); 
-                }
-            }).catch(() => {
-                btn.innerText = 'Xác Nhận Rút'; btn.disabled = false;
-                showPopup('Lỗi', 'Yêu cầu của bạn không gửi đi được!', false);
-            });
+                if (data.status === 'success') { document.getElementById('wd-details').value = ""; document.getElementById('wd-amount').value = ""; loadDashboard(); }
+            }).catch(() => { btn.innerText = 'Xác Nhận Rút'; btn.disabled = false; showPopup('Lỗi', 'Yêu cầu của bạn không gửi đi được!', false); });
         }
 
         function submitChangePassword() { showPopup("Thông báo", "Tính năng đổi mật khẩu đang bảo trì, vui lòng liên hệ Admin.", false); }
