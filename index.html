@@ -41,8 +41,9 @@
         
         main.content { margin-left: 260px; padding: 32px 40px; flex: 1; width: calc(100% - 260px); }
         header.top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; background: var(--white); padding: 12px 24px; border-radius: var(--border-radius); box-shadow: var(--shadow-sm); border: 1px solid var(--border-color); }
-        .header-right { display: flex; align-items: center; gap: 16px; }
+        .header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap;}
         .balance-badge { background-color: #FEF3C7; color: #B45309; padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 14px; }
+        .ip-badge { background-color: #E0E7FF; color: #4338CA; padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 13px; border: 1px solid #C7D2FE;}
         .dark-mode-toggle, .music-toggle { background: var(--bg-body); border: 1px solid var(--border-color); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; transition: 0.3s; }
         
         .marquee-container { background: #FEF3C7; padding: 12px 20px; border-radius: 8px; margin-bottom: 24px; overflow: hidden; white-space: nowrap; border-left: 4px solid var(--accent); }
@@ -157,6 +158,7 @@
             <header class="top-header">
                 <h2>Xin chào, <span id="welcome-username" style="color:var(--primary); font-weight:800;">User</span> 👋</h2>
                 <div class="header-right">
+                    <div class="ip-badge" id="user-ip-display">🇻🇳 IP: Đang quét...</div>
                     <div class="balance-badge">🌾 <span id="header-points">0</span></div>
                     <div class="music-toggle" onclick="toggleMusic()" id="music-btn" title="Bật/Tắt Nhạc">🔇</div>
                     <div class="dark-mode-toggle" onclick="toggleDarkMode()">🌙</div>
@@ -197,7 +199,7 @@
                 <div class="progress-box" style="text-align:center;">
                     <h3>🎁 Điểm danh chuỗi 7 ngày</h3>
                     <div class="streak-container" id="streak-box">
-                        <!-- Code JS sẽ tự động vẽ ngày sáng đèn vào đây -->
+                        <!-- Cập nhật bằng JS -->
                     </div>
                     <button class="btn btn-primary" id="btn-daily-checkin" onclick="executeRealCheckin()" style="margin-top:12px;">Điểm danh ngay (+50 Lúa)</button>
                 </div>
@@ -213,7 +215,6 @@
 
                 <div class="search-box"><input type="text" id="task-search" placeholder="🔍 Gõ từ khóa để tìm kiếm nhiệm vụ..." onkeyup="filterTasks()"></div>
                 
-                <!-- DANH SÁCH NHIỆM VỤ GỘP CHUNG 1 Ô SẼ HIỂN THỊ Ở ĐÂY -->
                 <div class="task-list" id="task-container"><p>Đang quét danh sách dữ liệu...</p></div>
             </section>
 
@@ -317,6 +318,7 @@
     </div>
 
     <script>
+        // BẮT BUỘC DÁN LINK WEB APP SCRIPT CỦA BẠN VÀO ĐÂY:
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx1hP042D5mQFWTxqaVXDVDvCFX5clpUJ4Ej1tf4d26H5XvPptMRwEqPOE86u3NqwbK/exec'; 
         
         let currentUser = ""; 
@@ -324,6 +326,23 @@
         let countdownInterval = null;
         let isMusicPlaying = false;
         let completedTodayList = []; 
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hiển thị IP tự động góc phải
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    const ipDisplay = document.getElementById('user-ip-display');
+                    if (ipDisplay) ipDisplay.innerText = '🇻🇳 IP: ' + data.ip;
+                }).catch(() => {
+                    console.log("Không thể lấy IP");
+                });
+
+            if(localStorage.getItem('darkMode') === 'true') toggleDarkMode();
+            setTimeout(() => { document.getElementById('welcome-popup').classList.add('show'); }, 500);
+            const savedUser = localStorage.getItem('remembered_user');
+            if(savedUser) { currentUser = savedUser; enterApplication(); }
+        });
 
         function toggleMusic() {
             const audio = document.getElementById('bg-music'); 
@@ -352,13 +371,6 @@
             localStorage.setItem('darkMode', isDark);
             document.querySelector('.dark-mode-toggle').innerText = isDark ? '☀️' : '🌙';
         }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            if(localStorage.getItem('darkMode') === 'true') toggleDarkMode();
-            setTimeout(() => { document.getElementById('welcome-popup').classList.add('show'); }, 500);
-            const savedUser = localStorage.getItem('remembered_user');
-            if(savedUser) { currentUser = savedUser; enterApplication(); }
-        });
 
         function showPopup(title, message, isSuccess = true) {
             const popup = document.getElementById('custom-popup-overlay');
@@ -449,9 +461,7 @@
         function loadDashboard() {
             fetch(`${SCRIPT_URL}?action=getUserData&username=${encodeURIComponent(currentUser)}`)
             .then(r => r.json()).then(data => {
-                
                 completedTodayList = data.completedToday || [];
-
                 document.getElementById('header-points').innerText = Number(data.points).toLocaleString();
                 document.getElementById('db-points').innerText = Number(data.points).toLocaleString();
                 document.getElementById('db-completed-count').innerText = data.completedCount;
@@ -460,36 +470,22 @@
                 document.getElementById('progress-bar').style.width = progress + '%';
                 document.getElementById('progress-text').innerText = data.completedCount + '/10';
                 
-                // THUẬT TOÁN ĐIỂM DANH SÁNG ĐÈN 7 NGÀY
                 let totalCheckins = data.taskHistory.filter(h => h.taskId === "daily_checkin").length;
                 let cycleDay = totalCheckins % 7; 
                 if (cycleDay === 0 && totalCheckins > 0 && data.hasCheckedInToday) cycleDay = 7;
 
                 let streakHtml = '';
                 for (let i = 1; i <= 7; i++) {
-                    let isActive = "";
-                    let icon = i === 7 ? "💎" : "🎁";
-                    
-                    if (i <= cycleDay) {
-                        isActive = "active"; // Ngày đã điểm danh thành công
-                    } else if (i === cycleDay + 1 && !data.hasCheckedInToday) {
-                        isActive = "next-day"; // Sáng đèn viền ngày chuẩn bị điểm danh hôm nay
-                    }
-
-                    streakHtml += `<div class="streak-day ${isActive}">
-                        ${icon}<span>Ngày ${i}</span>
-                    </div>`;
+                    let isActive = ""; let icon = i === 7 ? "💎" : "🎁";
+                    if (i <= cycleDay) isActive = "active";
+                    else if (i === cycleDay + 1 && !data.hasCheckedInToday) isActive = "next-day";
+                    streakHtml += `<div class="streak-day ${isActive}">${icon}<span>Ngày ${i}</span></div>`;
                 }
                 document.getElementById('streak-box').innerHTML = streakHtml;
 
                 const btnCheckin = document.getElementById('btn-daily-checkin');
-                if (data.hasCheckedInToday) {
-                    btnCheckin.innerText = "Đã điểm danh ✅";
-                    btnCheckin.disabled = true;
-                } else {
-                    btnCheckin.innerText = "Điểm danh ngay (+50 Lúa)";
-                    btnCheckin.disabled = false;
-                }
+                if (data.hasCheckedInToday) { btnCheckin.innerText = "Đã điểm danh ✅"; btnCheckin.disabled = true; } 
+                else { btnCheckin.innerText = "Điểm danh ngay (+50 Lúa)"; btnCheckin.disabled = false; }
 
                 let labels = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ Nhật"];
                 if(incomeChartInstance) incomeChartInstance.destroy();
@@ -520,26 +516,22 @@
             });
         }
 
-        // TẢI NHIỆM VỤ VÀ GỘP CHUNG VÀO 1 Ô
         function loadTasks() {
             const box = document.getElementById('task-container');
             box.innerHTML = '<p>Đang tải danh sách nhiệm vụ...</p>';
             
             fetch(`${SCRIPT_URL}?action=getUserData&username=${encodeURIComponent(currentUser)}`)
-            .then(r => r.json())
-            .then(userData => {
+            .then(r => r.json()).then(userData => {
                 completedTodayList = userData.completedToday || [];
                 return fetch(`${SCRIPT_URL}?action=getTasks`);
             })
-            .then(r => r.json())
-            .then(tasks => {
+            .then(r => r.json()).then(tasks => {
                 const availableTasks = tasks.filter(t => !completedTodayList.includes(t.id.toString()));
 
                 if(availableTasks.length === 0) {
                     return box.innerHTML = '<div style="background:#DCFCE7; padding:20px; border-radius:12px; border:1px solid #22C55E; text-align:center;"><p style="color:#15803D; font-weight:bold; font-size:15px;">🎉 Bạn đã hoàn thành xuất sắc toàn bộ nhiệm vụ ngày hôm nay!<br>Hãy quay lại vào ngày mai để nhận link mới nhé.</p></div>';
                 }
 
-                // Gộp nhóm nhiệm vụ
                 const grouped = {};
                 availableTasks.forEach(t => {
                     const key = `${t.name}_${t.reward}`;
@@ -552,7 +544,6 @@
                     const g = grouped[key]; 
                     const isFeatured = idx < 1 ? '<span class="featured-badge">⭐ Nổi bật</span>' : '';
                     
-                    // GIAO DIỆN GỘP CHUNG 1 Ô
                     html += `
                     <div class="task-group-card" style="margin-bottom: 20px; border: 1px solid var(--border-color); border-radius: 16px; background: var(--white); overflow: hidden; box-shadow: var(--shadow-sm);">
                         <div style="display: flex; align-items: center; padding: 16px; background: var(--bg-body); border-bottom: 1px solid var(--border-color);">
@@ -576,7 +567,7 @@
             });
         }
 
-        // BẮT LỖI TỪ MÁY CHỦ NẾU API LỖI
+        // TÍNH NĂNG GỌI API RÚT GỌN CHUẨN XÁC
         function openTaskLink(id) {
             const btn = document.getElementById(`btn-action-${id}`);
             btn.innerText = "Đang xin API tạo link ngắn..."; btn.disabled = true;
